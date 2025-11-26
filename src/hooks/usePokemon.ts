@@ -1,10 +1,25 @@
 import { useEffect, useState } from 'react';
 
+export type Stats = {
+  hp: number;
+  attack: number;
+  defense: number;
+  specialAttack: number;
+  specialDefense: number;
+  speed: number;
+};
+
+export const PokemonTypes = [
+  'fire', 'water', 'grass', 'electric', 'psychic', 'fighting', 'normal', 'ice', 'poison', 'ground', 'flying', 'bug', 'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy'
+];
+  
+
 export type FetchedPokemon = {
   id: number;
   name: string;
-  types: string[];
+  types: 'fire' | 'water'| 'grass'| 'electric' | 'psychic' | 'fighting' | 'normal' | 'ice' | 'poison' | 'ground' | 'flying' | 'bug' | 'rock' | 'ghost' | 'dragon' | 'dark' | 'steel' | 'fairy';
   imageUrl: string | null;
+  stats: Stats;
 };
 
 export function usePokemon() {
@@ -25,25 +40,46 @@ export function usePokemon() {
         const listData = await listRes.json();
         const results: Array<{ name: string; url: string }> = listData.results || [];
 
-        const batchSize = 20; // avoid blasting the API all at once
+        const batchSize = 20;
         const fetched: FetchedPokemon[] = [];
 
         for (let i = 0; i < results.length; i += batchSize) {
           const batch = results.slice(i, i + batchSize);
           const promises = batch.map(r =>
-            fetch(r.url)
-              .then(res => (res.ok ? res.json() : Promise.reject(res.status)))
-              .catch(() => null)
+        fetch(r.url)
+          .then(res => (res.ok ? res.json() : Promise.reject(res.status)))
+          .catch(() => null)
           );
+        const details = await Promise.all(promises); // Ensure details are fetched
 
-          const details = await Promise.all(promises);
+        details.forEach((d, idx) => {
+        if (!d) return;
+        const id = d.id || i + idx + 1;
+        const imageUrl = d.sprites?.other?.['official-artwork']?.front_default || null;
+        const types: FetchedPokemon['types'] = Array.isArray(d.types) ? d.types.map((t: any) => t.type.name) : [];
+        console.log(d);
+        
+        // Extract all stats from API
+        const stats: Stats = {
+          hp: 0,
+          attack: 0,
+          defense: 0,
+          specialAttack: 0,
+          specialDefense: 0,
+          speed: 0
+        };
+        if (Array.isArray(d.stats)) {
+          d.stats.forEach((s: any) => {
+            const statName = s?.stat?.name;
+            const baseStat = typeof s?.base_stat === 'number' ? s.base_stat : 0;
+            const statKey = statName?.replace('-', '') === 'specialattack' ? 'specialAttack' :
+                            statName?.replace('-', '') === 'specialdefense' ? 'specialDefense' :
+                            statName;
+            if (statKey && statKey in stats) stats[statKey as keyof Stats] = baseStat;
+          });
+        }
 
-          details.forEach((d, idx) => {
-            if (!d) return;
-            const id = d.id || i + idx + 1;
-            const imageUrl = d.sprites?.other?.['official-artwork']?.front_default || null;
-            const types: string[] = Array.isArray(d.types) ? d.types.map((t: any) => t.type.name) : [];
-            fetched.push({ id, name: d.name, types, imageUrl });
+        fetched.push({ id, name: d.name, types, imageUrl, stats });
           });
         }
 

@@ -5,7 +5,7 @@ import { UserData } from '../App';
 interface NavigationProps {
   user: UserData;
   currentView: string;
-  onViewChange: (view: 'library' | 'shop' | 'battle') => void;
+  onViewChange: (view: 'library' | 'myCards' | 'shop' | 'battle') => void;
   onLogout: () => void;
 }
 
@@ -103,21 +103,41 @@ const LogoutButton = styled.button`
   }
 `;
 
+export const LogoDiv = styled.div`
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  & > span {
+    position: absolute;
+    bottom: -10px;
+    right: 0px;
+    color: #9ca3af;
+    font-size: 0.7rem;
+    margin: 0;
+  }
+`;
+
 export function Navigation({ user, currentView, onViewChange, onLogout }: NavigationProps) {
   return (
     <Nav>
       <NavContainer>
         <NavContent>
           <LeftSection>
-            <Logo>Pokemon Cards</Logo>
-            
+            <LogoDiv>
+            <Logo>Pokemon CBL</Logo>
+            <span>by: Daniel Avzaradel</span>
+            </LogoDiv>
             <NavButtons>
               <NavButton
-                $active={currentView === 'library'}
-                onClick={() => onViewChange('library')}
+                $active={currentView === 'myCards'}
+                onClick={() => onViewChange('myCards')}
               >
                 <Library style={{ width: '1rem', height: '1rem' }} />
-                <span>Library</span>
+                <span>Collection</span>
               </NavButton>
 
               <NavButton

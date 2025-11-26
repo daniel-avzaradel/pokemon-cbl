@@ -1,21 +1,13 @@
 import { useState, useEffect } from 'react';
+import { FetchedPokemon as HookFetchedPokemon } from './hooks/usePokemon';
 import styled from 'styled-components';
 import { Login } from './components/Login';
-import { CardLibrary } from './components/CardLibrary';
-import { Shop } from './components/Shop';
-import { Battle } from './components/Battle';
+import { Shop } from './components/shop/Shop';
+import { Battle } from './components/battle/Battle';
 import { Navigation } from './components/Navigation';
+import { MyCards } from './components/my-cards/MyCards';
 
-export interface Card {
-  id: string;
-  name: string;
-  type: 'fire' | 'water' | 'grass' | 'electric' | 'psychic' | 'fighting' | 'normal';
-  rarity: 'common' | 'uncommon' | 'rare' | 'ultra-rare';
-  hp: number;
-  attack: number;
-  defense: number;
-  imageUrl: string;
-}
+export type Card = HookFetchedPokemon;
 
 export interface UserData {
   username: string;
@@ -24,7 +16,7 @@ export interface UserData {
   battleDeck: Card[];
 }
 
-type View = 'library' | 'shop' | 'battle';
+type View = 'library' | 'myCards' | 'shop' | 'battle';
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -83,8 +75,8 @@ export default function App() {
       />
       
       <MainContent>
-        {currentView === 'library' && (
-          <CardLibrary user={user} updateUser={updateUser} />
+        {currentView === 'myCards' && (
+          <MyCards user={user} updateUser={updateUser} />
         )}
         {currentView === 'shop' && (
           <Shop user={user} updateUser={updateUser} />
