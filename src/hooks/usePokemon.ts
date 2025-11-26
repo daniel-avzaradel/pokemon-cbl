@@ -9,15 +9,14 @@ export type Stats = {
   speed: number;
 };
 
-export const PokemonTypes = [
-  'fire', 'water', 'grass', 'electric', 'psychic', 'fighting', 'normal', 'ice', 'poison', 'ground', 'flying', 'bug', 'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy'
-];
-  
+export type PokemonTypes = 'fire' | 'water'| 'grass'| 'electric' | 'psychic' | 'fighting' | 'normal' | 'ice' | 'poison' | 'ground' | 'flying' | 'bug' | 'rock' | 'ghost' | 'dragon' | 'dark' | 'steel' | 'fairy';
+
+export const PokemonTypes = [ 'fire', 'water', 'grass', 'electric', 'psychic', 'fighting', 'normal', 'ice', 'poison', 'ground', 'flying', 'bug', 'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy' ] as const;
 
 export type FetchedPokemon = {
   id: number;
   name: string;
-  types: 'fire' | 'water'| 'grass'| 'electric' | 'psychic' | 'fighting' | 'normal' | 'ice' | 'poison' | 'ground' | 'flying' | 'bug' | 'rock' | 'ghost' | 'dragon' | 'dark' | 'steel' | 'fairy';
+  types: PokemonTypes[];
   imageUrl: string | null;
   stats: Stats;
 };

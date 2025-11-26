@@ -63,8 +63,8 @@ const AllCards = ({ user, updateUser, addToDeck, setSelectedCard }: AllCardsProp
                     <span style={{ color: 'white', float: 'right' }}>Filter by type:</span>
                     <FilterSelect onChange={(e) => handleFilterChange(e.target.value)} value={filter}>
                         <option value="none">None</option>
-                        {PokemonTypes.map((type) => (
-                            <option key={type} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</option>
+                        {PokemonTypes.map((type, i: number) => (
+                            <option key={type+i} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</option>
                         ))}
                     </FilterSelect>
                 </div>
@@ -72,13 +72,13 @@ const AllCards = ({ user, updateUser, addToDeck, setSelectedCard }: AllCardsProp
             <CardsGrid>
                 {filteredCollection.map((card) => (
                     <CardContainer key={card.id}>
-                        <PokemonCard card={card} onClick={() => setSelectedCard(card)} />
+                        <PokemonCard {...{ user, updateUser }} card={card} onClick={() => setSelectedCard(card)} />
                         {!isInDeck(card.id) && user.battleDeck.length < 6 && (
                             <ActionButton
                                 $variant="add"
                                 onClick={() => addToDeck(card)}
                             >
-                                <Plus style={{ width: '1rem', height: '1rem' }} /> Add to deck
+                                <Plus /> Add to deck
                             </ActionButton>
                         )}
                     </CardContainer>

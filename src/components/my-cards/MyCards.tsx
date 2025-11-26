@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { UserData, Card } from '../../App';
 import { PokemonCard } from '../common/PokemonCard';
-import { Minus } from 'lucide-react';
 import { ActionButton, CardContainer, CardsGrid, Container, DeckEmpty, EmptyState, Header, Modal, ModalContent, Section } from './MyCards.module';
 import AllCards from './AllCards';
 
@@ -23,12 +22,6 @@ export function MyCards({ user, updateUser }: MyCardsProps) {
     }
   };
 
-  const removeFromDeck = (cardId: number) => {
-    updateUser({
-      ...user,
-      battleDeck: user.battleDeck.filter(card => card.id !== cardId)
-    });
-  };
 
   return (
     <Container>
@@ -54,13 +47,7 @@ export function MyCards({ user, updateUser }: MyCardsProps) {
               <CardsGrid $columns={6}>
                 {user.battleDeck.map((card) => (
                   <CardContainer key={card.id}>
-                    <PokemonCard card={card} onClick={() => setSelectedCard(card)} />
-                    <ActionButton
-                      $variant="remove"
-                      onClick={() => removeFromDeck(card.id)}
-                    >
-                      <Minus style={{ width: '1rem', height: '1rem' }} />
-                    </ActionButton>
+                    <PokemonCard {... { user, updateUser}} card={card} onClick={() => setSelectedCard(card)} />
                   </CardContainer>
                 ))}
               </CardsGrid>
@@ -74,7 +61,7 @@ export function MyCards({ user, updateUser }: MyCardsProps) {
       {selectedCard && (
         <Modal onClick={() => setSelectedCard(null)}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
-            <PokemonCard card={selectedCard} large />
+            <PokemonCard {... { user, updateUser}} card={selectedCard} large />
           </ModalContent>
         </Modal>
       )}

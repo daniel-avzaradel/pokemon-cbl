@@ -30,7 +30,7 @@ export const rarityColors: Record<string, string> = {
 
 export const CardWrapper = styled.div<{ $large?: boolean; $clickable?: boolean }>`
   max-height: 100%;
-  width: 240px;
+  width: 220px;
   cursor: ${props => props.$clickable ? 'pointer' : 'default'};
   transition: transform 0.2s ease;
   &:hover {
@@ -46,6 +46,7 @@ export const CardOuter = styled.div<{ $gradient: string; $rarityColor: string }>
 `;
 
 export const CardInner = styled.div<{$type: string}>`
+  position: relative;
   background-color: ${props => typeColors[props.$type] || 'linear-gradient(to bottom right, #262626, #0a0a0a)'};
   border-radius: 0.5rem;
   padding: 0.75rem;

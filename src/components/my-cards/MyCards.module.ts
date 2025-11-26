@@ -54,7 +54,7 @@ export const DeckEmpty = styled.div`
 
 export const CardsGrid = styled.div<{ $columns?: number }>`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(6,minmax(220px, 1fr));
   gap: 1rem;
   width: 100%;
   max-width: 100%;
@@ -77,10 +77,11 @@ export const ActionButton = styled.button<{ $variant: 'add' | 'remove' }>`
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.875rem;
-  width: 75%;
+  width: 90%;
   background: ${props => props.$variant === 'remove' ? '#7f1d1d' : '#1b6446ff'};
   color: white;
   padding: 0.25rem;
+  max-height: 40px;
   box-sizing: border-box;
   border-radius: 25px;
   border: ${props => props.$variant === 'remove' ? '1px solid rgba(202, 138, 4, 0.3)' : 'none'};
@@ -88,7 +89,9 @@ export const ActionButton = styled.button<{ $variant: 'add' | 'remove' }>`
   transition: all 0.2s ease;
   opacity: 0;
   border: 1px solid #e1e1e1;
-
+  & > svg {
+    width: 16px;
+    height: 16px;}
   &:hover {
     background: ${props => props.$variant === 'remove' ? '#991b1b' : '#113b2aff'};
   }
