@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { UserData, Card } from '../../App';
 import { PokemonCard } from '../common/PokemonCard';
-import { ActionButton, CardContainer, CardsGrid, Container, DeckEmpty, EmptyState, Header, Modal, ModalContent, Section } from './MyCards.module';
+import { CardContainer, CardsGrid, Container, DeckEmpty, EmptyState, Header, Modal, ModalContent, Section } from './MyCards.module';
 import AllCards from './AllCards';
 
 interface MyCardsProps {
@@ -47,7 +47,7 @@ export function MyCards({ user, updateUser }: MyCardsProps) {
               <CardsGrid $columns={6}>
                 {user.battleDeck.map((card) => (
                   <CardContainer key={card.id}>
-                    <PokemonCard {... { user, updateUser}} card={card} onClick={() => setSelectedCard(card)} deck />
+                    <PokemonCard {... { user }} card={card} onClick={() => setSelectedCard(card)} />
                   </CardContainer>
                 ))}
               </CardsGrid>

@@ -46,6 +46,8 @@ export const DeckEmpty = styled.div`
   padding: 2rem;
   text-align: center;
   border: 1px solid #2a2a2a;
+  width: 100%;
+  maх-width: 100%;
 
   p {
     color: #9ca3af;
@@ -54,7 +56,7 @@ export const DeckEmpty = styled.div`
 
 export const CardsGrid = styled.div<{ $columns?: number }>`
   display: grid;
-  grid-template-columns: repeat(6,minmax(220px, 1fr));
+  grid-template-columns: repeat(5,minmax(240px, 1fr));
   gap: 1rem;
   width: 100%;
   max-width: 100%;
@@ -63,6 +65,8 @@ export const CardsGrid = styled.div<{ $columns?: number }>`
 
 export const CardContainer = styled.div`
   position: relative;
+  box-sizing: border-box;
+  width: 100%;
   &:hover > button {
     opacity: 1;
   }
@@ -76,12 +80,12 @@ export const ActionButton = styled.button<{ $variant: 'add' | 'remove' }>`
   bottom: 1rem;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 0.875rem;
-  width: 90%;
+  font-size: .9rem;
+  width: 200px;
   background: ${props => props.$variant === 'remove' ? '#7f1d1d' : '#1b6446ff'};
   color: white;
-  padding: 0.25rem;
-  max-height: 40px;
+  padding: 0.05rem;
+  height: 26px;
   box-sizing: border-box;
   border-radius: 25px;
   border: ${props => props.$variant === 'remove' ? '1px solid rgba(202, 138, 4, 0.3)' : 'none'};

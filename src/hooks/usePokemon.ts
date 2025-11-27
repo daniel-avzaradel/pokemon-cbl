@@ -11,7 +11,7 @@ export type Stats = {
 
 export type PokemonTypes = 'fire' | 'water'| 'grass'| 'electric' | 'psychic' | 'fighting' | 'normal' | 'ice' | 'poison' | 'ground' | 'flying' | 'bug' | 'rock' | 'ghost' | 'dragon' | 'dark' | 'steel' | 'fairy';
 
-export const PokemonTypes = [ 'fire', 'water', 'grass', 'electric', 'psychic', 'fighting', 'normal', 'ice', 'poison', 'ground', 'flying', 'bug', 'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy' ] as const;
+export const PokemonTypes = [ 'fire', 'water', 'grass', 'electric', 'psychic', 'fighting', 'normal', 'ice', 'poison', 'ground', 'flying', 'bug', 'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy' ] as Array<PokemonTypes>;
 
 export type FetchedPokemon = {
   id: number;
@@ -56,7 +56,6 @@ export function usePokemon() {
         const id = d.id || i + idx + 1;
         const imageUrl = d.sprites?.other?.['official-artwork']?.front_default || null;
         const types: FetchedPokemon['types'] = Array.isArray(d.types) ? d.types.map((t: any) => t.type.name) : [];
-        console.log(d);
         
         // Extract all stats from API
         const stats: Stats = {
