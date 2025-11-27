@@ -1,14 +1,27 @@
 import styled from "styled-components";
-import { Flame, Droplet, Leaf, Zap, Brain, Hand, Circle } from 'lucide-react';
+import { Flame, Droplet, Leaf, Zap, Brain, Hand, Circle, Origami, Pipette } from 'lucide-react';
+import Foil from '../../../assets/foil.gif';
 
 export const typeColors: Record<string, string> = {
-  fire: 'linear-gradient(to bottom right, #832929ff, #c2410c)',
-  water: 'linear-gradient(to bottom right, #6bc9e6ff, #031e2bff)',
+  fire: 'linear-gradient(to bottom right, #e47676ff, #410a08ff)',
+  water: 'linear-gradient(to bottom right, #acecffff, #031e2bff)',
   grass: 'linear-gradient(to bottom right, #16a34a, #094230ff)',
   electric: 'linear-gradient(to bottom right, #bb9d42ff, #3d2c08ff)',
   psychic: 'linear-gradient(to bottom right, #9333ea, #db2777)',
   fighting: 'linear-gradient(to bottom right, #da7b55ff, #291203ff)',
-  normal: 'linear-gradient(to bottom right, #8b8b8bff, #353535ff)'
+  normal: 'linear-gradient(to bottom right, #dfdfdfff, #353535ff)'
+};
+
+export const singleTypeColors: Record<string, string> = {
+  fire: '#e47676ff',
+  water: '#acecffff',
+  grass: '#16a34a',
+  electric: '#bb9d42ff',
+  psychic: '#9333ea',
+  fighting: '#da7b55ff',
+  dragon: '#c5b662ff',
+  poison: '#624fd1ff',
+  normal: '#e7e7e7ff'
 };
 
 export const typeIcons = {
@@ -18,7 +31,9 @@ export const typeIcons = {
   electric: Zap,
   psychic: Brain,
   fighting: Hand,
-  normal: Circle
+  normal: Circle,
+  dragon: Origami,
+  poison: Pipette
 };
 
 export const rarityColors: Record<string, string> = {
@@ -30,52 +45,59 @@ export const rarityColors: Record<string, string> = {
 
 export const CardWrapper = styled.div<{ $large?: boolean; $clickable?: boolean }>`
   max-height: 100%;
-  width: 220px;
+  width: ${props => props.$large ? '300px' : '220px'};
   cursor: ${props => props.$clickable ? 'pointer' : 'default'};
   transition: transform 0.2s ease;
-  &:hover {
-  }
 `;
 
-export const CardOuter = styled.div<{ $gradient: string; $rarityColor: string }>`
-  background: ${props => props.$gradient};
+export const CardOuter = styled.div<{ $type: string, $gradient: string; $rarityColor: string }>`
   border-radius: 0.75rem;
   border: 2px solid #d1d1d1;
   box-sizing: border-box;
   width: 100%;
 `;
 
-export const CardInner = styled.div<{$type: string}>`
+export const CardInner = styled.div<{ $type: string }>`
   position: relative;
-  background-color: ${props => typeColors[props.$type] || 'linear-gradient(to bottom right, #262626, #0a0a0a)'};
   border-radius: 0.5rem;
   padding: 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+
+  background-image: url(${Foil}), ${props => typeColors[props.$type] || typeColors['normal']};
+
+  background-size: contain, cover;
+  background-blend-mode: luminosity;
 `;
 
 export const CardHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 0.5rem;
+  background: #222;
+  border: 2px solid #686868ff;
+  margin: 0;
+  border-radius: 1rem;
+  font-size: medium;
 `;
 
-export const CardName = styled.h3`
-  color: white;
+export const CardName = styled.h4`
+  color: #d1d5db;
   margin: 0;
 `;
 
-export const ImageContainer = styled.div<{$type: string}>`
+export const ImageContainer = styled.div<{ $type: string }>`
   aspect-ratio: 1;
-  background-image: ${props => typeColors[props.$type] || '#0a0a0a'};
-  background-color: #a1a1a1;
-  background-blend-mode: hard-light;
+  background: #222;
+  background-blend-mode: overlay;
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  border: 2px solid #404040;
 `;
 
 export const CardImage = styled.img`
@@ -91,6 +113,11 @@ export const StatsGrid = styled.div`
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
   text-align: center;
+  background-color: #1f1f1f;
+  border: 2px solid #404040;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-blend-mode: overlay;
 `;
 
 export const StatsBarContainer = styled.div`

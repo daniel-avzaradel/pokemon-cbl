@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Card, UserData } from '../../App';
 import { ActionButton } from '../my-cards/MyCards.module';
-import { CardHeader, CardImage, CardInner, CardName, CardOuter, CardWrapper, ImageContainer, rarityColors, RarityLabel, StatsBarContainer, StatsBarFill, StatsBarLabel, StatsBarRow, StatsBarTrack, StatsBarValue, StatsGrid, typeColors, typeIcons } from './PokemonCards.styles';
+import { CardHeader, CardImage, CardInner, CardName, CardOuter, CardWrapper, ImageContainer, rarityColors, RarityLabel, singleTypeColors, StatsBarContainer, StatsBarFill, StatsBarLabel, StatsBarRow, StatsBarTrack, StatsBarValue, StatsGrid, typeColors, typeIcons } from './PokemonCards.styles';
 import { Circle } from 'lucide-react';
 import { Minus } from 'lucide-react';
 
@@ -11,9 +11,10 @@ interface PokemonCardProps {
   large?: boolean;
   user: UserData;
   updateUser: (user: UserData) => void;
+  deck?: boolean;
 }
 
-export function PokemonCard({ card, onClick, large, user, updateUser }: PokemonCardProps) {
+export function PokemonCard({ card, onClick, large, user, updateUser, deck }: PokemonCardProps) {
   const primaryType = Array.isArray(card.types) && card.types.length > 0 ? card.types[0] : 'normal';
   const TypeIcon = typeIcons[primaryType as keyof typeof typeIcons] || Circle;
   const rarity = (card as any).rarity as string | undefined;
@@ -27,23 +28,16 @@ export function PokemonCard({ card, onClick, large, user, updateUser }: PokemonC
       });
     };
 
-
     return (
-      <CardWrapper $large={large} $clickable={!!onClick} onClick={onClick} onMouseEnter={() => {
-        console.log(mouseOver);
-        setMouseOver(true);
-      }} onMouseLeave={() => {
-        console.log(mouseOver);
-        setMouseOver(false)
-      }}>
-        <CardOuter $gradient={typeColors[primaryType[0]] || typeColors.normal} $rarityColor={rarity ? (rarityColors[rarity] ?? '#d1d1d1') : '#d1d1d1'}>
-          <CardInner $type={primaryType[0]}>
+      <CardWrapper $large={large} $clickable={!!onClick} onClick={onClick} onMouseEnter={() => setMouseOver(true)} onMouseLeave={() => setMouseOver(false)}>
+        <CardOuter $type={typeColors[primaryType]} $gradient={typeColors[primaryType] || typeColors.normal} $rarityColor={rarity ? (rarityColors[rarity] ?? '#d1d1d1') : '#d1d1d1'}>
+          <CardInner $type={primaryType}>
             <CardHeader>
               <CardName>{card.name.charAt(0).toUpperCase() + card.name.slice(1)}</CardName>
-              <TypeIcon style={{ width: '1.25rem', height: '1.25rem', color: '#d1d5db' }} />
+              <TypeIcon style={{ width: '1.25rem', height: '1.25rem', color: `${singleTypeColors[primaryType] || '#e1e1e1'}` }} />
             </CardHeader>
 
-            <ImageContainer $type={primaryType[0]}>
+            <ImageContainer $type={primaryType}>
               <CardImage src={card.imageUrl ?? ''} alt={card.name} />
             </ImageContainer>
 
@@ -67,11 +61,16 @@ export function PokemonCard({ card, onClick, large, user, updateUser }: PokemonC
                 ))}
               </StatsBarContainer>
             </StatsGrid>
+
             {rarity ? <RarityLabel>{rarity}</RarityLabel> : <RarityLabel />}
-            {mouseOver && (
+
+            {(deck && mouseOver) && (
             <ActionButton
               $variant="remove"
-              onClick={() => removeFromDeck(card.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                removeFromDeck(card.id)
+              }}
             >
               <Minus />
             </ActionButton>

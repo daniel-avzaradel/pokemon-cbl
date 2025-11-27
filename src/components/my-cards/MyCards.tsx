@@ -47,7 +47,7 @@ export function MyCards({ user, updateUser }: MyCardsProps) {
               <CardsGrid $columns={6}>
                 {user.battleDeck.map((card) => (
                   <CardContainer key={card.id}>
-                    <PokemonCard {... { user, updateUser}} card={card} onClick={() => setSelectedCard(card)} />
+                    <PokemonCard {... { user, updateUser}} card={card} onClick={() => setSelectedCard(card)} deck />
                   </CardContainer>
                 ))}
               </CardsGrid>

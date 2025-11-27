@@ -87,8 +87,9 @@ export const ActionButton = styled.button<{ $variant: 'add' | 'remove' }>`
   border: ${props => props.$variant === 'remove' ? '1px solid rgba(202, 138, 4, 0.3)' : 'none'};
   cursor: pointer;
   transition: all 0.2s ease;
-  opacity: 0;
+  opacity: 1;
   border: 1px solid #e1e1e1;
+  z-index: 10;
   & > svg {
     width: 16px;
     height: 16px;}
