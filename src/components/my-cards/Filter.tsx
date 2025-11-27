@@ -1,4 +1,4 @@
-import { FilterSelect } from './AllCards'
+import styled from 'styled-components';
 import { PokemonTypes } from '../../hooks/usePokemon';
 
 interface FilterProps {
@@ -6,6 +6,27 @@ interface FilterProps {
     filter: string;
     PokemonTypes: PokemonTypes[];
 }
+
+export const FilterSelect = styled.select`
+    display: flex;
+    align-items: center;
+    padding: 0.1rem 0.5rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    background-color: white;
+    cursor: pointer;
+                
+    &:hover {
+        border-color: #b0b0b0;
+    }
+                
+    &:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+    }
+`;
 
 const Filter = ({ filter, handleFilterChange, PokemonTypes }: FilterProps) => {
     return (

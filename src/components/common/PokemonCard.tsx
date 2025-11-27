@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Card, UserData } from '../../App';
 import { ActionButton } from '../my-cards/MyCards.module';
-import { CardHeader, CardImage, CardInner, CardName, CardOuter, CardWrapper, ImageContainer, singleTypeColors, StatsBarContainer, StatsBarFill, StatsBarLabel, StatsBarRow, StatsBarTrack, StatsBarValue, StatsGrid, typeColors, typeIcons } from './PokemonCards.styles';
+import { CardHeader, CardImage, CardInner, CardName, CardOuter, CardWrapper, HoloBorder, ImageContainer, singleTypeColors, StatsBarContainer, StatsBarFill, StatsBarLabel, StatsBarRow, StatsBarTrack, StatsBarValue, StatsGrid, typeColors, typeIcons } from './PokemonCards.styles';
 import { Circle, Plus } from 'lucide-react';
 import { Minus } from 'lucide-react';
 
@@ -12,9 +12,10 @@ interface PokemonCardProps {
   user: UserData;
   addToDeck?: (card: Card) => void;
   removeFromDeck?: (cardId: number) => void;
+  shop?: boolean;
 }
 
-export function PokemonCard({ card, onClick, large, user, addToDeck, removeFromDeck }: PokemonCardProps) {
+export function PokemonCard({ card, onClick, large, user, addToDeck, removeFromDeck, shop }: PokemonCardProps) {
   const primaryType = Array.isArray(card.types) && card.types.length > 0 ? card.types[0] : 'normal';
   const TypeIcon = typeIcons[primaryType as keyof typeof typeIcons] || Circle;
 
@@ -29,7 +30,7 @@ export function PokemonCard({ card, onClick, large, user, addToDeck, removeFromD
     if (isInDeck(card.id) && removeFromDeck) {
       removeFromDeck(card.id)
     } else if (!isInDeck(card.id)) {
-      console.log('Adding to deck');
+      console.log('Adding to deck', card);
       addToDeck?.(card);
     }
   }
@@ -41,11 +42,11 @@ export function PokemonCard({ card, onClick, large, user, addToDeck, removeFromD
 
   return (
     <CardWrapper $large={large} $clickable={!!onClick} onClick={onClick} onMouseEnter={() => setMouseOver(true)} onMouseLeave={() => setMouseOver(false)}>
-      <CardOuter $type={typeColors[primaryType]} $gradient={typeColors[primaryType] || typeColors.normal} >
+      <HoloBorder $type={typeColors[primaryType]}  >
         <CardInner $type={primaryType} $rarity={rarity(card)}>
-          <CardHeader>
+          <CardHeader $type={primaryType}>
             <CardName>{card.name.charAt(0).toUpperCase() + card.name.slice(1)}</CardName>
-            <TypeIcon style={{ width: '1.25rem', height: '1.25rem', color: `${singleTypeColors[primaryType] || '#e1e1e1'}` }} />
+            <TypeIcon style={{ width: '1.25rem', height: '1.25rem', fill: `${singleTypeColors[primaryType] || '#e1e1e1'}` }} />
           </CardHeader>
 
           <ImageContainer $type={primaryType}>
@@ -73,7 +74,7 @@ export function PokemonCard({ card, onClick, large, user, addToDeck, removeFromD
             </StatsBarContainer>
           </StatsGrid>
 
-          {(mouseOver) && (
+          {(mouseOver && !shop && !large) && (
             <ActionButton
               $variant={isInDeck(card.id) ? 'remove' : 'add'}
               onClick={(e) => handleButtonClick(e)}
@@ -90,7 +91,7 @@ export function PokemonCard({ card, onClick, large, user, addToDeck, removeFromD
             </ActionButton>
           )}
         </CardInner>
-      </CardOuter>
+      </HoloBorder>
     </CardWrapper>
   );
 }

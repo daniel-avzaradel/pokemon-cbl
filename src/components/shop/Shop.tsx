@@ -144,8 +144,8 @@ export function Shop({ user, updateUser }: ShopProps) {
 
             <CardsGrid>
               {revealedCards.map((card, index) => (
-                <CardWrapper key={card.id} $delay={index * 0.25}>
-                  <PokemonCard {...{ user }} card={card} />
+                <CardWrapper key={card.id} $delay={index * 0.2}>
+                  <PokemonCard {...{ user }} card={card} shop />
                 </CardWrapper>
               ))}
             </CardsGrid>

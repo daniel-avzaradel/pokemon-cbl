@@ -1,4 +1,4 @@
-import { FilterSelect } from './AllCards'
+import { FilterSelect } from "./Filter";
 
 interface SortByProps {
     handleSort: (value: string) => void;
@@ -11,8 +11,9 @@ const SortBy = ({ sort, handleSort }: SortByProps) => {
             <span style={{ color: 'white', float: 'right' }}>Sort by:</span>
             <FilterSelect onChange={(e) => handleSort(e.target.value)} value={sort}>
                 <option value="none">None</option>
-                <option value="id">Pokedex Entry #</option>
-                <option value="element">Element</option>
+                <option value="id">Pokedex Entry</option>
+                <option value="statsAsc">Status Ascending</option>
+                <option value="statsDes">Status Descending</option>
             </FilterSelect>
         </div>
     )

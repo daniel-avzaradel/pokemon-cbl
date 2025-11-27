@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import styled from 'styled-components';
 import { Card, UserData } from '../../App';
 import { PokemonTypes } from '../../hooks/usePokemon';
 import { PokemonCard } from '../common/PokemonCard';
@@ -14,31 +13,10 @@ interface AllCardsProps {
     setSelectedCard: (card: Card) => void;
 }
 
-export const FilterSelect = styled.select`
-    display: flex;
-    align-items: center;
-    padding: 0.1rem 0.5rem;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    font-size: 0.95rem;
-    background-color: white;
-    cursor: pointer;
-                
-    &:hover {
-        border-color: #b0b0b0;
-    }
-                
-    &:focus {
-        outline: none;
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-    }
-`;
-
 const AllCards = ({ user, updateUser, setSelectedCard }: AllCardsProps) => {
 
     const [filter, setFilter] = useState<string>('');
-    const [sort, setSort] = useState<string>('');
+    const [sort, setSort] = useState<string>('id');
 
     const filteredCollection = useMemo(() => {
         const result = [...user.collection]  // clone so we never mutate the original
@@ -49,6 +27,13 @@ const AllCards = ({ user, updateUser, setSelectedCard }: AllCardsProps) => {
 
         if (sort === 'id') {
             result.sort((a, b) => a.id - b.id);
+        }
+
+        if (sort === 'statsAsc') {
+            result.sort((a, b) => Object.values(a.stats).reduce((prev, cur) => prev + cur) - Object.values(b.stats).reduce((prev, cur) => prev + cur));
+        }
+        if (sort === 'statsDes') {
+            result.sort((a, b) => Object.values(b.stats).reduce((prev, cur) => prev + cur) - Object.values(a.stats).reduce((prev, cur) => prev + cur));
         }
 
         return result;
@@ -66,9 +51,6 @@ const AllCards = ({ user, updateUser, setSelectedCard }: AllCardsProps) => {
         setSort(value);
     }
 
-    console.log(sort, filteredCollection);
-
-
     return (
         <Section>
             <AllCardsHeader>
@@ -80,9 +62,12 @@ const AllCards = ({ user, updateUser, setSelectedCard }: AllCardsProps) => {
                 </div>
             </AllCardsHeader>
             <CardsGrid>
-                {filteredCollection.map((card) => (
-                    <CardContainer key={card.id}>
-                        <PokemonCard {...{ user, updateUser }} card={card} onClick={() => setSelectedCard(card)} />
+                {filteredCollection.map((card, index) => (
+                    <CardContainer key={card.id + '-' + index}>
+                        <PokemonCard {...{ user, updateUser }}
+                            card={card}
+                            onClick={() => setSelectedCard(card)}
+                        />
                     </CardContainer>
                 ))}
             </CardsGrid>
