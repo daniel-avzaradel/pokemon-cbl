@@ -10,10 +10,10 @@ interface AllCardsProps {
     user: UserData;
     updateUser: (user: UserData) => void;
     addToDeck: (card: Card) => void;
-    setSelectedCard: (card: Card) => void;
+    removeFromDeck: (cardId: number) => void;
 }
 
-const AllCards = ({ user, updateUser, setSelectedCard }: AllCardsProps) => {
+const AllCards = ({ user, addToDeck, removeFromDeck, updateUser }: AllCardsProps) => {
 
     const [filter, setFilter] = useState<string>('');
     const [sort, setSort] = useState<string>('id');
@@ -64,9 +64,9 @@ const AllCards = ({ user, updateUser, setSelectedCard }: AllCardsProps) => {
             <CardsGrid>
                 {filteredCollection.map((card, index) => (
                     <CardContainer key={card.id + '-' + index}>
-                        <PokemonCard {...{ user, updateUser }}
+                        <PokemonCard {...{ user, updateUser, removeFromDeck, addToDeck }}
                             card={card}
-                            onClick={() => setSelectedCard(card)}
+                            onClick={addToDeck ? () => addToDeck(card) : undefined }
                         />
                     </CardContainer>
                 ))}

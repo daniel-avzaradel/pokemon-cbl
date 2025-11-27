@@ -22,6 +22,13 @@ export function MyCards({ user, updateUser }: MyCardsProps) {
     }
   };
 
+  const removeFromDeck = (cardId: number) => {
+    updateUser({
+      ...user,
+      battleDeck: user.battleDeck.filter(card => card.uid !== cardId)
+    });
+  }
+
 
   return (
     <Container>
@@ -46,24 +53,16 @@ export function MyCards({ user, updateUser }: MyCardsProps) {
             ) : (
               <CardsGrid $columns={6}>
                 {user.battleDeck.map((card) => (
-                  <CardContainer key={card.id}>
-                    <PokemonCard {... { user }} card={card} onClick={() => setSelectedCard(card)} />
+                  <CardContainer key={card.id + '-' + card.uid}>
+                    <PokemonCard {... { user, addToDeck, removeFromDeck }} card={card} onClick={() => removeFromDeck(card.uid)} deck />
                   </CardContainer>
                 ))}
               </CardsGrid>
             )}
           </Section>
-          <AllCards {...{ user, updateUser, addToDeck, setSelectedCard }} />
+          <AllCards {...{ user, updateUser, addToDeck, removeFromDeck, setSelectedCard }} />
           
         </>
-      )}
-
-      {selectedCard && (
-        <Modal onClick={() => setSelectedCard(null)}>
-          <ModalContent onClick={(e) => e.stopPropagation()}>
-            <PokemonCard {... { user, updateUser}} card={selectedCard} large />
-          </ModalContent>
-        </Modal>
       )}
     </Container>
   );

@@ -56,66 +56,26 @@ export const typeIcons = {
   ghost: Ghost,
 };
 
-export const HoloBorder = styled.div<{ $type: string }>`
-  position: relative;
-  border-radius: .5rem;
-  padding: 4px; /* border thickness */
-  background: ${p => singleTypeColors[p.$type]};
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    padding: 2px;
-    border-radius: inherit;
-
-    background: 
-      linear-gradient(
-        130deg,
-        #ff00c8,
-        #00eaff,
-        #ffde00,
-        #ff00c8
-      );
-    background-size: 300% 300%;
-
-    animation: holoShift 4s linear infinite;
-
-    /* Cut out the inside so only border is visible */
-    -webkit-mask: 
-      linear-gradient(#fff 0 0) content-box, 
-      linear-gradient(#fff 0 0) border-box;
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-  }
-
-  @keyframes holoShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-`;
-
-export const CardWrapper = styled.div<{ $large?: boolean; $clickable?: boolean }>`
+export const CardWrapper = styled.div<{ $clickable?: boolean, $inDeck?: boolean }>`
   max-height: 100%;
-  width: ${props => props.$large ? '360px' : '100%'};
+  width: 100%;
   cursor: ${props => props.$clickable ? 'pointer' : 'default'};
   transition: transform 0.2s ease;
+  opacity: ${props => props.$inDeck ? 0.1 : 1};
 `;
 
-export const CardOuter = styled.div<{ $type: string, $gradient: string }>`
+export const CardOuter = styled.div<{ $type: string }>`
   border-radius: 0.5rem;
   box-sizing: border-box;
   width: 100%;
-  border: 15px solid color-mix(in srgb, ${p => singleTypeColors[p.$type]} 90%, black);
-  background: ${props => props.$gradient};
+  border: 4px solid color-mix(in srgb, ${p => singleTypeColors[p.$type] || "#e1e1e1"} 90%, black);
   padding: 0.25rem;
 `;
 
 export const CardInner = styled.div<{ $type: string, $rarity: boolean }>`
   position: relative;
   border-radius: 0.25rem;
-  padding: 0.75rem;
+  padding: 0.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;

@@ -6,6 +6,7 @@ import { Shop } from './components/shop/Shop';
 import { Battle } from './components/battle/Battle';
 import { Navigation } from './components/Navigation';
 import { MyCards } from './components/my-cards/MyCards';
+import Library from './components/library/Library';
 
 export type Card = HookFetchedPokemon;
 
@@ -26,7 +27,7 @@ const AppContainer = styled.div`
 const MainContent = styled.main`
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 1rem;
 `;
 
 export default function App() {
@@ -75,6 +76,8 @@ export default function App() {
       />
       
       <MainContent>
+        {currentView === 'library' && (
+          <Library />)}
         {currentView === 'myCards' && (
           <MyCards user={user} updateUser={updateUser} />
         )}

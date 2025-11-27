@@ -56,7 +56,7 @@ export const DeckEmpty = styled.div`
 
 export const CardsGrid = styled.div<{ $columns?: number }>`
   display: grid;
-  grid-template-columns: repeat(5,minmax(240px, 1fr));
+  grid-template-columns: repeat(6, minmax(auto, 1fr));
   gap: 1rem;
   width: 100%;
   max-width: 100%;

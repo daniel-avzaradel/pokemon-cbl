@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Library, ShoppingBag, Swords, Coins, LogOut } from 'lucide-react';
+import { BookMarked, Library, ShoppingBag, Swords, Coins, LogOut } from 'lucide-react';
 import { UserData } from '../App';
 
 interface NavigationProps {
@@ -132,6 +132,13 @@ export function Navigation({ user, currentView, onViewChange, onLogout }: Naviga
             <span>by: Daniel Avzaradel</span>
             </LogoDiv>
             <NavButtons>
+              <NavButton
+                $active={currentView === 'library'}
+                onClick={() => onViewChange('library')}
+              >
+                <BookMarked style={{ width: '1rem', height: '1rem' }} />
+                <span>Library</span>
+              </NavButton>
               <NavButton
                 $active={currentView === 'myCards'}
                 onClick={() => onViewChange('myCards')}

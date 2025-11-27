@@ -14,6 +14,7 @@ export type PokemonTypes = 'fire' | 'water'| 'grass'| 'electric' | 'psychic' | '
 export const PokemonTypes = [ 'fire', 'water', 'grass', 'electric', 'psychic', 'fighting', 'normal', 'ice', 'poison', 'ground', 'flying', 'bug', 'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy' ] as Array<PokemonTypes>;
 
 export type FetchedPokemon = {
+  uid: number;
   id: number;
   name: string;
   types: PokemonTypes[];
@@ -53,6 +54,7 @@ export function usePokemon() {
 
         details.forEach((d, idx) => {
         if (!d) return;
+        const uid = Math.random() * 100000;
         const id = d.id || i + idx + 1;
         const imageUrl = d.sprites?.other?.['official-artwork']?.front_default || null;
         const types: FetchedPokemon['types'] = Array.isArray(d.types) ? d.types.map((t: any) => t.type.name) : [];
@@ -77,7 +79,7 @@ export function usePokemon() {
           });
         }
 
-        fetched.push({ id, name: d.name, types, imageUrl, stats });
+        fetched.push({ uid, id, name: d.name, types, imageUrl, stats });
           });
         }
 
