@@ -1,4 +1,4 @@
-import { Star, Trophy, Zap, LockIcon, Swords } from 'lucide-react';
+import { Star, Coins, Zap, LockIcon, Swords } from 'lucide-react';
 import { ActionButton, EmptyState, LevelBadge, LockedDiv, LockWrapper, PokemonList, PokemonSection, ProfileCard, ProfileContent, ProfileHeader, ProfileImage, ProfileImageBorder, ProfileImageWrapper, SectionTitle, StatBox, StatIcon, StatLabel, StatsGrid, StatValue, TrainerName, TrainerTitle } from './TrainerCard.styles';
 
 import PokeBall from '../../assets/pokeball.png'
@@ -17,7 +17,7 @@ export function TrainerCard({ trainer, user, updateUser }: TrainerCardProps) {
   const battlesWon = 3
   const userArenaTrainer = user.arena?.find(t => t.name === trainer.name)
 
-  const isLocked = () => {
+  const isUnlocked = () => {
     if(userArenaTrainer) {
       return userArenaTrainer.unlocked
     }
@@ -25,12 +25,12 @@ export function TrainerCard({ trainer, user, updateUser }: TrainerCardProps) {
   }
 
   return (
-    <ProfileCard $unlocked={isLocked()}>
+    <ProfileCard $unlocked={isUnlocked()}>
       <ProfileContent>
         <ProfileHeader>
           <ProfileImageWrapper>
             <ProfileImageBorder>
-              <ProfileImage $imageUrl={trainer.profile} />
+              <ProfileImage $imageUrl={isUnlocked() ? trainer.profile : ""} />
             </ProfileImageBorder>
             <LevelBadge>{trainer.level}</LevelBadge>
           </ProfileImageWrapper>
@@ -49,10 +49,10 @@ export function TrainerCard({ trainer, user, updateUser }: TrainerCardProps) {
 
           <StatBox>
             <StatIcon>
-              <Trophy style={{ width: '1.5rem', height: '1.5rem' }} />
+              <Coins style={{ width: '1.5rem', height: '1.5rem' }} />
             </StatIcon>
-            <StatValue>{battlesWon}</StatValue>
-            <StatLabel>Battles Won</StatLabel>
+            <StatValue>{trainer.rewardCoins}</StatValue>
+            <StatLabel>Reward Coins</StatLabel>
           </StatBox>
 
           <StatBox>
@@ -87,10 +87,10 @@ export function TrainerCard({ trainer, user, updateUser }: TrainerCardProps) {
             </EmptyState>
           ) : (
             <LockedDiv>
-            <LockWrapper>
-              <LockIcon size={40} />
-            </LockWrapper>
-            <span>Unlock this trainer by defeating all previous trainer challenges.</span>
+              <LockWrapper>
+                <LockIcon size={40} />
+              </LockWrapper>
+              <span>Unlock this trainer by defeating all previous trainer challenges.</span>
             </LockedDiv>
           )}
           {userArenaTrainer?.unlocked && (

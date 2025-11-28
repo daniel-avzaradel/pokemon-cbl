@@ -27,7 +27,7 @@ export const IconWrapper = styled.div`
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  font-size: 2rem;
+  font-size: 1.8rem;
   & > svg {
     margin: 0;
     filter: drop-shadow(0px 2px 2px rgba(255, 255, 255, 0.9));

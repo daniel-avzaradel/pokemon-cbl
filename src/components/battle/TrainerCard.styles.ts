@@ -15,12 +15,15 @@ export const ProfileCard = styled.div<{$unlocked?: boolean}>`
   position: relative;
   background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
   border-radius: 1rem;
-  padding: 1rem;
+  padding: 0 1rem;
   border: 2px solid #2a2a2a;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   position: relative;
   overflow: hidden;
   opacity: ${p => p.$unlocked ? '1' : '0.4'};
+  height: 100%;
+  margin: 0;
+  padding-top: 1rem;
     
   &::before {
     content: '';
@@ -28,7 +31,7 @@ export const ProfileCard = styled.div<{$unlocked?: boolean}>`
     top: 0;
     left: 0;
     right: 0;
-    height: 6.5rem;
+    height: 6rem;
     background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
     border-bottom: 2px solid #ca8a04;
   }
@@ -57,15 +60,15 @@ export const LockWrapper = styled.div`
 
 export const LockedDiv = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 2rem;
   width: 100%;
   height: 100%;
   font-style: italic;
   color: #d1d1d1;
-  text-align: center;
+  font-size: 0.875rem;
+  text-align: left;
   padding: 0 1rem;
 `
 
@@ -191,6 +194,7 @@ export const SectionTitle = styled.h3`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  padding: 0 0.5rem;
 `;
 
 export const PokemonList = styled.section`
@@ -202,6 +206,7 @@ export const PokemonList = styled.section`
   text-transform: capitalize;
   font-size: 0.9rem;
   transition: 0.5s ease-in-out;
+  padding: 0 .5rem;
 
   &::-webkit-scrollbar {
     width: 0.5rem;
@@ -227,7 +232,7 @@ export const ActionButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  bottom: 0rem;
+  bottom: 1rem;
   left: 50%;
   gap: 0 10px;
   transform: translateX(-50%);

@@ -1,6 +1,5 @@
 import { Swords } from 'lucide-react';
 import { UserData } from '../../App';
-import { FetchedPokemon } from '../../hooks/usePokemon';
 import { BattleContainer, BattleHeader, IconWrapper, LevelContainer } from './Battle.styled';
 import { TrainerCard } from './TrainerCard';
 
@@ -45,7 +44,7 @@ const Battle = ({ user, updateUser }: BattleProps) => {
       </BattleHeader>
       <IconWrapper>
         <span>Battle</span>
-        <Swords size={60} color='rgb(127, 29, 29)' />
+        <Swords size={48} color='rgb(127, 29, 29)' />
         <span>Arena</span>
       </IconWrapper>
       <LevelContainer>

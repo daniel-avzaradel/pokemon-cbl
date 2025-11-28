@@ -123,6 +123,8 @@ export const PurchaseButton = styled.button<{ $disabled: boolean }>`
 `;
 
 export const Modal = styled.div`
+  display: flex;
+  align-items: center;
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.95);
@@ -148,13 +150,17 @@ export const Modal = styled.div`
 `;
 
 export const ModalContent = styled.div`
-  max-width: 72rem;
+  position: absolute;
+  max-width: 1280px;
+  padding: 1rem;
+  box-sizing: border-box;
   width: 100%;
 `;
 
 export const ModalHeader = styled.div`
   text-align: center;
   margin-bottom: 2rem;
+  box-sizing: border-box;
 `;
 
 export const ModalTitle = styled.div`
@@ -163,25 +169,28 @@ export const ModalTitle = styled.div`
   gap: 0.5rem;
   color: #eab308;
   font-size: 1.5rem;
-  margin-bottom: 1rem;
+  box-sizing: border-box;
 `;
 
-export const CardsGrid = styled.div`
+export const CardsGrid = styled.div<{$cards: number}>`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  place-content: center;
+  grid-template-columns: ${p => p.$cards > 4 ? `repeat(3, min(220px))` : `repeat(${p.$cards}, 1fr)`};
+  max-width: ${p => p.$cards >= 4 ? `1280px` : `768px`};
+  margin: auto;
+  place-items: center;
+  justify-items: center;
+  align-items: center;
   gap: 1rem;
-  margin-bottom: 2rem;
+  box-sizing: border-box;
 
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(5, 1fr);
+  & > * {
+    height: 100%;
   }
 `;
 
 export const CardWrapper = styled.div<{ $delay: number }>`
+  display: flex;
   animation: fadeIn 0.5s ease-in-out;
   animation-delay: ${props => props.$delay}s;
   animation-fill-mode: backwards;
@@ -208,6 +217,7 @@ export const ContinueButton = styled.button<{ $delay: number }>`
   transition: all 0.5s ease;
   animation: fadeIn 0.5s ease-in-out;
   animation-fill-mode: backwards;
+  margin-top: 2rem;
 
   animation-delay: ${props => props.$delay}s;
   @keyframes fadeIn {
