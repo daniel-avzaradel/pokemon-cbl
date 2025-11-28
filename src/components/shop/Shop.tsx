@@ -1,7 +1,6 @@
 import { Package, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { Card, UserData } from '../../App';
-import { usePokemon } from '../../hooks/usePokemon';
 import { PokemonCard } from '../common/PokemonCard';
 import { ButtonContainer, CardsGrid, CardWrapper, Container, ContinueButton, Header, IconWrapper, Modal, ModalContent, ModalHeader, ModalTitle, PackCard, PackContent, PackInfo, PacksGrid, PriceBox, PurchaseButton } from './Shop.styles';
 import { BoosterPack, boosterPacks, OpeninBoosterPack } from './packLogic';
@@ -13,7 +12,8 @@ interface ShopProps {
 }
 
 export const boosterColors: Record<string, string> = {
-  basic: 'linear-gradient(to bottom right, #e4e4e4ff, #4d4d4dff, #ffffffff, #4d4d4dff, #8d8d8dff)',
+  basic: '#d1d1d1',
+  great: 'linear-gradient(to bottom right, #e4e4e4ff, #4d4d4dff, #ffffffff, #4d4d4dff, #8d8d8dff)',
   ultra: 'linear-gradient(to bottom right, #eed253ff, #574207ff, #ffe397ff, #574207ff, #dfad0aff)',
   master: 'linear-gradient(to bottom right, #d453eeff, #5f1359ff, #ec8affff, #581753ff, #ff07f3ff)',
 };
@@ -21,7 +21,6 @@ export const boosterColors: Record<string, string> = {
 export function Shop({ user, updateUser }: ShopProps) {
   const [openingPack, setOpeningPack] = useState(false);
   const [revealedCards, setRevealedCards] = useState<Card[]>([]);
-  const { pokemons, loading: pokemonsLoading, error: pokemonsError } = usePokemon();
 
   const purchasePack = async (pack: BoosterPack) => {
     if (user.coins < pack.price) {
