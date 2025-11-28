@@ -3,11 +3,11 @@ import { useState, useEffect } from 'react';
 import { FetchedPokemon as HookFetchedPokemon } from './hooks/usePokemon';
 import { Login } from './components/Login';
 import { Shop } from './components/shop/Shop';
-import { Battle } from './components/battle/Battle';
 import { Navigation } from './components/Navigation';
 import { MyCards } from './components/my-cards/MyCards';
 import Library from './components/library/Library';
 import { ToastContainer, toast } from 'react-toastify';
+import Battle from './components/battle/Battle';
 
 export type Card = HookFetchedPokemon;
 
