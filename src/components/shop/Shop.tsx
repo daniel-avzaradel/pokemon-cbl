@@ -1,10 +1,11 @@
-import { Package, Sparkles } from 'lucide-react';
+import ModalComponent from './Modal';
+
+import { Package } from 'lucide-react';
 import { useState } from 'react';
-import { Card, UserData } from '../../App';
-import { PokemonCard } from '../common/PokemonCard';
-import { ButtonContainer, CardsGrid, CardWrapper, Container, ContinueButton, Header, IconWrapper, Modal, ModalContent, ModalHeader, ModalTitle, PackCard, PackContent, PackInfo, PacksGrid, PriceBox, PurchaseButton } from './Shop.styles';
-import { BoosterPack, boosterPacks, OpeninBoosterPack } from './packLogic';
 import { toast } from 'react-toastify';
+import { Card, UserData } from '../../App';
+import { Container, Header, IconWrapper, PackCard, PackContent, PackInfo, PacksGrid, PriceBox, PurchaseButton } from './Shop.styles';
+import { BoosterPack, boosterPacks, OpeninBoosterPack } from './packLogic';
 
 interface ShopProps {
   user: UserData;
@@ -22,6 +23,8 @@ export function Shop({ user, updateUser }: ShopProps) {
   const [openingPack, setOpeningPack] = useState(false);
   const [revealedCards, setRevealedCards] = useState<Card[]>([]);
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const purchasePack = async (pack: BoosterPack) => {
     if (user.coins < pack.price) {
       toast.error('You do not have enough coins to purchase this pack.', {
@@ -38,13 +41,12 @@ export function Shop({ user, updateUser }: ShopProps) {
       });
       return;
     }
-
+    setLoading(true);
     setOpeningPack(true);
     // Generate cards from fetched pokemon list if available, else fall back
     const newCards: Card[] = [];
     const boosterPack = await OpeninBoosterPack(pack)
     newCards.push(...boosterPack);
-
     setRevealedCards(newCards);
 
     // Deduct coins and immediately add cards to the user's collection
@@ -53,11 +55,15 @@ export function Shop({ user, updateUser }: ShopProps) {
       coins: user.coins - pack.price,
       collection: [...user.collection, ...newCards]
     });
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000)
   };
 
   const closePackOpening = () => {
     setOpeningPack(false);
     setRevealedCards([]);
+    setLoading(false)
   };
 
   return (
@@ -97,31 +103,7 @@ export function Shop({ user, updateUser }: ShopProps) {
       </PacksGrid>
 
       {openingPack && (
-        <Modal>
-          <ModalContent>
-            <ModalHeader>
-              <ModalTitle>
-                <Sparkles style={{ width: '2rem', height: '2rem' }} />
-                <h2 style={{ margin: 0 }}>Pack Opened!</h2>
-                <Sparkles style={{ width: '2rem', height: '2rem' }} />
-              </ModalTitle>
-            </ModalHeader>
-
-            <CardsGrid>
-              {revealedCards.map((card, index) => (
-                <CardWrapper key={card.id + '-' + index} $delay={index * 0.2}>
-                  <PokemonCard {...{ user }} card={card} />
-                </CardWrapper>
-              ))}
-            </CardsGrid>
-
-            <ButtonContainer>
-              <ContinueButton onClick={closePackOpening}>
-                Continue
-              </ContinueButton>
-            </ButtonContainer>
-          </ModalContent>
-        </Modal>
+        <ModalComponent {... { user, closePackOpening, revealedCards, loading}} />
       )}
     </Container>
   );

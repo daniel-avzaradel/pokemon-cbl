@@ -129,7 +129,7 @@ export const OpeninBoosterPack = async (pack: BoosterPack) => {
         c.stats = applyFoilBoost(c.stats, 0.15);
       }
     }
-
+    
     return all;
   };
 

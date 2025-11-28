@@ -116,6 +116,19 @@ export const Modal = styled.div`
   justify-content: center;
   z-index: 50;
   padding: 1rem;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  & > img {
+    animation: spin 1s linear infinite;
+  }
 `;
 
 export const ModalContent = styled.div`
@@ -169,15 +182,28 @@ export const CardWrapper = styled.div<{ $delay: number }>`
   }
 `;
 
-export const ContinueButton = styled.button`
+export const ContinueButton = styled.button<{ $delay: number }>`
   background: linear-gradient(to right, #7f1d1d, #450a0a);
   color: white;
   padding: 0.75rem 2rem;
   border-radius: 0.5rem;
   border: 1px solid rgba(202, 138, 4, 0.3);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.5s ease;
+  animation: fadeIn 0.5s ease-in-out;
+  animation-fill-mode: backwards;
 
+  animation-delay: ${props => props.$delay}s;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
   &:hover {
     background: linear-gradient(to right, #991b1b, #7f1d1d);
   }

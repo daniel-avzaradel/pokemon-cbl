@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Flame, Droplet, Moon, Leaf, Anvil, Zap, Brain, Hand, FlaskConical, Circle, Ghost, Origami, Snowflake, Bug, Mountain } from 'lucide-react';
+import { Flame, Droplet, Moon, Leaf, Anvil, Zap, Brain, Hand, FlaskConical, Circle, Ghost, Origami, Snowflake, Bug, BrickWall, Mountain } from 'lucide-react';
 import Foil from '../../assets/foil1.gif';
 import ShineTexture from '../../assets/foil4.gif';
 import Texture01 from '../../assets/texture01.jpg';
@@ -56,7 +56,7 @@ export const typeIcons = {
   ice: Snowflake,
   bug: Bug,
   ground: Mountain,
-  rock: Mountain,
+  rock: BrickWall,
   ghost: Ghost,
   dark: Moon,
   steel: Anvil
