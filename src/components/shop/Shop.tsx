@@ -68,8 +68,8 @@ export function Shop({ user, updateUser }: ShopProps) {
       </Header>
 
       <PacksGrid>
-        {boosterPacks.map((pack) => (
-          <PackCard key={pack.id} $type={boosterColors[pack.tag]}>
+        {boosterPacks.map((pack, i) => (
+          <PackCard key={pack.id + '-' + i} $type={boosterColors[pack.tag]}>
             <PackContent>
               <IconWrapper>
                 <Package style={{ width: '2.5rem', height: '2.5rem', color: '#eab308' }} />

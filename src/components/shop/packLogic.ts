@@ -1,4 +1,5 @@
 import { Card } from "../../App";
+import { FetchedPokemon, Stats } from "../../hooks/usePokemon";
 import { generateCardFromPokemon } from "../../utils/generateCardFromPokemon";
 
 export interface BoosterPack {
@@ -45,57 +46,61 @@ export const boosterPacks: BoosterPack[] = [
   }
 ];
 
+function applyFoilBoost(stats: Stats, boost = 0.1) {
+  const result: Stats = { ...stats };
+  
+  for (const key in stats) {
+    result[key as keyof Stats] = Math.round(stats[key as keyof typeof stats] * (1 + boost));
+  }
+
+  return result;
+}
+
 export const OpeninBoosterPack = async (pack: BoosterPack) => {
 
     let cards: Card[] = [];
-    let rarity: number;
+    let rarity: (pokemon: FetchedPokemon) => number;
 
     let chance = Math.random() * 100;
+    let foil = Math.random() * 100;
     
     if(pack.id === 1) {
         while(cards.length < pack.cardCount) {
+
           let pokemon = await generateCardFromPokemon();
-          rarity = pokemon ? Object.values(pokemon.stats).reduce((a, b) => a + b, 0) : 0;
+          rarity = (pokemon) => {
+            return Object.values(pokemon.stats).reduce((a, b) => a + b, 0) ?? 0;
+          } 
+          
           if(chance <= 5) {
-              while(rarity < 320) {
+              while(rarity(pokemon) < 280 || rarity(pokemon) > 400) {
                   pokemon = await generateCardFromPokemon();
-                  rarity = pokemon ? Object.values(pokemon.stats).reduce((a, b) => a + b, 0) : 0;
               }
-              console.log(pokemon.name + ' RARE');
-              cards.push(pokemon);
-              chance = Math.random() * 100;
-            } else if(rarity < 280) {
-                cards.push(pokemon);
+              console.log(pokemon.name + ' RARE', rarity);
+            } else {
+              while(rarity(pokemon) > 280) {
+                pokemon = await generateCardFromPokemon();
+              }
             }
+
+            if(foil <= 12) {
+                pokemon.isFoil = true;
+                let foilStats = applyFoilBoost(pokemon.stats, 0.15);
+                pokemon.stats = foilStats;
+                console.log('FOIL', pokemon.name);
+                foil = Math.random() * 100;
+              }
+            cards.push(pokemon);
         }
         
     }
 
     if(pack.id === 2) {
-        while(cards.length < pack.cardCount) {
-            let pokemon = await generateCardFromPokemon();
-            rarity = pokemon ? Object.values(pokemon.stats).reduce((a, b) => a + b, 0) : 0;
-            if(rarity < 360) {
-                cards.push(pokemon);
-            }
-        }
         
     }
 
     if(pack.id === 3) {
-        while(cards.length < pack.cardCount) {
-            let pokemon = await generateCardFromPokemon();
-            let rares = 0;
-            rarity = pokemon ? Object.values(pokemon.stats).reduce((a, b) => a + b, 0) : 0;
-            if(rarity > 360 && rares < 1) {
-              cards.push(pokemon);
-              rares += 1;
-            }
-            if(rarity < 360) {
-                cards.push(pokemon);
-            }
-        }
-        
+       
     }
     
     return cards;

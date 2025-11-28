@@ -20,6 +20,7 @@ export type FetchedPokemon = {
   types: PokemonTypes[];
   imageUrl: string | null;
   stats: Stats;
+  isFoil?: boolean;
 };
 
 export function usePokemon() {

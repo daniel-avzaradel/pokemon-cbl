@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Flame, Droplet, Leaf, Zap, Brain, Hand, FlaskConical, Circle, Ghost, Origami, Snowflake, Bug, Mountain } from 'lucide-react';
 import Foil from '../../../assets/foil.gif';
+import ShineTexture from '../../../assets/foil4.gif';
 import Texture01 from '../../../assets/texture01.jpg';
 
 export const typeColors: Record<string, string> = {
@@ -72,16 +73,30 @@ export const CardOuter = styled.div<{ $type: string }>`
   padding: 0.25rem;
 `;
 
-export const CardInner = styled.div<{ $type: string, $rarity: boolean }>`
+export const CardInner = styled.div<{ $type: string, $rarity: boolean, $shine?: boolean }>`
   position: relative;
   border-radius: 0.25rem;
   padding: 0.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  background-image: url(${props => props.$rarity ? Foil : Texture01}), ${props => typeColors[props.$type] || typeColors['normal']};
-  background-size: contain, cover;
-  background-blend-mode: luminosity, overlay;
+  background-image: ${props => {
+    // Build layers dynamically
+    const layers = [
+      `url(${props.$rarity ? Foil : Texture01})`,
+      typeColors[props.$type] || typeColors["normal"]
+    ];
+
+    // Add conditional 3rd layer
+    if (props.$shine) {
+      layers.push(`url(${ShineTexture})`);
+    }
+
+    return layers.join(", ");
+  }};
+
+  background-size: ${props => (props.$shine ? "contain, cover" : "cover")};
+  background-blend-mode: ${props => props.$shine ? "lighten" : "luminosity"};
 `;
 
 export const CardHeader = styled.div<{ $type: string }>`

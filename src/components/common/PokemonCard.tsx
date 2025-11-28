@@ -1,5 +1,4 @@
 import { Circle } from 'lucide-react';
-import { useState } from 'react';
 import { Card, UserData } from '../../App';
 import { CardHeader, CardImage, CardInner, CardName, CardOuter, CardWrapper, ImageContainer, singleTypeColors, StatsBarContainer, StatsBarFill, StatsBarLabel, StatsBarRow, StatsBarTrack, StatsBarValue, StatsGrid, typeColors, typeIcons } from './PokemonCards.styles';
 
@@ -36,7 +35,7 @@ export function PokemonCard({ card, large, deck, onClick, user }: PokemonCardPro
   return (
     <CardWrapper $inDeck={(deck || large) ? false : isInDeck(card.uid)} $clickable={!!onClick} onClick={onClick}>
       <CardOuter $type={typeColors[primaryType]}  >
-        <CardInner $type={primaryType} $rarity={rarity(card)}>
+        <CardInner $type={primaryType} $rarity={rarity(card)} $shine={card.isFoil}>
           <CardHeader $type={primaryType}>
             <CardName>{card.name.charAt(0).toUpperCase() + card.name.slice(1)}</CardName>
             <TypeIcon style={{ width: '1.25rem', height: '1.25rem', fill: `${singleTypeColors[primaryType] || '#e1e1e1'}` }} />
