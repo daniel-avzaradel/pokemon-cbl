@@ -75,7 +75,7 @@ export function Shop({ user, updateUser }: ShopProps) {
 
       <PacksGrid>
         {boosterPacks.map((pack, i) => (
-          <PackCard key={pack.id + '-' + i} $type={boosterColors[pack.tag]} show $delay={i * 0.25}>
+          <PackCard key={pack.id + '-' + i} $type={boosterColors[pack.tag]} $show $delay={i * 0.25}>
             <PackContent>
               <IconWrapper>
                 <Package style={{ width: '2.5rem', height: '2.5rem', color: '#eab308' }} />

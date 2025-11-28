@@ -1,16 +1,31 @@
-import { Star, Trophy, Zap } from 'lucide-react';
-import { EmptyState, LevelBadge, PokemonList, PokemonSection, ProfileCard, ProfileContent, ProfileHeader, ProfileImage, ProfileImageBorder, ProfileImageWrapper, SectionTitle, StatBox, StatIcon, StatLabel, StatsGrid, StatValue, TrainerName, TrainerTitle } from './TrainerCard.styles';
+import { Star, Trophy, Zap, LockIcon, Swords } from 'lucide-react';
+import { ActionButton, EmptyState, LevelBadge, LockedDiv, LockWrapper, PokemonList, PokemonSection, ProfileCard, ProfileContent, ProfileHeader, ProfileImage, ProfileImageBorder, ProfileImageWrapper, SectionTitle, StatBox, StatIcon, StatLabel, StatsGrid, StatValue, TrainerName, TrainerTitle } from './TrainerCard.styles';
 
 import PokeBall from '../../assets/pokeball.png'
 import { TrainerCardI } from './trainersData';
+import { UserData } from '../../App';
 
-export function TrainerCard(trainer : TrainerCardI) {
+interface TrainerCardProps {
+  trainer: TrainerCardI;
+  user: UserData;
+  updateUser: (user: UserData) => void;
+}
+
+export function TrainerCard({ trainer, user, updateUser }: TrainerCardProps) {
   
   // Calculate total battles won (using coins as proxy)
   const battlesWon = 3
+  const userArenaTrainer = user.arena?.find(t => t.name === trainer.name)
+
+  const isLocked = () => {
+    if(userArenaTrainer) {
+      return userArenaTrainer.unlocked
+    }
+    return false
+  }
 
   return (
-    <ProfileCard>
+    <ProfileCard $unlocked={isLocked()}>
       <ProfileContent>
         <ProfileHeader>
           <ProfileImageWrapper>
@@ -52,10 +67,10 @@ export function TrainerCard(trainer : TrainerCardI) {
         <PokemonSection>
           <SectionTitle>
             <Zap style={{ width: '1.25rem', height: '1.25rem', color: '#eab308' }} />
-            My Pokemon Collection
+            Pokemon
           </SectionTitle>
           
-          {trainer.pokemons.length > 0 ? (
+          {trainer.pokemons.length > 0 && userArenaTrainer?.unlocked ? (
             <PokemonList>
               {trainer.pokemons.map((pokemon, i: number) => {
                 return (
@@ -66,10 +81,20 @@ export function TrainerCard(trainer : TrainerCardI) {
                 )
               })}
             </PokemonList>
-          ) : (
+          ) : userArenaTrainer?.unlocked ? (
             <EmptyState>
               No Pokemon collected yet. Visit the shop to start your collection!
             </EmptyState>
+          ) : (
+            <LockedDiv>
+            <LockWrapper>
+              <LockIcon size={40} />
+            </LockWrapper>
+            <span>Unlock this trainer by defeating all previous trainer challenges.</span>
+            </LockedDiv>
+          )}
+          {userArenaTrainer?.unlocked && (
+            <ActionButton><Swords /> Battle</ActionButton>
           )}
         </PokemonSection>
       </ProfileContent>

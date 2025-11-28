@@ -41,11 +41,11 @@ export const LevelContainer = styled.div`
   border-radius: 10px;
   padding: 1rem;
 
-  &:hover > *:not(:hover) {
-    opacity: 0.3;
-    transition: opacity 0.3s ease;
-  }
-  * > * {
-    transition: opacity 0.5s ease; /* make sure hover transition is smooth */
-  }
+  // &:hover > *:not(:hover) {
+  //   opacity: 0.9;
+  //   transition: opacity 0.3s ease;
+  // }
+  // * > * {
+  //   transition: opacity 0.5s ease; /* make sure hover transition is smooth */
+  // }
 `

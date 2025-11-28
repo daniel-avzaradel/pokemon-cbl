@@ -1,6 +1,18 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
-export const ProfileCard = styled.div`
+const slideUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0px);
+  }
+`;
+
+export const ProfileCard = styled.div<{$unlocked?: boolean}>`
+  position: relative;
   background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
   border-radius: 1rem;
   padding: 1rem;
@@ -8,7 +20,8 @@ export const ProfileCard = styled.div`
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   position: relative;
   overflow: hidden;
-
+  opacity: ${p => p.$unlocked ? '1' : '0.4'};
+    
   &::before {
     content: '';
     position: absolute;
@@ -19,7 +32,42 @@ export const ProfileCard = styled.div`
     background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
     border-bottom: 2px solid #ca8a04;
   }
+
+  &:hover button {
+    animation: ${slideUp} .5s linear;
+    opacity: 1;
+  }
+  &:hover section {
+    opacity: 0;
+  }
 `;
+
+export const LockWrapper = styled.div`
+  display: flex;
+  width: 60px;
+  height: 60px;
+  padding: .75rem;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  background: #333;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+`
+
+export const LockedDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  height: 100%;
+  font-style: italic;
+  color: #d1d1d1;
+  text-align: center;
+  padding: 0 1rem;
+`
 
 export const ProfileContent = styled.div`
   position: relative;
@@ -145,13 +193,15 @@ export const SectionTitle = styled.h3`
   gap: 0.5rem;
 `;
 
-export const PokemonList = styled.div`
+export const PokemonList = styled.section`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
   gap: 0.5rem;
   overflow-y: auto;
   text-transform: capitalize;
   font-size: 0.9rem;
+  transition: 0.5s ease-in-out;
 
   &::-webkit-scrollbar {
     width: 0.5rem;
@@ -169,6 +219,36 @@ export const PokemonList = styled.div`
     &:hover {
       background: #991b1b;
     }
+  }
+`;
+
+export const ActionButton = styled.button`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 0rem;
+  left: 50%;
+  gap: 0 10px;
+  transform: translateX(-50%);
+  font-size: .9rem;
+  width: auto;
+  background: #7f1d1d;
+  color: white;
+  padding: 0.75rem 2rem;
+  height: 46px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 1px solid rgba(80, 11, 11, 1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0;
+  z-index: 10;
+  font-size: 1.25rem;
+  transition: 0.4s ease-in;
+
+  &:hover {
+    background: #991b1b;
   }
 `;
 

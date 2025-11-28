@@ -8,14 +8,21 @@ import Library from './components/library/Library';
 import { MyCards } from './components/my-cards/MyCards';
 import { Shop } from './components/shop/Shop';
 import { FetchedPokemon as HookFetchedPokemon } from './hooks/usePokemon';
+import { trainersData } from './components/battle/trainersData';
 
 export type Card = HookFetchedPokemon;
+
+interface ArenaTrainersUnlock {
+  name: string;
+  unlocked: boolean;
+}
 
 export interface UserData {
   username: string;
   coins: number;
   collection: Card[];
   battleDeck: Card[];
+  arena: ArenaTrainersUnlock[]
 }
 
 type View = 'library' | 'myCards' | 'shop' | 'battle';
@@ -48,7 +55,13 @@ export default function App() {
       username,
       coins: 20000,
       collection: [],
-      battleDeck: []
+      battleDeck: [],
+      arena: trainersData.map(t => {
+        return {
+          name: t.name,
+          unlocked: t.name === 'Bug Catcher' ? true : false
+        }
+      })
     };
     setUser(newUser);
     localStorage.setItem('pokemonUser', JSON.stringify(newUser));

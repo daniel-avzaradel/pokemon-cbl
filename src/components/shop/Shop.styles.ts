@@ -38,7 +38,7 @@ export const PacksGrid = styled.div`
   }
 `;
 
-export const PackCard = styled.div<{$type?: string, $delay: number, show: boolean}>`
+export const PackCard = styled.div<{$type?: string, $delay: number, $show: boolean}>`
   background: ${props => props.$type || 'linear-gradient(to bottom right, #d6d6d6ff, #1b1b1bff, #585858ff)'};
   backdrop-filter: blur(12px);
   border-radius: 1rem;
@@ -48,7 +48,7 @@ export const PackCard = styled.div<{$type?: string, $delay: number, show: boolea
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   opacity: 0;
   transform: translateX(50px);
-  animation: ${({ show }) => (show ? slideIn : 'none')} 0.5s forwards;
+  animation: ${({ $show }) => ($show ? slideIn : 'none')} 0.5s forwards;
   animation-delay: ${({ $delay }) => $delay || 0}s;
 
   &:hover {

@@ -8,11 +8,10 @@ import { useEffect, useState } from 'react';
 import { trainerPokemonGenerator } from './trainerUtils';
 import { TrainerCardI, trainersData } from './trainersData';
 
-interface BattleProps {
+export interface BattleProps {
   user: UserData;
   updateUser: (user: UserData) => void;
 }
-
 
 
 const Battle = ({ user, updateUser }: BattleProps) => {
@@ -51,7 +50,7 @@ const Battle = ({ user, updateUser }: BattleProps) => {
       </IconWrapper>
       <LevelContainer>
         {trainers.map((trainer: TrainerCardI, i: number) => {
-          return <TrainerCard {...trainer} key={trainer.name + i} />
+          return <TrainerCard {...{ trainer, user, updateUser}} key={trainer.name + i} />
         })}
       </LevelContainer>
     </BattleContainer>
