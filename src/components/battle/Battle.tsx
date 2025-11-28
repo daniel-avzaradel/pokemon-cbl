@@ -1,11 +1,12 @@
-import { UserData } from '../../App'
+import { Swords } from 'lucide-react';
+import { UserData } from '../../App';
+import { FetchedPokemon } from '../../hooks/usePokemon';
 import { BattleContainer, BattleHeader, IconWrapper, LevelContainer } from './Battle.styled';
 import { TrainerCard } from './TrainerCard';
-import { FetchedPokemon } from '../../hooks/usePokemon';
-import { Swords } from 'lucide-react';
-import { generateCardFromPokemon } from '../../utils/generateCardFromPokemon';
 
-import BugCatcher from '../../../assets/bug-catcher.jpg'
+import { useEffect, useState } from 'react';
+import BugCatcher from '../../assets/bug-catcher.jpg';
+import { trainerPokemonGenerator } from './trainerUtils';
 
 interface BattleProps {
   user: UserData;
@@ -13,52 +14,80 @@ interface BattleProps {
 }
 
 export interface TrainerCardI {
+  level: number;
+  title: string;
+  difficulty: string;
   name: string;
-  trainer: string;
   pokemons: FetchedPokemon[];
   profile: string;
 }
 
+
 const battleLevels: TrainerCardI[] = [
   {
-    name: "Beginner",
-    trainer: "Bug Catcher",
+    level: 1,
+    title: "Pokemon Trainer",
+    difficulty: "Beginner",
+    name: "Bug Catcher",
     pokemons: [],
     profile: BugCatcher
   },
   {
-    name: "Intermediate",
-    trainer: "Gym Trainer",
+    level: 3,
+    title: "Bandit Trainer",
+    difficulty: "Intermediate",
+    name: "Team Rocket Member",
     pokemons: [],
     profile: ''
   },
   {
-    name: "Advanced",
-    trainer: "Gym Trainer",
+    level: 5,
+    title: "Gym Trainer",
+    difficulty: "Advanced",
+    name: "Gym Trainer",
     pokemons: [],
     profile: ''
   },
   {
-    name: "Beginner",
-    trainer: "Bug Catcher",
+    level: 10,
+    title: "Elite Four Member",
+    difficulty: "Expert",
+    name: "Bug Catcher",
     pokemons: [],
     profile: BugCatcher
   },
   {
-    name: "Intermediate",
-    trainer: "Gym Trainer",
+    level: 20,
+    title: "Tournament Winner",
+    difficulty: "Champion",
+    name: "Ash Ketchum",
     pokemons: [],
     profile: ''
   },
   {
-    name: "Advanced",
-    trainer: "Gym Trainer",
+    level: 50,
+    title: "Webmaster",
+    difficulty: "Legendary",
+    name: "Daniel Avzaradel",
     pokemons: [],
     profile: ''
-  }
+  },
 ]
 
 const Battle = ({ user, updateUser }: BattleProps) => {
+
+  const [trainers, setTrainers] = useState<TrainerCardI[]>(battleLevels)
+
+  useEffect(() => {
+    const fetchTeam = async () => {
+      const teamBugCatcher = await trainerPokemonGenerator(['rattata', 'caterpie', 'weedle', 'nidoran-m', 'beedrill']);
+      setTrainers(prev => {
+        return prev.map(t => t.name === 'Bug Catcher' ? {...t, pokemons: teamBugCatcher} : t)
+      })
+    };
+    fetchTeam();
+  }, []);
+
   return (
     <BattleContainer>
       <BattleHeader>
@@ -68,7 +97,7 @@ const Battle = ({ user, updateUser }: BattleProps) => {
         <h1>Battle Arena</h1>
       </IconWrapper>
       <LevelContainer>
-        {battleLevels.map((trainer: TrainerCardI, i: number) => {
+        {trainers.map((trainer: TrainerCardI, i: number) => {
           return <TrainerCard {...trainer} key={trainer.name + i} />
         })}
       </LevelContainer>

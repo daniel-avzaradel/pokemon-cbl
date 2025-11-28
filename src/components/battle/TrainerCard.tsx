@@ -1,12 +1,10 @@
 import { Star, Trophy, Zap } from 'lucide-react';
-import { EmptyState, LevelBadge, PokemonInfo, PokemonItem, PokemonList, PokemonName, PokemonSection, PokemonStat, PokemonStats, PokemonType, ProfileCard, ProfileContent, ProfileHeader, ProfileImage, ProfileImageBorder, ProfileImageWrapper, SectionTitle, StatBox, StatIcon, StatLabel, StatsGrid, StatValue, TrainerName, TrainerTitle } from './TrainerCard.styles';
-import { typeColors } from '../common/PokemonCards.styles';
 import { TrainerCardI } from './Battle';
+import { EmptyState, LevelBadge, PokemonList, PokemonSection, ProfileCard, ProfileContent, ProfileHeader, ProfileImage, ProfileImageBorder, ProfileImageWrapper, SectionTitle, StatBox, StatIcon, StatLabel, StatsGrid, StatValue, TrainerName, TrainerTitle } from './TrainerCard.styles';
 
+import PokeBall from '../../assets/pokeball.png'
 
 export function TrainerCard(trainer : TrainerCardI) {
-  // Calculate trainer level based on cards collected
-  const trainerLevel = 1
   
   // Calculate total battles won (using coins as proxy)
   const battlesWon = 3
@@ -19,9 +17,9 @@ export function TrainerCard(trainer : TrainerCardI) {
             <ProfileImageBorder>
               <ProfileImage $imageUrl={trainer.profile} />
             </ProfileImageBorder>
-            <LevelBadge>{trainerLevel}</LevelBadge>
+            <LevelBadge>{trainer.level}</LevelBadge>
           </ProfileImageWrapper>
-          <TrainerName>{trainer.trainer}</TrainerName>
+          <TrainerName>{trainer.name}</TrainerName>
           <TrainerTitle>Pokemon Trainer</TrainerTitle>
         </ProfileHeader>
 
@@ -30,7 +28,7 @@ export function TrainerCard(trainer : TrainerCardI) {
             <StatIcon>
               <Star style={{ width: '1.5rem', height: '1.5rem' }} />
             </StatIcon>
-            <StatValue>{trainerLevel}</StatValue>
+            <StatValue>{trainer.level}</StatValue>
             <StatLabel>Level</StatLabel>
           </StatBox>
 
@@ -59,19 +57,14 @@ export function TrainerCard(trainer : TrainerCardI) {
           
           {trainer.pokemons.length > 0 ? (
             <PokemonList>
-              {trainer.pokemons.map((pokemon) => (
-                <PokemonItem key={pokemon.id} $typeColor={typeColors['bug']}>
-                  <PokemonInfo>
-                    <PokemonName>{pokemon.name}</PokemonName>
-                    <PokemonType>type</PokemonType>
-                  </PokemonInfo>
-                  <PokemonStats>
-                    <PokemonStat $color="#f87171">HP {45}</PokemonStat>
-                    <PokemonStat $color="#eab308">ATK {90}</PokemonStat>
-                    <PokemonStat $color="#60a5fa">DEF {67}</PokemonStat>
-                  </PokemonStats>
-                </PokemonItem>
-              ))}
+              {trainer.pokemons.map((pokemon) => {
+                return (
+                  <div style={{ display: 'flex', gap: '1rem' }}>
+                  <img src={PokeBall} width={30} />
+                  <span>{pokemon.name}</span>
+                  </div>
+                )
+              })}
             </PokemonList>
           ) : (
             <EmptyState>

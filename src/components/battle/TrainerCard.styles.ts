@@ -77,7 +77,7 @@ export const LevelBadge = styled.div`
 
 export const TrainerName = styled.h2`
   color: white;
-  font-size: 2rem;
+  font-size: 1.5rem;
   margin: 0 0 0.5rem 0;
   text-align: center;
 `;
@@ -147,12 +147,13 @@ export const SectionTitle = styled.h3`
 `;
 
 export const PokemonList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
   max-height: 15rem;
   overflow-y: auto;
   padding-right: 0.5rem;
+  text-transform: capitalize;
 
   &::-webkit-scrollbar {
     width: 0.5rem;
@@ -171,49 +172,6 @@ export const PokemonList = styled.div`
       background: #991b1b;
     }
   }
-`;
-
-export const PokemonItem = styled.div<{ $typeColor: string }>`
-  background: #262626;
-  border-left: 4px solid ${props => props.$typeColor};
-  border-radius: 0.5rem;
-  padding: 0.75rem 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: #2a2a2a;
-    transform: translateX(4px);
-  }
-`;
-
-export const PokemonInfo = styled.div`
-  flex: 1;
-`;
-
-export const PokemonName = styled.div`
-  color: white;
-  font-weight: bold;
-  margin-bottom: 0.25rem;
-`;
-
-export const PokemonType = styled.div`
-  color: #9ca3af;
-  font-size: 0.875rem;
-  text-transform: capitalize;
-`;
-
-export const PokemonStats = styled.div`
-  display: flex;
-  gap: 1rem;
-  font-size: 0.875rem;
-`;
-
-export const PokemonStat = styled.div<{ $color: string }>`
-  color: ${props => props.$color};
-  font-weight: bold;
 `;
 
 export const EmptyState = styled.div`

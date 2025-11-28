@@ -1,13 +1,13 @@
+import { useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
-import { FetchedPokemon as HookFetchedPokemon } from './hooks/usePokemon';
 import { Login } from './components/Login';
-import { Shop } from './components/shop/Shop';
 import { Navigation } from './components/Navigation';
-import { MyCards } from './components/my-cards/MyCards';
-import Library from './components/library/Library';
-import { ToastContainer, toast } from 'react-toastify';
 import Battle from './components/battle/Battle';
+import Library from './components/library/Library';
+import { MyCards } from './components/my-cards/MyCards';
+import { Shop } from './components/shop/Shop';
+import { FetchedPokemon as HookFetchedPokemon } from './hooks/usePokemon';
 
 export type Card = HookFetchedPokemon;
 
@@ -31,7 +31,6 @@ const MainContent = styled.main`
   padding: 1rem;
 `;
 
-export const apiURL = 'https://pokeapi.co/api/v2/pokemon?limit=251'
 
 export default function App() {
   const [user, setUser] = useState<UserData | null>(null);

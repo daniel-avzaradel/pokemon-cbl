@@ -1,5 +1,5 @@
-import { apiURL } from '../App';
 import { FetchedPokemon, PokemonTypes, Stats } from '../hooks/usePokemon';
+import { apiURL } from './constants';
 
 export class FetchedPokemonClass {
     uid: number;
@@ -19,18 +19,18 @@ export class FetchedPokemonClass {
     }
 }
 
-export async function generateCardFromPokemon(): Promise<FetchedPokemon> {
+export async function generateCardFromPokemon(pokemonId?: number): Promise<FetchedPokemon> {
 
-    const id = Math.floor(Math.random() * 251);
+    const id = Math.floor(Math.random() * 151);
 
     let pokemon: FetchedPokemonClass | null = null;
 
     try {
-        const list = await fetch(apiURL);
+        const list = await fetch(apiURL());
         const data = await list.json();
         const results: Array<{ name: string; url: string }> = data.results || [];
 
-        const randomPokemon = results[id];
+        const randomPokemon = results[pokemonId ?? id];
         const res = await fetch(randomPokemon.url);
         const d = await res.json();
         const imageUrl = d.sprites?.other?.['official-artwork']?.front_default || null;
@@ -54,7 +54,7 @@ export async function generateCardFromPokemon(): Promise<FetchedPokemon> {
         return pokemon;
 
     } catch (error) {
-        throw new Error('Failed to generate card from Pokemon');
+        throw new Error(`Failed to generate card from Pokemon ${error}`);
     }
 
 }

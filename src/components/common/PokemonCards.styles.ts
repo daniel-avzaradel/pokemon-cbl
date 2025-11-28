@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { Flame, Droplet, Moon, Leaf, Anvil, Zap, Brain, Hand, FlaskConical, Circle, Ghost, Origami, Snowflake, Bug, Mountain } from 'lucide-react';
-import Foil from '../../../assets/foil1.gif';
-import ShineTexture from '../../../assets/foil4.gif';
-import Texture01 from '../../../assets/texture01.jpg';
+import Foil from '../../assets/foil1.gif';
+import ShineTexture from '../../assets/foil4.gif';
+import Texture01 from '../../assets/texture01.jpg';
 
 export const typeColors: Record<string, string> = {
   fire: 'linear-gradient(to bottom right, #ee9153ff, #882a19ff, #740a0aff)',
