@@ -46,7 +46,7 @@ export default function App() {
   const handleLogin = (username: string) => {
     const newUser: UserData = {
       username,
-      coins: 2000,
+      coins: 20000,
       collection: [],
       battleDeck: []
     };

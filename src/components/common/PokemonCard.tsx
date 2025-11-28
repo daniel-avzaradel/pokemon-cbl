@@ -41,7 +41,7 @@ export function PokemonCard({ card, large, deck, onClick, user }: PokemonCardPro
             <TypeIcon style={{ width: '1.25rem', height: '1.25rem', fill: `${singleTypeColors[primaryType] || '#e1e1e1'}` }} />
           </CardHeader>
 
-          <ImageContainer $type={primaryType}>
+          <ImageContainer $type={primaryType} $rarity={rarity(card)} $shine={card.isFoil}>
             <CardImage src={card.imageUrl ?? ''} alt={card.name} />
           </ImageContainer>
 

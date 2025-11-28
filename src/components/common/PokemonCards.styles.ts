@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Flame, Droplet, Leaf, Zap, Brain, Hand, FlaskConical, Circle, Ghost, Origami, Snowflake, Bug, Mountain } from 'lucide-react';
-import Foil from '../../../assets/foil.gif';
+import Foil from '../../../assets/foil1.gif';
 import ShineTexture from '../../../assets/foil4.gif';
 import Texture01 from '../../../assets/texture01.jpg';
 
@@ -10,7 +10,7 @@ export const typeColors: Record<string, string> = {
   ice: 'linear-gradient(to bottom right, #275457ff, #00f7ffff)',
   grass: 'linear-gradient(to bottom right, #16a34a, #094230ff)',
   bug: 'linear-gradient(to bottom right, #16a34a, #094230ff)',
-  electric: 'linear-gradient(to bottom right, #fff9a0ff, #ffec41ff)',
+  electric: 'linear-gradient(to bottom right, #dfd771ff, #5e5504ff)',
   psychic: 'linear-gradient(to bottom right, #5d2492ff, #ff0095ff)',
   fighting: 'linear-gradient(to bottom right, #da7b55ff, #291203ff)',
   normal: 'linear-gradient(to bottom right, #dfdfdfff, #353535ff)',
@@ -83,20 +83,21 @@ export const CardInner = styled.div<{ $type: string, $rarity: boolean, $shine?: 
   background-image: ${props => {
     // Build layers dynamically
     const layers = [
-      `url(${props.$rarity ? Foil : Texture01})`,
+      `url(${props.$rarity ? Texture01 : Texture01})`,
       typeColors[props.$type] || typeColors["normal"]
     ];
 
     // Add conditional 3rd layer
     if (props.$shine) {
       layers.push(`url(${ShineTexture})`);
+      layers.push(typeColors[props.$type])
     }
 
     return layers.join(", ");
   }};
 
-  background-size: ${props => (props.$shine ? "contain, cover" : "cover")};
-  background-blend-mode: ${props => props.$shine ? "lighten" : "luminosity"};
+  background-size: ${props => (props.$shine ? "contain, cover" : "contain")};
+  background-blend-mode: ${props => props.$rarity ? "screen" : props.$shine ? "lighten" : "luminosity"};
 `;
 
 export const CardHeader = styled.div<{ $type: string }>`
@@ -123,11 +124,12 @@ export const CardName = styled.h4`
   margin: 0;
 `;
 
-export const ImageContainer = styled.div<{ $type: string }>`
+export const ImageContainer = styled.div<{ $type: string, $rarity: boolean, $shine?: boolean }>`
   aspect-ratio: 1;
   background: #222;
-  background-image: url(${Texture01}), ${props => typeColors[props.$type] || typeColors['normal']};
-  background-blend-mode: color-dodge, overlay;
+  background-image: url(${props => (props.$rarity && props.$shine) ? Foil : Texture01}), ${props => typeColors[props.$type] || typeColors['normal']};
+  background-blend-mode: ${props => props.$shine ? "screen" : "color-dodge"};
+  background-size: contain;
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
