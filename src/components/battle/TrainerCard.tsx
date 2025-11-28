@@ -1,8 +1,8 @@
 import { Star, Trophy, Zap } from 'lucide-react';
-import { TrainerCardI } from './Battle';
 import { EmptyState, LevelBadge, PokemonList, PokemonSection, ProfileCard, ProfileContent, ProfileHeader, ProfileImage, ProfileImageBorder, ProfileImageWrapper, SectionTitle, StatBox, StatIcon, StatLabel, StatsGrid, StatValue, TrainerName, TrainerTitle } from './TrainerCard.styles';
 
 import PokeBall from '../../assets/pokeball.png'
+import { TrainerCardI } from './trainersData';
 
 export function TrainerCard(trainer : TrainerCardI) {
   
@@ -20,7 +20,7 @@ export function TrainerCard(trainer : TrainerCardI) {
             <LevelBadge>{trainer.level}</LevelBadge>
           </ProfileImageWrapper>
           <TrainerName>{trainer.name}</TrainerName>
-          <TrainerTitle>Pokemon Trainer</TrainerTitle>
+          <TrainerTitle>{trainer.title}</TrainerTitle>
         </ProfileHeader>
 
         <StatsGrid>
@@ -57,10 +57,10 @@ export function TrainerCard(trainer : TrainerCardI) {
           
           {trainer.pokemons.length > 0 ? (
             <PokemonList>
-              {trainer.pokemons.map((pokemon) => {
+              {trainer.pokemons.map((pokemon, i: number) => {
                 return (
-                  <div style={{ display: 'flex', gap: '1rem' }}>
-                  <img src={PokeBall} width={30} />
+                  <div style={{ display: 'flex', gap: '.5rem' }} key={pokemon.uid + i}>
+                  <img src={PokeBall} width={26} />
                   <span>{pokemon.name}</span>
                   </div>
                 )

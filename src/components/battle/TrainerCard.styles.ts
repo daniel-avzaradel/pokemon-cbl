@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 export const ProfileCard = styled.div`
   background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-  border-radius: 1.5rem;
-  padding: 2rem;
+  border-radius: 1.25rem;
+  padding: 1.25rem;
   border: 2px solid #2a2a2a;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   position: relative;
@@ -15,7 +15,7 @@ export const ProfileCard = styled.div`
     top: 0;
     left: 0;
     right: 0;
-    height: 8rem;
+    height: 7rem;
     background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
     border-bottom: 2px solid #ca8a04;
   }
@@ -30,12 +30,12 @@ export const ProfileHeader = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 `;
 
 export const ProfileImageWrapper = styled.div`
   position: relative;
-  margin-bottom: 1rem;
+  margin-bottom: .75rem;
 `;
 
 export const ProfileImageBorder = styled.div`
@@ -53,8 +53,7 @@ export const ProfileImage = styled.div<{ $imageUrl: string }>`
   border-radius: 50%;
   background-image: url(${props => props.$imageUrl});
   background-size: cover;
-  background-position: 70%;
-  transform: rotate(-45deg);
+  background-position: 50%;
   border: 3px solid #1a1a1a;
 `;
 
@@ -93,15 +92,15 @@ export const TrainerTitle = styled.p`
 export const StatsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: .5rem;
+  margin-bottom: 1rem;
 `;
 
 export const StatBox = styled.div`
   background: #262626;
   border: 1px solid #404040;
   border-radius: 0.75rem;
-  padding: 1rem;
+  padding: .5rem;
   text-align: center;
   transition: all 0.3s ease;
 
@@ -115,13 +114,13 @@ export const StatIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
   color: #eab308;
 `;
 
 export const StatValue = styled.div`
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: bold;
   margin-bottom: 0.25rem;
 `;
@@ -134,13 +133,13 @@ export const StatLabel = styled.div`
 `;
 
 export const PokemonSection = styled.div`
-  margin-top: 1.5rem;
+  margin: 2rem 0;
 `;
 
 export const SectionTitle = styled.h3`
   color: white;
   font-size: 1.25rem;
-  margin: 0 0 1rem 0;
+  margin: 0 0 2rem 0;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -150,9 +149,7 @@ export const PokemonList = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem;
-  max-height: 15rem;
   overflow-y: auto;
-  padding-right: 0.5rem;
   text-transform: capitalize;
 
   &::-webkit-scrollbar {
@@ -176,7 +173,6 @@ export const PokemonList = styled.div`
 
 export const EmptyState = styled.div`
   text-align: center;
-  padding: 2rem;
   color: #737373;
   font-style: italic;
 `;

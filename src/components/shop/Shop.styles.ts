@@ -74,10 +74,10 @@ export const PackInfo = styled.div`
 `;
 
 export const PriceBox = styled.div`
-  background: #262626;
+  background: #252525ff;
   border-radius: 0.5rem;
   padding: 0.75rem;
-  border: 1px solid #404040;
+  border: 1px solid #3d3d3dff;
 
   .price {
     color: #eab308;

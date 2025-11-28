@@ -5,78 +5,19 @@ import { BattleContainer, BattleHeader, IconWrapper, LevelContainer } from './Ba
 import { TrainerCard } from './TrainerCard';
 
 import { useEffect, useState } from 'react';
-import BugCatcher from '../../assets/bug-catcher.jpg';
 import { trainerPokemonGenerator } from './trainerUtils';
+import { TrainerCardI, trainersData } from './trainersData';
 
 interface BattleProps {
   user: UserData;
   updateUser: (user: UserData) => void;
 }
 
-export interface TrainerCardI {
-  level: number;
-  title: string;
-  difficulty: string;
-  name: string;
-  pokemons: FetchedPokemon[];
-  profile: string;
-}
 
-
-const battleLevels: TrainerCardI[] = [
-  {
-    level: 1,
-    title: "Pokemon Trainer",
-    difficulty: "Beginner",
-    name: "Bug Catcher",
-    pokemons: [],
-    profile: BugCatcher
-  },
-  {
-    level: 3,
-    title: "Bandit Trainer",
-    difficulty: "Intermediate",
-    name: "Team Rocket Member",
-    pokemons: [],
-    profile: ''
-  },
-  {
-    level: 5,
-    title: "Gym Trainer",
-    difficulty: "Advanced",
-    name: "Gym Trainer",
-    pokemons: [],
-    profile: ''
-  },
-  {
-    level: 10,
-    title: "Elite Four Member",
-    difficulty: "Expert",
-    name: "Bug Catcher",
-    pokemons: [],
-    profile: BugCatcher
-  },
-  {
-    level: 20,
-    title: "Tournament Winner",
-    difficulty: "Champion",
-    name: "Ash Ketchum",
-    pokemons: [],
-    profile: ''
-  },
-  {
-    level: 50,
-    title: "Webmaster",
-    difficulty: "Legendary",
-    name: "Daniel Avzaradel",
-    pokemons: [],
-    profile: ''
-  },
-]
 
 const Battle = ({ user, updateUser }: BattleProps) => {
 
-  const [trainers, setTrainers] = useState<TrainerCardI[]>(battleLevels)
+  const [trainers, setTrainers] = useState<TrainerCardI[]>(trainersData)
 
   useEffect(() => {
     const fetchTeam = async () => {
@@ -93,8 +34,9 @@ const Battle = ({ user, updateUser }: BattleProps) => {
       <BattleHeader>
       </BattleHeader>
       <IconWrapper>
+        <span>Battle</span>
         <Swords size={90} color='rgb(127, 29, 29)' />
-        <h1>Battle Arena</h1>
+        <span>Arena</span>
       </IconWrapper>
       <LevelContainer>
         {trainers.map((trainer: TrainerCardI, i: number) => {
