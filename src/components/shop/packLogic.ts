@@ -3,6 +3,7 @@ import { generateCardFromPokemon } from "../../utils/generateCardFromPokemon";
 
 export interface BoosterPack {
   id: number;
+  tag: string;
   name: string;
   price: number;
   cardCount: number;
@@ -12,6 +13,7 @@ export interface BoosterPack {
 export const boosterPacks: BoosterPack[] = [
   {
     id: 1,
+    tag: 'basic',
     name: 'Basic Pack',
     price: 100,
     cardCount: 3,
@@ -19,6 +21,7 @@ export const boosterPacks: BoosterPack[] = [
   },
   {
     id: 2,
+    tag: 'ultra',
     name: 'Ultra Pack',
     price: 250,
     cardCount: 5,
@@ -26,6 +29,7 @@ export const boosterPacks: BoosterPack[] = [
   },
   {
     id: 3,
+    tag: 'master',
     name: 'Master Pack',
     price: 500,
     cardCount: 6,

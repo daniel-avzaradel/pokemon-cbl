@@ -8,9 +8,10 @@ interface PokemonCardProps {
   onClick?: () => void;
   user: UserData;
   deck?: boolean;
+  large?: boolean;
 }
 
-export function PokemonCard({ card, deck, onClick, user }: PokemonCardProps) {
+export function PokemonCard({ card, large, deck, onClick, user }: PokemonCardProps) {
   const primaryType = Array.isArray(card.types) && card.types.length > 0 ? card.types[0] : 'normal';
   const TypeIcon = typeIcons[primaryType as keyof typeof typeIcons] || Circle;
 
@@ -33,7 +34,7 @@ export function PokemonCard({ card, deck, onClick, user }: PokemonCardProps) {
   }
 
   return (
-    <CardWrapper $inDeck={deck ? false : isInDeck(card.uid)} $clickable={!!onClick} onClick={onClick}>
+    <CardWrapper $inDeck={(deck || large) ? false : isInDeck(card.uid)} $clickable={!!onClick} onClick={onClick}>
       <CardOuter $type={typeColors[primaryType]}  >
         <CardInner $type={primaryType} $rarity={rarity(card)}>
           <CardHeader $type={primaryType}>

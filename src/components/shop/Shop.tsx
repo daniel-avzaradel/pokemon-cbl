@@ -5,12 +5,18 @@ import { usePokemon } from '../../hooks/usePokemon';
 import { PokemonCard } from '../common/PokemonCard';
 import { ButtonContainer, CardsGrid, CardWrapper, Container, ContinueButton, Header, IconWrapper, Modal, ModalContent, ModalHeader, ModalTitle, PackCard, PackContent, PackInfo, PacksGrid, PriceBox, PurchaseButton } from './Shop.styles';
 import { BoosterPack, boosterPacks, OpeninBoosterPack } from './packLogic';
+import { toast } from 'react-toastify';
 
 interface ShopProps {
   user: UserData;
   updateUser: (user: UserData) => void;
 }
 
+export const boosterColors: Record<string, string> = {
+  basic: 'linear-gradient(to bottom right, #e4e4e4ff, #4d4d4dff, #ffffffff, #4d4d4dff, #8d8d8dff)',
+  ultra: 'linear-gradient(to bottom right, #eed253ff, #574207ff, #ffe397ff, #574207ff, #dfad0aff)',
+  master: 'linear-gradient(to bottom right, #d453eeff, #5f1359ff, #ec8affff, #581753ff, #ff07f3ff)',
+};
 
 export function Shop({ user, updateUser }: ShopProps) {
   const [openingPack, setOpeningPack] = useState(false);
@@ -19,7 +25,18 @@ export function Shop({ user, updateUser }: ShopProps) {
 
   const purchasePack = async (pack: BoosterPack) => {
     if (user.coins < pack.price) {
-      alert('Not enough coins!');
+      toast.error('You do not have enough coins to purchase this pack.', {
+        position: "top-center",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        theme: "dark",
+        style: {
+          fontSize: '1.2rem',
+          gap: '0 1rem'
+        }
+      });
       return;
     }
 
@@ -53,14 +70,14 @@ export function Shop({ user, updateUser }: ShopProps) {
 
       <PacksGrid>
         {boosterPacks.map((pack) => (
-          <PackCard key={pack.id}>
+          <PackCard key={pack.id} $type={boosterColors[pack.tag]}>
             <PackContent>
               <IconWrapper>
                 <Package style={{ width: '2.5rem', height: '2.5rem', color: '#eab308' }} />
               </IconWrapper>
 
               <PackInfo>
-                <h3>{pack.name}</h3>
+                <h3>{pack.name.toUpperCase()}</h3>
                 <p>{pack.description}</p>
               </PackInfo>
 
@@ -94,7 +111,7 @@ export function Shop({ user, updateUser }: ShopProps) {
             <CardsGrid>
               {revealedCards.map((card, index) => (
                 <CardWrapper key={card.id + '-' + index} $delay={index * 0.2}>
-                  <PokemonCard {...{ user }} card={card} shop />
+                  <PokemonCard {...{ user }} card={card} />
                 </CardWrapper>
               ))}
             </CardsGrid>

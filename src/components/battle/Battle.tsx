@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { UserData, Card } from '../../App';
 import { PokemonCard } from '../common/PokemonCard';
 import { Swords, Shield, Heart, Zap, Trophy, RotateCcw } from 'lucide-react';
-import { generateRandomCard } from '../../utils/cardGenerator';
 import { ActionButton, ActionButtons, BattleArena, BattleGrid, BattleLog, CardDisplay, Container, DefeatIcon, Header, HealthBarBg, HealthBarContainer, HealthBarFill, HpDisplay, LogContent, PlayerSection, ResetButton, ResultCard, SetupCard, StartButton, StatusCard, StatusHeader, TurnIndicator } from './Battle.styles';
+import { generateCardFromPokemon } from '../../utils/generateCardFromPokemon';
 
 interface BattleProps {
   user: UserData;
@@ -31,14 +31,14 @@ export function Battle({ user, updateUser }: BattleProps) {
     status: 'setup'
   });
 
-  const startBattle = () => {
+  const startBattle = async () => {
     if (user.battleDeck.length === 0) {
       alert('Add cards to your battle deck first!');
       return;
     }
 
     const playerCard = user.battleDeck[Math.floor(Math.random() * user.battleDeck.length)];
-    const enemyCard = generateRandomCard(true, false);
+    const enemyCard = await generateCardFromPokemon();
 
     setBattleState({
       playerCard,
@@ -185,7 +185,7 @@ export function Battle({ user, updateUser }: BattleProps) {
 
               {battleState.playerCard && (
                 <CardDisplay>
-                  <PokemonCard card={battleState.playerCard} large />
+                  <PokemonCard {...{ user }} card={battleState.playerCard} large />
                 </CardDisplay>
               )}
 
@@ -232,7 +232,7 @@ export function Battle({ user, updateUser }: BattleProps) {
 
               {battleState.enemyCard && (
                 <CardDisplay>
-                  <PokemonCard card={battleState.enemyCard} large />
+                  <PokemonCard {...{ user }} card={battleState.enemyCard} large />
                 </CardDisplay>
               )}
             </PlayerSection>

@@ -56,9 +56,9 @@ export const typeIcons = {
   ghost: Ghost,
 };
 
-export const CardWrapper = styled.div<{ $clickable?: boolean, $inDeck?: boolean }>`
+export const CardWrapper = styled.div<{ $large?: boolean, $clickable?: boolean, $inDeck?: boolean }>`
   max-height: 100%;
-  width: 100%;
+  width: ${props => props.$large ? '350px' : '100%'};
   cursor: ${props => props.$clickable ? 'pointer' : 'default'};
   transition: transform 0.2s ease;
   opacity: ${props => props.$inDeck ? 0.1 : 1};
@@ -111,7 +111,8 @@ export const CardName = styled.h4`
 export const ImageContainer = styled.div<{ $type: string }>`
   aspect-ratio: 1;
   background: #222;
-  background-blend-mode: overlay;
+  background-image: url(${Texture01}), ${props => typeColors[props.$type] || typeColors['normal']};
+  background-blend-mode: color-dodge, overlay;
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
@@ -131,7 +132,7 @@ export const CardImage = styled.img`
 export const StatsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
+  gap: 0.25rem;
   text-align: center;
   background-color: #1f1f1f;
   border: 2px solid #404040;
@@ -148,8 +149,8 @@ export const StatsBarContainer = styled.div`
 
 export const StatsBarRow = styled.div`
   display: grid;
-  grid-template-columns: 3rem 1fr 2rem;
-  gap: 0.2rem;
+  grid-template-columns: 2.4rem 1fr 2rem;
+  gap: 0rem;
   align-items: center;
   & > *:first-child {
     text-align: left;
@@ -158,7 +159,7 @@ export const StatsBarRow = styled.div`
 
 export const StatsBarLabel = styled.div`
   color: #9ca3af;
-  font-size: 0.75rem;
+  font-size: 0.6rem;
   font-weight: 600;
 `;
 

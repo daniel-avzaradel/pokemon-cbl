@@ -1,12 +1,14 @@
+import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { FetchedPokemon as HookFetchedPokemon } from './hooks/usePokemon';
-import styled from 'styled-components';
 import { Login } from './components/Login';
 import { Shop } from './components/shop/Shop';
 import { Battle } from './components/battle/Battle';
 import { Navigation } from './components/Navigation';
 import { MyCards } from './components/my-cards/MyCards';
 import Library from './components/library/Library';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 export type Card = HookFetchedPokemon;
 
@@ -44,7 +46,7 @@ export default function App() {
   const handleLogin = (username: string) => {
     const newUser: UserData = {
       username,
-      coins: 5000,
+      coins: 200,
       collection: [],
       battleDeck: []
     };
@@ -88,6 +90,7 @@ export default function App() {
           <Battle user={user} updateUser={updateUser} />
         )}
       </MainContent>
+      <ToastContainer position="top-right" autoClose={3000} />
     </AppContainer>
   );
 }

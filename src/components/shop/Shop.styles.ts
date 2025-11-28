@@ -27,8 +27,8 @@ export const PacksGrid = styled.div`
   }
 `;
 
-export const PackCard = styled.div`
-  background: #1a1a1a;
+export const PackCard = styled.div<{$type?: string}>`
+  background: ${props => props.$type || 'linear-gradient(to bottom right, #d6d6d6ff, #1b1b1bff, #585858ff)'};
   backdrop-filter: blur(12px);
   border-radius: 1rem;
   padding: 1.5rem;
@@ -61,14 +61,15 @@ export const IconWrapper = styled.div`
 
 export const PackInfo = styled.div`
   h3 {
-    color: white;
+    color: #111;
+    font-weight: 700;
     font-size: 1.25rem;
     margin-bottom: 0.25rem;
   }
 
   p {
-    color: #9ca3af;
-    font-size: 0.875rem;
+    color: #111;
+    font-size: 0.9375rem;
   }
 `;
 
