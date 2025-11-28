@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 export const ProfileCard = styled.div`
   background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-  border-radius: 1.25rem;
-  padding: 1.25rem;
+  border-radius: 1rem;
+  padding: 1rem;
   border: 2px solid #2a2a2a;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   position: relative;
@@ -15,7 +15,7 @@ export const ProfileCard = styled.div`
     top: 0;
     left: 0;
     right: 0;
-    height: 7rem;
+    height: 6.5rem;
     background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
     border-bottom: 2px solid #ca8a04;
   }
@@ -30,17 +30,17 @@ export const ProfileHeader = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: .75rem;
 `;
 
 export const ProfileImageWrapper = styled.div`
   position: relative;
-  margin-bottom: .75rem;
+  margin-bottom: .5rem;
 `;
 
 export const ProfileImageBorder = styled.div`
-  width: 9rem;
-  height: 9rem;
+  width: 8rem;
+  height: 8rem;
   border-radius: 50%;
   background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%);
   padding: 0.375rem;
@@ -64,8 +64,8 @@ export const LevelBadge = styled.div`
   background: linear-gradient(135deg, #7f1d1d 0%, #450a0a 100%);
   border: 3px solid #ca8a04;
   border-radius: 50%;
-  width: 3rem;
-  height: 3rem;
+  width: 2.6rem;
+  height: 2.65rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -138,8 +138,8 @@ export const PokemonSection = styled.div`
 
 export const SectionTitle = styled.h3`
   color: white;
-  font-size: 1.25rem;
-  margin: 0 0 2rem 0;
+  font-size: 1rem;
+  margin: 0 0 1.5rem 0;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -147,10 +147,11 @@ export const SectionTitle = styled.h3`
 
 export const PokemonList = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 0.5rem;
   overflow-y: auto;
   text-transform: capitalize;
+  font-size: 0.9rem;
 
   &::-webkit-scrollbar {
     width: 0.5rem;

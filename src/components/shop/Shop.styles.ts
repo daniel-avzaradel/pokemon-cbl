@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const Container = styled.div`
   display: flex;
@@ -18,6 +18,17 @@ export const Header = styled.div`
   }
 `;
 
+const slideIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
 export const PacksGrid = styled.div`
   display: grid;
   gap: 1.5rem;
@@ -27,13 +38,18 @@ export const PacksGrid = styled.div`
   }
 `;
 
-export const PackCard = styled.div<{$type?: string}>`
+export const PackCard = styled.div<{$type?: string, $delay: number, show: boolean}>`
   background: ${props => props.$type || 'linear-gradient(to bottom right, #d6d6d6ff, #1b1b1bff, #585858ff)'};
   backdrop-filter: blur(12px);
   border-radius: 1rem;
   padding: 1.5rem;
   border: 1px solid #2a2a2a;
   transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  opacity: 0;
+  transform: translateX(50px);
+  animation: ${({ show }) => (show ? slideIn : 'none')} 0.5s forwards;
+  animation-delay: ${({ $delay }) => $delay || 0}s;
 
   &:hover {
     border-color: rgba(202, 138, 4, 0.5);

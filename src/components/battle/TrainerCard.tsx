@@ -60,7 +60,7 @@ export function TrainerCard(trainer : TrainerCardI) {
               {trainer.pokemons.map((pokemon, i: number) => {
                 return (
                   <div style={{ display: 'flex', gap: '.5rem' }} key={pokemon.uid + i}>
-                  <img src={PokeBall} width={26} />
+                  <img src={PokeBall} width={22} />
                   <span>{pokemon.name}</span>
                   </div>
                 )

@@ -46,7 +46,7 @@ export const boosterPacks: BoosterPack[] = [
   }
 ];
 
-function applyFoilBoost(stats: Stats, boost = 0.1) {
+export function applyFoilBoost(stats: Stats, boost = 0.1) {
   const result: Stats = { ...stats };
 
   for (const key in stats) {

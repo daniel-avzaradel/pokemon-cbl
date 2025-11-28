@@ -50,16 +50,6 @@ export const trainersData: TrainerCardI[] = [
     rewardCoins: 100
   },
   {
-    level: 10,
-    title: "Elite Four Member",
-    difficulty: "Expert",
-    name: "Bug Catcher",
-    pokemons: [],
-    profile: BugCatcher,
-    battlesWon: 10,
-    rewardCoins: 100
-  },
-  {
     level: 20,
     title: "Tournament Champion",
     difficulty: "Champion",

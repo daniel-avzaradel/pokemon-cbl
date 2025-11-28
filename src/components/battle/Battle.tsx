@@ -21,9 +21,20 @@ const Battle = ({ user, updateUser }: BattleProps) => {
 
   useEffect(() => {
     const fetchTeam = async () => {
-      const teamBugCatcher = await trainerPokemonGenerator(['rattata', 'caterpie', 'weedle', 'nidoran-m', 'beedrill']);
+      const teamBugCatcher = await trainerPokemonGenerator([{name: 'rattata'}, {name: 'caterpie'}, {name: 'weedle'}, {name: 'nidoran-m'}, {name: 'beedrill'}]);
+      const teamRocket = await trainerPokemonGenerator([{name: 'ekans'}, {name: 'koffing'}, {name: 'meowth'}, {name: 'lickitung'}, {name: 'golbat'}]);
+      const brock = await trainerPokemonGenerator([{name: 'geodude'}, {name: 'onix'}, {name: 'vulpix'}, {name: 'tauros'}, {name: 'golem'}]);
+      const ash = await trainerPokemonGenerator([{name: 'pikachu'}, {name: 'charizard'}, {name: 'blastoise'}, {name: 'primeape'}, {name: 'butterfree'}, {name: 'snorlax'}]);
+      const daniel = await trainerPokemonGenerator([{name: 'gengar'}, {name: 'jolteon', foil: true}, {name: 'blastoise'}, {name: 'dragonite', foil: true}, {name: 'arcanine'}, {name: 'articuno'}]);
       setTrainers(prev => {
-        return prev.map(t => t.name === 'Bug Catcher' ? {...t, pokemons: teamBugCatcher} : t)
+        return prev.map(t => {
+          return t.name === 'Bug Catcher' ? {...t, pokemons: teamBugCatcher} 
+          : t.name === 'Team Rocket' ? {...t, pokemons: teamRocket} 
+          : t.name === 'Brock' ? {...t, pokemons: brock} 
+          : t.name === 'Ash Ketchum' ? {...t, pokemons: ash} 
+          : t.name === 'Daniel Avzaradel' ? {...t, pokemons: daniel} 
+          : t
+        })
       })
     };
     fetchTeam();
@@ -35,7 +46,7 @@ const Battle = ({ user, updateUser }: BattleProps) => {
       </BattleHeader>
       <IconWrapper>
         <span>Battle</span>
-        <Swords size={90} color='rgb(127, 29, 29)' />
+        <Swords size={60} color='rgb(127, 29, 29)' />
         <span>Arena</span>
       </IconWrapper>
       <LevelContainer>
