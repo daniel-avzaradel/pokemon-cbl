@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { apiURL } from '../App';
 
 export type Stats = {
   hp: number;
@@ -36,7 +37,7 @@ export function usePokemon() {
       setError(null);
 
       try {
-        const listRes = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151');
+        const listRes = await fetch(apiURL);
         if (!listRes.ok) throw new Error(`List fetch failed: ${listRes.status}`);
         const listData = await listRes.json();
         const results: Array<{ name: string; url: string }> = listData.results || [];

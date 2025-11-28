@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Flame, Droplet, Leaf, Zap, Brain, Hand, FlaskConical, Circle, Ghost, Origami, Snowflake, Bug, Mountain } from 'lucide-react';
+import { Flame, Droplet, Moon, Leaf, Anvil, Zap, Brain, Hand, FlaskConical, Circle, Ghost, Origami, Snowflake, Bug, Mountain } from 'lucide-react';
 import Foil from '../../../assets/foil1.gif';
 import ShineTexture from '../../../assets/foil4.gif';
 import Texture01 from '../../../assets/texture01.jpg';
@@ -20,6 +20,8 @@ export const typeColors: Record<string, string> = {
   rock: 'linear-gradient(to bottom right, #493b13ff, #332718ff)',
   fairy: 'linear-gradient(to bottom right, #ffcdfaff, #33182fff)',
   ghost: 'linear-gradient(to bottom right, #ee9cffff, #4d0d43ff)',
+  dark: 'linear-gradient(to bottom right, #000000ff, #1b0318ff)',
+  steel: 'linear-gradient(to bottom right, #747474ff, #b4b4b4ff)',
 };
 
 export const singleTypeColors: Record<string, string> = {
@@ -38,6 +40,7 @@ export const singleTypeColors: Record<string, string> = {
   rock: '#fad9a9ff',
   fairy: '#fda7f2ff',
   ghost: '#c782ffff',
+  dark: '#8a8091ff',
 };
 
 export const typeIcons = {
@@ -55,6 +58,8 @@ export const typeIcons = {
   ground: Mountain,
   rock: Mountain,
   ghost: Ghost,
+  dark: Moon,
+  steel: Anvil
 };
 
 export const CardWrapper = styled.div<{ $large?: boolean, $clickable?: boolean, $inDeck?: boolean }>`

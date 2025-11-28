@@ -1,3 +1,4 @@
+import { apiURL } from '../App';
 import { FetchedPokemon, PokemonTypes, Stats } from '../hooks/usePokemon';
 
 export class FetchedPokemonClass {
@@ -19,12 +20,13 @@ export class FetchedPokemonClass {
 }
 
 export async function generateCardFromPokemon(): Promise<FetchedPokemon> {
-    const id = Math.floor(Math.random() * 151);
+
+    const id = Math.floor(Math.random() * 251);
 
     let pokemon: FetchedPokemonClass | null = null;
 
     try {
-        const list = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151');
+        const list = await fetch(apiURL);
         const data = await list.json();
         const results: Array<{ name: string; url: string }> = data.results || [];
 

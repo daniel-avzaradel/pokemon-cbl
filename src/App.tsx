@@ -9,7 +9,6 @@ import { MyCards } from './components/my-cards/MyCards';
 import Library from './components/library/Library';
 import { ToastContainer, toast } from 'react-toastify';
 
-
 export type Card = HookFetchedPokemon;
 
 export interface UserData {
@@ -31,6 +30,8 @@ const MainContent = styled.main`
   margin: 0 auto;
   padding: 1rem;
 `;
+
+export const apiURL = 'https://pokeapi.co/api/v2/pokemon?limit=251'
 
 export default function App() {
   const [user, setUser] = useState<UserData | null>(null);
