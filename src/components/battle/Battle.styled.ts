@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const BattleContainer = styled.div`
   display: flex;
@@ -40,14 +40,28 @@ export const LevelContainer = styled.div`
   gap: 1.25rem;
   border-radius: 10px;
   padding: 1rem;
+`
 
-  // &:hover > *:not(:hover) {
-  //   opacity: 0.9;
-  //   transition: opacity 0.3s ease;
-  // }
-  // * > * {
-  //   transition: opacity 0.5s ease; /* make sure hover transition is smooth */
-  // }
+const slideL = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateX(-50%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+`
+
+const slideR = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateX(50%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0%);
+  }
 `
 
 export const PlayersGrid = styled.div`
@@ -62,4 +76,12 @@ export const PlayersGrid = styled.div`
   border-radius: 15px;
   width: 100%;
   height: 100%;
+  & > div:first-child {
+    animation: ${slideL} 2s linear;
+    transition: 0.2s ease-in-out;
+  }
+  & > div:nth-child(2) {
+    animation: ${slideR} 2s linear;
+    transition: 0.2s ease-in-out;
+  }
 `;

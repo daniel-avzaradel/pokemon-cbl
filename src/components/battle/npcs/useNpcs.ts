@@ -7,7 +7,8 @@ import { PokemonRoot } from "./jsonTypes";
 interface NPCProps {
     username: string;
     coins: number;
-    pokemon: TeamProps[]
+    pokemon: TeamProps[];
+    imageUrl?: string;
 }
 
 export interface Root {
@@ -22,9 +23,9 @@ export interface Result {
   url: string
 }
 
-export async function useNPCs({ username, coins, pokemon }: NPCProps) {
+export async function useNPCs({ username, coins, pokemon, imageUrl }: NPCProps) {
 
-  let trainer = new User({ username, coins });
+  let trainer = new User({ username, coins, profilePicture: imageUrl });
   let pokemons: Root = await fetch(apiURL()).then(res => res.json());
 
   await Promise.all(

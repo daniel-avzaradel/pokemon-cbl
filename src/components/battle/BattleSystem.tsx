@@ -35,6 +35,7 @@ const BattleSystem = ({ user }: BattleSystemInterface) => {
           username: trainer.name,
           coins: trainer.rewardCoins,
           pokemon: trainer.pokemons,
+          imageUrl: trainer.profile
         });
         setEnemy(npc);
       } catch (err) {
@@ -42,7 +43,7 @@ const BattleSystem = ({ user }: BattleSystemInterface) => {
       } finally {
         setTimeout(() => {
           setLoading(false);
-        }, Math.random() * 5000)
+        }, (Math.random() * 2000) + 1000)
       }
     };
 
