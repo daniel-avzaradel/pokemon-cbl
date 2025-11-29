@@ -3,6 +3,8 @@ import { DivColumn, FaintedPokemonStatus, Header, PokemonBox, PokemonTray, Train
 import DefaultTrainer from '../../../assets/default-trainer-m.jpg';
 import Pokeball from '../../../assets/pokeball2.png';
 
+import { Gem } from 'lucide-react';
+
 interface TrainerStatsProps {
     trainer: UserData
 }
@@ -25,31 +27,38 @@ const TrainerStats = ({trainer}: TrainerStatsProps) => {
                 <div style={{ display: 'flex', width: '100%', height: '100%', gap: '2rem' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px'}}>
                         <TrainerProfilePic $image={trainer.profilePicture ?? DefaultTrainer} />
-                        <PokemonTray>
-                            <span>Badges: </span>
-                        </PokemonTray>
+                        <DivColumn>
+                            <PokemonTray>
+                                <span style={{color: 'goldenrod', fontWeight: 500}}>BADGES: </span>
+                            </PokemonTray>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px'}}>
+                                <Gem size={28} />
+                                <Gem size={28} />
+                                <Gem size={28} />
+                                <Gem size={28} />
+                                <Gem size={28} />
+                                <Gem size={28} />
+                            </div>
+                        </DivColumn>
                     </div>
 
                     <DivColumn>
 
                         <PokemonTray>
-                            {trainer.battleDeck?.map(el => {
+                            {trainer.battleDeck?.map((el, i) => {
                                 return (
-                                <>
-                                {el.stats.hp < 50 ? (
-                                    <FaintedPokemonStatus />
-                                ) : (
-                                    <img src={Pokeball} key={el.uid} />
-                                )}
-                                </>
+                                <div key={el.uid + i}>
+                                    {el.stats.hp < 80 ? <FaintedPokemonStatus  /> : <img src={Pokeball} />}
+                                </div>
                                 )
                             })}
                         </PokemonTray>
 
                         <TrainerPokemonStats>
                             {trainer.battleDeck?.length > 0 && (
-                                trainer.battleDeck.map(p => {
-                                    return <PokemonBox $fainted={p.stats.hp < 50} $image={p.imageUrl ?? ""} key={p.uid}></PokemonBox>
+                                trainer.battleDeck.map((p, i) => {
+                                    return <PokemonBox key={p.uid + i} $fainted={p.stats.hp < 80} $image={p.imageUrl ?? ""} />
                                 })
                             )}
                         </TrainerPokemonStats>

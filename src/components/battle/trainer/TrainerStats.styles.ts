@@ -89,17 +89,27 @@ export const TrainerPokemonStats = styled.main`
     gap: 4px;
 `
 
-export const PokemonBox = styled.div<{ $image: string, $fainted?: boolean }>`
+export const PokemonBox = styled.div<{
+  $image: string;
+  $fainted?: boolean;
+}>`
   position: relative;
   width: 100%;
   height: 100%;
   border: 2px solid #111;
   border-radius: 6px;
-  background-image: url(${p => p.$image});
-  background-size: 140%;
-  background-position: 40% 60%;
+
+  /* Combined background: overlay color + image */
+  background-image: 
+    ${p => p.$fainted 
+      ? 'linear-gradient(rgba(255, 255, 255, 1), rgba(209, 209, 209, 0.7))'
+      : 'linear-gradient(to bottom right, #ffffffff, #7a622eff)'},
+    url(${p => p.$image});
+  background-size: 240%;
+  background-position: 50% 30%;
   background-repeat: no-repeat;
-  background-color: ${p => p.$fainted ? '#d1d1d1' : '#f1f1f1'};
+  background-blend-mode: ${p => p.$fainted ? 'hue' : 'soft-light'};
+
   filter: ${p => p.$fainted ? 'brightness(0.2)' : 'none'};
 `;
 
@@ -111,7 +121,7 @@ export const PokemonTray = styled.div`
     border-bottom: 1px solid #e1e1e1;
     gap: 0 4px;
     padding: 4px 0;
-    & > img {
+    & > div > img {
         position: relative;
         width: 22px;
         height: 22px;
