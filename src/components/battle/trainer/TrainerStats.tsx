@@ -1,16 +1,17 @@
-import { UserData } from '../../../App'
+import { Card, UserData } from '../../../App'
 import { DivColumn, FaintedPokemonStatus, Header, PokemonBox, PokemonTray, TrainerHeaderName, TrainerPokemonStats, TrainerPokemonStatsWrapper, TrainerProfilePic, TrainerStatsContainer, TrainerStatsHeader } from './TrainerStats.styles'
 import DefaultTrainer from '../../../assets/default-trainer-m.jpg';
 import Pokeball from '../../../assets/pokeball2.png';
 
 import { Gem } from 'lucide-react';
+import { useState } from 'react';
 
 interface TrainerStatsProps {
-    trainer: UserData
+    trainer: UserData;
+    selectedPokemon?: Card
 }
 
-const TrainerStats = ({trainer}: TrainerStatsProps) => {
-
+const TrainerStats = ({trainer, selectedPokemon}: TrainerStatsProps) => {
 
   return (
     <TrainerStatsContainer>
@@ -60,7 +61,7 @@ const TrainerStats = ({trainer}: TrainerStatsProps) => {
                         <TrainerPokemonStats>
                             {trainer.battleDeck?.length > 0 && (
                                 trainer.battleDeck.map((p, i) => {
-                                    return <PokemonBox key={p.uid + i} $fainted={p.stats.hp < 80} $image={p.imageUrl ?? ""} />
+                                    return <PokemonBox $selected={selectedPokemon.uid === p.uid} key={p.uid + i} $fainted={p.stats.hp < 80} $image={p.imageUrl ?? ""} />
                                 })
                             )}
                         </TrainerPokemonStats>

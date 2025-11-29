@@ -1,14 +1,17 @@
-import { Navigate, useParams } from 'react-router-dom'
-import { BattleContainer, BattleHeader, IconWrapper, PlayersGrid } from './Battle.styled'
-import { Swords } from 'lucide-react'
+import { Swords } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { trainersData } from './trainersData';
+import { Navigate, useParams } from 'react-router-dom';
 import { UserData } from '../../App';
+import { BattleContainer, BattleHeader, IconWrapper, PlayersGrid } from './Battle.styled';
+import { trainersData } from './trainersData';
 
-import TrainerStats from './trainer/TrainerStats';
-import { useNPCs } from './npcs/useNpcs';
 import { toast } from 'react-toastify';
+import { FetchedPokemon } from '../../hooks/usePokemon';
+import CardActions from './card-actions/CardActions';
 import LoadingBattle from './LoadingBattle';
+import { useNPCs } from './npcs/useNpcs';
+import TrainerStats from './trainer/TrainerStats';
+import { generateCardFromPokemon } from '../../utils/generateCardFromPokemon';
 
 interface BattleSystemInterface {
   user: UserData
@@ -21,13 +24,16 @@ const BattleSystem = ({ user }: BattleSystemInterface) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
+  const [selectedPokemonUser, setSelectedPokemonUser] = useState<FetchedPokemon>(user.battleDeck[0])
+  const [selectedPokemonEnemy, setSelectedPokemonEnemy] = useState<FetchedPokemon | undefined>(user.battleDeck[0])
+  
+
   const trainer = useMemo(() => {
     return trainersData.find(el => el.id.toString() === id);
   }, [id]);
 
   useEffect(() => {
     if (!trainer) return;
-
     const load = async () => {
       try {
         setLoading(true);
@@ -38,12 +44,14 @@ const BattleSystem = ({ user }: BattleSystemInterface) => {
           imageUrl: trainer.profile
         });
         setEnemy(npc);
+        setSelectedPokemonEnemy(npc?.battleDeck[0])
+
       } catch (err) {
         setError(true);
       } finally {
         setTimeout(() => {
           setLoading(false);
-        }, (Math.random() * 2000) + 1000)
+        }, (Math.random() * 0) + 0)
       }
     };
 
@@ -62,7 +70,7 @@ const BattleSystem = ({ user }: BattleSystemInterface) => {
     toast.error("Could not fetch data for the battle");
     return <Navigate to="/battle" replace />;
   }
-
+  
   return (
     <BattleContainer>
       <BattleHeader>
@@ -75,10 +83,13 @@ const BattleSystem = ({ user }: BattleSystemInterface) => {
       <br />
 
       {(user && enemy) && (
+      <>
         <PlayersGrid>
-          <TrainerStats trainer={user} />
-          <TrainerStats trainer={enemy} />
+          <TrainerStats selectedPokemon={selectedPokemonUser} trainer={user} />
+          <TrainerStats selectedPokemon={selectedPokemonEnemy} trainer={enemy} />
         </PlayersGrid>
+        <CardActions {...{ user }} userCard={selectedPokemonUser} enemyCard={selectedPokemonEnemy ?? selectedPokemonUser} />
+      </>
       )}
     </BattleContainer>
   )

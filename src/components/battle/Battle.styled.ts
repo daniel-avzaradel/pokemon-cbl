@@ -45,7 +45,7 @@ export const LevelContainer = styled.div`
 const slideL = keyframes`
   0% {
     opacity: 0;
-    transform: translateX(-50%);
+    transform: translateX(-25%);
   }
   100% {
     opacity: 1;
@@ -56,11 +56,29 @@ const slideL = keyframes`
 const slideR = keyframes`
   0% {
     opacity: 0;
-    transform: translateX(50%);
+    transform: translateX(25%);
   }
   100% {
     opacity: 1;
     transform: translateX(0%);
+  }
+`
+
+export const CardGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1.2fr;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: .5rem;
+  width: 100%;
+  height: 100%;
+  border: 1px solid purple;
+  & > div {
+    width: 100%;
+  }
+  & > div:last-child {
+    border: 2px solid yellow;
+    flex-direction: row-reverse;
   }
 `
 
@@ -77,11 +95,11 @@ export const PlayersGrid = styled.div`
   width: 100%;
   height: 100%;
   & > div:first-child {
-    animation: ${slideL} 2s linear;
+    animation: ${slideL} 3s linear;
     transition: 0.2s ease-in-out;
   }
   & > div:nth-child(2) {
-    animation: ${slideR} 2s linear;
+    animation: ${slideR} 3s linear;
     transition: 0.2s ease-in-out;
   }
 `;

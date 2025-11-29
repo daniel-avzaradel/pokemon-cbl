@@ -1,11 +1,12 @@
 import { Circle } from 'lucide-react';
 import { Card, UserData } from '../../App';
 import { CardHeader, CardImage, CardInner, CardName, CardOuter, CardWrapper, ImageContainer, singleTypeColors, StatsBarContainer, StatsBarFill, StatsBarLabel, StatsBarRow, StatsBarTrack, StatsBarValue, StatsGrid, typeColors, typeIcons } from './PokemonCards.styles';
+import { useLocation } from 'react-router-dom';
 
 interface PokemonCardProps {
   card: Card;
-  onClick?: () => void;
   user: UserData;
+  onClick?: () => void;
   deck?: boolean;
   large?: boolean;
 }
@@ -13,6 +14,8 @@ interface PokemonCardProps {
 export function PokemonCard({ card, large, deck, onClick, user }: PokemonCardProps) {
   const primaryType = Array.isArray(card.types) && card.types.length > 0 ? card.types[0] : 'normal';
   const TypeIcon = typeIcons[primaryType as keyof typeof typeIcons] || Circle;
+
+  const params = useLocation();
 
   const statusArray = [
     { label: 'HP', value: card.stats.hp, color: '#f87171' },
@@ -33,7 +36,7 @@ export function PokemonCard({ card, large, deck, onClick, user }: PokemonCardPro
   }
 
   return (
-    <CardWrapper $inDeck={(deck || large) ? false : isInDeck(card.uid)} $clickable={!!onClick} onClick={onClick}>
+    <CardWrapper $inDeck={(deck || large || params.pathname.includes('/battle')) ? false : isInDeck(card.uid)} $clickable={!!onClick} onClick={onClick}>
       <CardOuter $type={typeColors[primaryType]}  >
         <CardInner $type={primaryType} $rarity={rarity(card)} $shine={card.isFoil}>
           <CardHeader $type={primaryType}>
