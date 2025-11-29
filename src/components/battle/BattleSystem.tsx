@@ -1,10 +1,12 @@
 import { useParams } from 'react-router-dom'
 import { BattleContainer, BattleHeader, IconWrapper, PlayersGrid } from './Battle.styled'
 import { Swords } from 'lucide-react'
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { trainersData } from './trainersData';
 import { UserData } from '../../App';
+
 import TrainerStats from './trainer/TrainerStats';
+import { useNPCs } from './npcs/useNpcs';
 
 interface BattleSystemInterface {
   user: UserData
@@ -13,13 +15,26 @@ interface BattleSystemInterface {
 const BattleSystem = ({ user }: BattleSystemInterface) => {
 
   const { id } = useParams();
+  const [enemy, setEnemy] = useState<UserData>();
 
   const trainer = useMemo(() => {
-    return trainersData.find(el => el.id.toString() === id)
-  }, [id])
+    return trainersData.find(el => el.id.toString() === id);
+  }, [id]);
 
-  console.log(user);
-  
+  useEffect(() => {
+    if (!trainer) return;
+
+    const load = async () => {
+      const npc = await useNPCs({
+        username: trainer.name,
+        coins: trainer.rewardCoins,
+        pokemon: trainer.pokemons,
+      });
+      setEnemy(npc);
+    };
+
+    load();
+  }, [trainer, id]);
 
   return (
     <BattleContainer>
@@ -32,10 +47,12 @@ const BattleSystem = ({ user }: BattleSystemInterface) => {
       </IconWrapper>
       <br />
 
-      <PlayersGrid>
-        <TrainerStats trainer={user} />
-        <TrainerStats trainer={user} />
-      </PlayersGrid>
+      {(user && enemy) ? (
+        <PlayersGrid>
+          <TrainerStats trainer={user} />
+          <TrainerStats trainer={enemy} />
+        </PlayersGrid>
+      ) : <h1>No Data</h1>}
     </BattleContainer>
   )
 }

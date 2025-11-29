@@ -21,7 +21,7 @@ import BattleSystem from './components/battle/BattleSystem';
 
 export type Card = HookFetchedPokemon;
 
-interface ArenaTrainersUnlock {
+export interface ArenaTrainersUnlock {
   name: string;
   unlocked: boolean;
 }
@@ -109,7 +109,10 @@ export default function App() {
           path: "battle",
           element: <Battle user={user} updateUser={updateUser} />,
         },
-        { path: "battle/:id", element: <BattleSystem user={user} /> },
+        {
+          path: "battle/:id",
+          element: <BattleSystem user={user} />,
+        },
         { path: "*", element: <Navigate to="/library" replace /> },
       ],
     },

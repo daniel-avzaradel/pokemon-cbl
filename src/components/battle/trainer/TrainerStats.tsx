@@ -10,6 +10,8 @@ interface TrainerStatsProps {
 }
 
 const TrainerStats = ({trainer}: TrainerStatsProps) => {
+
+
   return (
     <TrainerStatsContainer>
         <TrainerStatsHeader>

@@ -2,8 +2,9 @@ import { FetchedPokemon } from "../../hooks/usePokemon";
 import { apiURL } from "../../utils/constants";
 import { generateCardFromPokemon } from "../../utils/generateCardFromPokemon";
 
-interface TeamProps {
+export interface TeamProps {
   name: string;
+  id?: string;
   foil?: boolean;
 }
 
