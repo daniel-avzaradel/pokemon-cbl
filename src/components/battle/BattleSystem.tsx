@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 import { BattleContainer, BattleHeader, IconWrapper, PlayersGrid } from './Battle.styled'
 import { Swords } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react';
@@ -7,6 +7,8 @@ import { UserData } from '../../App';
 
 import TrainerStats from './trainer/TrainerStats';
 import { useNPCs } from './npcs/useNpcs';
+import { toast } from 'react-toastify';
+import LoadingBattle from './LoadingBattle';
 
 interface BattleSystemInterface {
   user: UserData
@@ -16,6 +18,8 @@ const BattleSystem = ({ user }: BattleSystemInterface) => {
 
   const { id } = useParams();
   const [enemy, setEnemy] = useState<UserData>();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const trainer = useMemo(() => {
     return trainersData.find(el => el.id.toString() === id);
@@ -25,16 +29,38 @@ const BattleSystem = ({ user }: BattleSystemInterface) => {
     if (!trainer) return;
 
     const load = async () => {
-      const npc = await useNPCs({
-        username: trainer.name,
-        coins: trainer.rewardCoins,
-        pokemon: trainer.pokemons,
-      });
-      setEnemy(npc);
+      try {
+        setLoading(true);
+        const npc = await useNPCs({
+          username: trainer.name,
+          coins: trainer.rewardCoins,
+          pokemon: trainer.pokemons,
+        });
+        setEnemy(npc);
+      } catch (err) {
+        setError(true);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, Math.random() * 5000)
+      }
     };
 
     load();
-  }, [trainer, id]);
+  }, [trainer]);
+
+  if (!trainer) {
+    return <Navigate to="/battle" replace />;
+  }
+
+  if (loading) {
+    return <LoadingBattle />;
+  }
+
+  if (error || !enemy) {
+    toast.error("Could not fetch data for the battle");
+    return <Navigate to="/battle" replace />;
+  }
 
   return (
     <BattleContainer>
@@ -47,12 +73,12 @@ const BattleSystem = ({ user }: BattleSystemInterface) => {
       </IconWrapper>
       <br />
 
-      {(user && enemy) ? (
+      {(user && enemy) && (
         <PlayersGrid>
           <TrainerStats trainer={user} />
           <TrainerStats trainer={enemy} />
         </PlayersGrid>
-      ) : <h1>No Data</h1>}
+      )}
     </BattleContainer>
   )
 }
