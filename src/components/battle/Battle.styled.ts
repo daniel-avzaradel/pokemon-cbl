@@ -42,7 +42,7 @@ export const LevelContainer = styled.div`
   padding: 1rem;
 `
 
-const slideL = keyframes`
+export const slideL = keyframes`
   0% {
     opacity: 0;
     transform: translateX(-25%);
@@ -53,7 +53,7 @@ const slideL = keyframes`
   }
 `
 
-const slideR = keyframes`
+export const slideR = keyframes`
   0% {
     opacity: 0;
     transform: translateX(25%);
@@ -66,16 +66,13 @@ const slideR = keyframes`
 
 export const CardGrid = styled.div`
   display: grid;
-  grid-template-columns: 1.2fr 1fr 1.2fr;
+  grid-template-columns: 1fr 1fr 1fr;
   justify-content: center;
   gap: 0.5rem;
   padding: .5rem;
   width: 100%;
   height: 100%;
 
-  & > div {
-    width: 100%;
-  }
   & > div:last-child {
     flex-direction: row-reverse;
   }
@@ -90,6 +87,11 @@ export const PlayersGrid = styled.div`
   border-radius: 15px;
   width: 100%;
   height: 100%;
+
+  & > img {
+    position: absolute;
+    left: 44%;
+  }
   
   & > div:first-child {
     animation: ${slideL} 3s linear;

@@ -1,8 +1,9 @@
 import { PokemonCard } from '../../common/PokemonCard'
 import { Card, UserData } from '../../../App'
 import { CardGrid } from '../Battle.styled';
-import { ActionsContainer, ActionsPageContainer, MovesetContainer } from './CardActions.styled';
+import { ActionsContainer, ActionsPageContainer, MovesetButton, MovesetContainer } from './CardActions.styled';
 import { StatusCardComponent } from './StatusCardComponent';
+import { Shield, Sword, WandSparkles } from 'lucide-react';
 
 interface CardActionProps {
   user: UserData;
@@ -21,7 +22,12 @@ const PokemonActions = ({ user, card }: PokemonActionsProps) => {
       <PokemonCard {...{ user }} card={card} />
       <ActionsContainer>
         <StatusCardComponent />
-        <MovesetContainer />
+        <MovesetContainer>
+          <MovesetButton><Sword/> Attack</MovesetButton>
+          <MovesetButton $color='royalblue'><Shield/> Defense</MovesetButton>
+          <MovesetButton $color='darkorange'><WandSparkles /> Special</MovesetButton>
+          <MovesetButton $color='#000'>Return</MovesetButton>
+        </MovesetContainer>
       </ActionsContainer>
     </ActionsPageContainer>
   )
@@ -32,7 +38,7 @@ const TurnsEvents = () => {
 
 
   return (
-    <div style={{ display: 'flex', border: '2px solid red', width: '100%', height: '100%', alignItems: 'center', padding: '2rem', justifyContent: 'center' }}>
+    <div style={{ display: 'flex', borderRadius: '10px', border: '2px solid red', width: '100%', height: '100%', alignItems: 'center', padding: '2rem', justifyContent: 'center' }}>
       <h1>YOUR TURN</h1>
     </div>
   )

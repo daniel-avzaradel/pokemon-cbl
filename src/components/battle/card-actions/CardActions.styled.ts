@@ -1,12 +1,25 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`
 
 export const ActionsPageContainer = styled.div`
     display: flex;
     align-items: center;
-    width: 100%;
-    height: 100%;
-    flex: 1;
     gap: 10px;
+    & > div:first-child {
+      width: 220px;
+      animation: ${fadeIn} 5s linear;
+    }
 `
 
 export const ActionsContainer = styled.div`
@@ -14,7 +27,7 @@ export const ActionsContainer = styled.div`
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  width: 100%;
+  width: min-content;
   height: 100%;
   gap: 10px;
 `
@@ -70,10 +83,31 @@ export const StatusHeader = styled.div`
 
 export const MovesetContainer = styled.div`
   display: grid;
+  place-items: start;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
   background: #1a1a1a;
   border: 1px solid #2a2a2a;
   padding: 10px;
   width: 100%;
-  height: 100%;
+  height: auto;
   border-radius: 0.75rem;
+`
+
+export const MovesetButton = styled.button<{$color?: string}>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  background: ${p => p.$color ?? 'darkred'};
+  color: white;
+  cursor: pointer;
+  opacity: 0.8;
+  padding: 6px 10px;
+  width: 100px;
+  &:hover {
+    opacity: 1;
+  }
 `

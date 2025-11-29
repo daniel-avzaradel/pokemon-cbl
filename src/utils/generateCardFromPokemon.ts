@@ -34,7 +34,6 @@ export async function generateCardFromPokemon(pokemonId?: number, foil?: boolean
         const randomPokemon = results[pokemonId ? (pokemonId - 1) : id];
         const res = await fetch(randomPokemon.url);
         const d = await res.json();
-        console.log(d);
         
         const imageUrl = d.sprites?.other?.['official-artwork']?.front_default || null;
         const types: PokemonTypes[] = Array.isArray(d.types) ? d.types.map((t: any) => t.type.name) : [];

@@ -11,7 +11,8 @@ import CardActions from './card-actions/CardActions';
 import LoadingBattle from './LoadingBattle';
 import { useNPCs } from './npcs/useNpcs';
 import TrainerStats from './trainer/TrainerStats';
-import { generateCardFromPokemon } from '../../utils/generateCardFromPokemon';
+
+import PokeballStar from '../../assets/star.png'
 
 interface BattleSystemInterface {
   user: UserData
@@ -87,6 +88,7 @@ const BattleSystem = ({ user }: BattleSystemInterface) => {
         <PlayersGrid>
           <TrainerStats selectedPokemon={selectedPokemonUser} trainer={user} />
           <TrainerStats selectedPokemon={selectedPokemonEnemy} trainer={enemy} />
+          <img src={PokeballStar} width={180} />
         </PlayersGrid>
         <CardActions {...{ user }} userCard={selectedPokemonUser} enemyCard={selectedPokemonEnemy ?? selectedPokemonUser} />
       </div>
