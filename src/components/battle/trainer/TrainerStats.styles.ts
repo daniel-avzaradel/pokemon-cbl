@@ -105,8 +105,8 @@ export const PokemonBox = styled.div<{
       ? 'linear-gradient(rgba(255, 255, 255, 1), rgba(209, 209, 209, 0.7))'
       : 'linear-gradient(to bottom right, #ffffffff, #7a622eff)'},
     url(${p => p.$image});
-  background-size: 240%;
-  background-position: 50% 30%;
+  background-size: 180%;
+  background-position: 70% 40%;
   background-repeat: no-repeat;
   background-blend-mode: ${p => p.$fainted ? 'hue' : 'soft-light'};
 
