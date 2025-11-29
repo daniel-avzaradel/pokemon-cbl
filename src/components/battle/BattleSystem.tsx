@@ -83,13 +83,13 @@ const BattleSystem = ({ user }: BattleSystemInterface) => {
       <br />
 
       {(user && enemy) && (
-      <>
+      <div>
         <PlayersGrid>
           <TrainerStats selectedPokemon={selectedPokemonUser} trainer={user} />
           <TrainerStats selectedPokemon={selectedPokemonEnemy} trainer={enemy} />
         </PlayersGrid>
         <CardActions {...{ user }} userCard={selectedPokemonUser} enemyCard={selectedPokemonEnemy ?? selectedPokemonUser} />
-      </>
+      </div>
       )}
     </BattleContainer>
   )

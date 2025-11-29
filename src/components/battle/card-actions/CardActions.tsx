@@ -1,8 +1,8 @@
-import React from 'react'
 import { PokemonCard } from '../../common/PokemonCard'
 import { Card, UserData } from '../../../App'
 import { CardGrid } from '../Battle.styled';
-import { ActionsContainer, ActionsPageContainer } from './CardActions.styled';
+import { ActionsContainer, ActionsPageContainer, MovesetContainer } from './CardActions.styled';
+import { StatusCardComponent } from './StatusCardComponent';
 
 interface CardActionProps {
   user: UserData;
@@ -20,13 +20,17 @@ const PokemonActions = ({ user, card }: PokemonActionsProps) => {
     <ActionsPageContainer>
       <PokemonCard {...{ user }} card={card} />
       <ActionsContainer>
-
+        <StatusCardComponent />
+        <MovesetContainer />
       </ActionsContainer>
     </ActionsPageContainer>
   )
 }
 
 const TurnsEvents = () => {
+
+
+
   return (
     <div style={{ display: 'flex', border: '2px solid red', width: '100%', height: '100%', alignItems: 'center', padding: '2rem', justifyContent: 'center' }}>
       <h1>YOUR TURN</h1>

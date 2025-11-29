@@ -72,12 +72,11 @@ export const CardGrid = styled.div`
   padding: .5rem;
   width: 100%;
   height: 100%;
-  border: 1px solid purple;
+
   & > div {
     width: 100%;
   }
   & > div:last-child {
-    border: 2px solid yellow;
     flex-direction: row-reverse;
   }
 `
@@ -88,12 +87,10 @@ export const PlayersGrid = styled.div`
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem;
-  border: 2px solid darkred;
-  background: #1a1a1a;
-  box-shadow: 0px 1px 12px rgba(221, 190, 11, 0.9);
   border-radius: 15px;
   width: 100%;
   height: 100%;
+  
   & > div:first-child {
     animation: ${slideL} 3s linear;
     transition: 0.2s ease-in-out;
