@@ -7,6 +7,7 @@ import Daniel from '../../assets/daniel2.png'
 import Ash from '../../assets/ash.png'
 
 export interface TrainerCardI {
+  id: number;
   level: number;
   battlesWon: number;
   rewardCoins: number;
@@ -20,6 +21,7 @@ export interface TrainerCardI {
 
 export const trainersData: TrainerCardI[] = [
   {
+    id: 1,
     level: 1,
     title: "Pokemon Trainer",
     difficulty: "Beginner",
@@ -30,6 +32,7 @@ export const trainersData: TrainerCardI[] = [
     rewardCoins: 100
   },
   {
+    id: 2,
     level: 3,
     title: "Bandit Trainers",
     difficulty: "Intermediate",
@@ -40,6 +43,7 @@ export const trainersData: TrainerCardI[] = [
     rewardCoins: 100
   },
   {
+    id: 3,
     level: 5,
     title: "Gym Trainer",
     difficulty: "Advanced",
@@ -50,6 +54,7 @@ export const trainersData: TrainerCardI[] = [
     rewardCoins: 100
   },
   {
+    id: 4,
     level: 20,
     title: "Tournament Champion",
     difficulty: "Champion",
@@ -60,6 +65,7 @@ export const trainersData: TrainerCardI[] = [
     rewardCoins: 100
   },
   {
+    id: 5,
     level: 50,
     title: "Webmaster",
     difficulty: "Legendary",

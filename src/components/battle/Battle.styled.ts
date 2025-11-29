@@ -49,3 +49,17 @@ export const LevelContainer = styled.div`
   //   transition: opacity 0.5s ease; /* make sure hover transition is smooth */
   // }
 `
+
+export const PlayersGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border: 2px solid darkred;
+  background: #1a1a1a;
+  box-shadow: 0px 1px 12px rgba(221, 190, 11, 0.9);
+  border-radius: 15px;
+  width: 100%;
+  height: 100%;
+`;

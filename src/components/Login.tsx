@@ -45,7 +45,7 @@ const IconWrapper = styled.div`
 
 const Title = styled.h1`
   color: white;
-  font-size: 2.25rem;
+  font-size: 1.8rem;
   margin-bottom: 0.5rem;
 `;
 
@@ -131,7 +131,7 @@ export function Login({ onLogin }: LoginProps) {
           <IconWrapper>
             <Zap style={{ width: '3rem', height: '3rem', color: '#eab308' }} />
           </IconWrapper>
-          <Title>Pokemon Cards</Title>
+          <Title>Pokemon Card Battle Legacy</Title>
           <Subtitle>Battle Platform</Subtitle>
         </HeaderSection>
 

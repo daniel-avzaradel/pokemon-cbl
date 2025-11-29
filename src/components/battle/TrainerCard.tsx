@@ -4,6 +4,7 @@ import { ActionButton, EmptyState, LevelBadge, LockedDiv, LockWrapper, PokemonLi
 import PokeBall from '../../assets/pokeball.png'
 import { TrainerCardI } from './trainersData';
 import { UserData } from '../../App';
+import { Link } from 'react-router-dom';
 
 interface TrainerCardProps {
   trainer: TrainerCardI;
@@ -94,7 +95,11 @@ export function TrainerCard({ trainer, user, updateUser }: TrainerCardProps) {
             </LockedDiv>
           )}
           {userArenaTrainer?.unlocked && (
-            <ActionButton><Swords /> Battle</ActionButton>
+            <Link to={`/battle/:${trainer.id}`}>
+              <ActionButton>
+                <Swords /> Battle
+              </ActionButton>
+            </Link>
           )}
         </PokemonSection>
       </ProfileContent>

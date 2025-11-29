@@ -16,6 +16,7 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router";
+import BattleSystem from './components/battle/BattleSystem';
 
 
 export type Card = HookFetchedPokemon;
@@ -31,6 +32,7 @@ export interface UserData {
   collection: Card[];
   battleDeck: Card[];
   arena: ArenaTrainersUnlock[]
+  profilePicture?: string;
 }
 
 const AppContainer = styled.div`
@@ -107,6 +109,7 @@ export default function App() {
           path: "battle",
           element: <Battle user={user} updateUser={updateUser} />,
         },
+        { path: "battle/:id", element: <BattleSystem user={user} /> },
         { path: "*", element: <Navigate to="/library" replace /> },
       ],
     },
