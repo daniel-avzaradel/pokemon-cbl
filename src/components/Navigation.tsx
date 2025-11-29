@@ -1,11 +1,10 @@
 import styled from 'styled-components';
 import { BookMarked, Library, ShoppingBag, Swords, Coins, LogOut } from 'lucide-react';
 import { UserData } from '../App';
+import { Link, useLocation, Outlet } from 'react-router-dom'
 
 interface NavigationProps {
   user: UserData;
-  currentView: string;
-  onViewChange: (view: 'library' | 'myCards' | 'shop' | 'battle') => void;
   onLogout: () => void;
 }
 
@@ -121,64 +120,71 @@ export const LogoDiv = styled.div`
   }
 `;
 
-export function Navigation({ user, currentView, onViewChange, onLogout }: NavigationProps) {
+const FullPageWrapper = styled.div`
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem;
+`;
+
+export function NavigationComponent({ user, onLogout }: NavigationProps) {
+
+  const location = useLocation();
+  const isActive = (path: string) => location.pathname === path;
+
   return (
-    <Nav>
-      <NavContainer>
-        <NavContent>
-          <LeftSection>
-            <LogoDiv>
-            <Logo>Pokemon CBL</Logo>
-            <span>by: Daniel Avzaradel</span>
-            </LogoDiv>
-            <NavButtons>
-              <NavButton
-                $active={currentView === 'library'}
-                onClick={() => onViewChange('library')}
-              >
-                <BookMarked style={{ width: '1rem', height: '1rem' }} />
-                <span>Library</span>
-              </NavButton>
-              <NavButton
-                $active={currentView === 'myCards'}
-                onClick={() => onViewChange('myCards')}
-              >
-                <Library style={{ width: '1rem', height: '1rem' }} />
-                <span>Collection</span>
-              </NavButton>
+    <>
+      <Nav>
+        <NavContainer>
+          <NavContent>
+            <LeftSection>
+              <LogoDiv>
+                <Logo>Pokemon CBL</Logo>
+                <span>by: Daniel Avzaradel</span>
+              </LogoDiv>
 
-              <NavButton
-                $active={currentView === 'shop'}
-                onClick={() => onViewChange('shop')}
-              >
-                <ShoppingBag style={{ width: '1rem', height: '1rem' }} />
-                <span>Shop</span>
-              </NavButton>
+              <NavButtons>
+                <NavButton $active={isActive("/library")} as={Link} to="/library">
+                  <BookMarked style={{ width: "1rem", height: "1rem" }} />
+                  <span>Library</span>
+                </NavButton>
 
-              <NavButton
-                $active={currentView === 'battle'}
-                onClick={() => onViewChange('battle')}
-              >
-                <Swords style={{ width: '1rem', height: '1rem' }} />
-                <span>Battle</span>
-              </NavButton>
-            </NavButtons>
-          </LeftSection>
+                <NavButton $active={isActive("/my-cards")} as={Link} to="/my-cards">
+                  <Library style={{ width: "1rem", height: "1rem" }} />
+                  <span>Collection</span>
+                </NavButton>
 
-          <RightSection>
-            <CoinsDisplay>
-              <Coins style={{ width: '1.25rem', height: '1.25rem', color: '#eab308' }} />
-              <CoinsText>{user.coins}</CoinsText>
-            </CoinsDisplay>
+                <NavButton $active={isActive("/shop")} as={Link} to="/shop">
+                  <ShoppingBag style={{ width: "1rem", height: "1rem" }} />
+                  <span>Shop</span>
+                </NavButton>
 
-            <Username>{user.username}</Username>
+                <NavButton $active={isActive("/battle")} as={Link} to="/battle">
+                  <Swords style={{ width: "1rem", height: "1rem" }} />
+                  <span>Battle</span>
+                </NavButton>
+              </NavButtons>
+            </LeftSection>
 
-            <LogoutButton onClick={onLogout} title="Logout">
-              <LogOut style={{ width: '1.25rem', height: '1.25rem' }} />
-            </LogoutButton>
-          </RightSection>
-        </NavContent>
-      </NavContainer>
-    </Nav>
+            <RightSection>
+              <CoinsDisplay>
+                <Coins style={{ width: "1.25rem", height: "1.25rem", color: "#eab308" }} />
+                <CoinsText>{user.coins}</CoinsText>
+              </CoinsDisplay>
+
+              <Username>{user.username}</Username>
+
+              <LogoutButton onClick={onLogout} title="Logout">
+                <LogOut style={{ width: "1.25rem", height: "1.25rem" }} />
+              </LogoutButton>
+            </RightSection>
+          </NavContent>
+        </NavContainer>
+      </Nav>
+
+      {/* Where Routed pages appear */}
+      <FullPageWrapper>
+          <Outlet />
+      </FullPageWrapper>
+    </>
   );
 }

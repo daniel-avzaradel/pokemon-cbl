@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const BattleContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: .5rem;
   color: white;
 `;
 
@@ -21,46 +21,45 @@ export const BattleHeader = styled.div`
 
 export const IconWrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: 100%;
   margin: 0 auto;
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  font-size: 3rem;
+  font-size: 1.8rem;
   & > svg {
-    filter: drop-shadow(0px 2px 2px rgba(216, 153, 18, 0.9));
+    margin: 0;
+    filter: drop-shadow(0px 2px 2px rgba(255, 255, 255, 0.9));
   }
 `
 
 export const LevelContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  border: 1px solid #333;
+  gap: 1.25rem;
   border-radius: 10px;
-  background: #222;
-  padding: 2rem;
+  padding: 1rem;
+
+  // &:hover > *:not(:hover) {
+  //   opacity: 0.9;
+  //   transition: opacity 0.3s ease;
+  // }
+  // * > * {
+  //   transition: opacity 0.5s ease; /* make sure hover transition is smooth */
+  // }
 `
 
-export const LevelCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: #444;
-  backdrop-filter: blur(12px);
-  border-radius: .5rem;
-  padding: 1.5rem;
-  border: 1px solid #2a2a2a;
-  transition: all 0.2s ease;
+export const PlayersGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: space-between;
   gap: 1rem;
-
-  &:hover {
-    border-color: rgba(202, 138, 4, 0.5);
-  }
-
-  & > h1 {
-    text-transform: uppercase;
-  }
-`
+  padding: 1rem;
+  border: 2px solid darkred;
+  background: #1a1a1a;
+  box-shadow: 0px 1px 12px rgba(221, 190, 11, 0.9);
+  border-radius: 15px;
+  width: 100%;
+  height: 100%;
+`;

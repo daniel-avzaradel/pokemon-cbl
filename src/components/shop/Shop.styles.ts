@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const Container = styled.div`
   display: flex;
@@ -18,6 +18,17 @@ export const Header = styled.div`
   }
 `;
 
+const slideIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
 export const PacksGrid = styled.div`
   display: grid;
   gap: 1.5rem;
@@ -27,13 +38,18 @@ export const PacksGrid = styled.div`
   }
 `;
 
-export const PackCard = styled.div<{$type?: string}>`
+export const PackCard = styled.div<{$type?: string, $delay: number, $show: boolean}>`
   background: ${props => props.$type || 'linear-gradient(to bottom right, #d6d6d6ff, #1b1b1bff, #585858ff)'};
   backdrop-filter: blur(12px);
   border-radius: 1rem;
   padding: 1.5rem;
   border: 1px solid #2a2a2a;
   transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  opacity: 0;
+  transform: translateX(50px);
+  animation: ${({ $show }) => ($show ? slideIn : 'none')} 0.5s forwards;
+  animation-delay: ${({ $delay }) => $delay || 0}s;
 
   &:hover {
     border-color: rgba(202, 138, 4, 0.5);
@@ -74,10 +90,10 @@ export const PackInfo = styled.div`
 `;
 
 export const PriceBox = styled.div`
-  background: #262626;
+  background: #252525ff;
   border-radius: 0.5rem;
   padding: 0.75rem;
-  border: 1px solid #404040;
+  border: 1px solid #3d3d3dff;
 
   .price {
     color: #eab308;
@@ -107,6 +123,8 @@ export const PurchaseButton = styled.button<{ $disabled: boolean }>`
 `;
 
 export const Modal = styled.div`
+  display: flex;
+  align-items: center;
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.95);
@@ -132,13 +150,17 @@ export const Modal = styled.div`
 `;
 
 export const ModalContent = styled.div`
-  max-width: 72rem;
+  position: absolute;
+  max-width: 1280px;
+  padding: 1rem;
+  box-sizing: border-box;
   width: 100%;
 `;
 
 export const ModalHeader = styled.div`
   text-align: center;
   margin-bottom: 2rem;
+  box-sizing: border-box;
 `;
 
 export const ModalTitle = styled.div`
@@ -147,25 +169,28 @@ export const ModalTitle = styled.div`
   gap: 0.5rem;
   color: #eab308;
   font-size: 1.5rem;
-  margin-bottom: 1rem;
+  box-sizing: border-box;
 `;
 
-export const CardsGrid = styled.div`
+export const CardsGrid = styled.div<{$cards: number}>`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  place-content: center;
+  grid-template-columns: ${p => p.$cards > 4 ? `repeat(3, min(220px))` : `repeat(${p.$cards}, 1fr)`};
+  max-width: ${p => p.$cards >= 4 ? `1280px` : `768px`};
+  margin: auto;
+  place-items: center;
+  justify-items: center;
+  align-items: center;
   gap: 1rem;
-  margin-bottom: 2rem;
+  box-sizing: border-box;
 
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(5, 1fr);
+  & > * {
+    height: 100%;
   }
 `;
 
 export const CardWrapper = styled.div<{ $delay: number }>`
+  display: flex;
   animation: fadeIn 0.5s ease-in-out;
   animation-delay: ${props => props.$delay}s;
   animation-fill-mode: backwards;
@@ -192,6 +217,7 @@ export const ContinueButton = styled.button<{ $delay: number }>`
   transition: all 0.5s ease;
   animation: fadeIn 0.5s ease-in-out;
   animation-fill-mode: backwards;
+  margin-top: 2rem;
 
   animation-delay: ${props => props.$delay}s;
   @keyframes fadeIn {

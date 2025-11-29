@@ -1,88 +1,38 @@
 import { Swords } from 'lucide-react';
 import { UserData } from '../../App';
-import { FetchedPokemon } from '../../hooks/usePokemon';
 import { BattleContainer, BattleHeader, IconWrapper, LevelContainer } from './Battle.styled';
 import { TrainerCard } from './TrainerCard';
 
 import { useEffect, useState } from 'react';
-import BugCatcher from '../../assets/bug-catcher.jpg';
 import { trainerPokemonGenerator } from './trainerUtils';
+import { TrainerCardI, trainersData } from './trainersData';
 
-interface BattleProps {
+export interface BattleProps {
   user: UserData;
   updateUser: (user: UserData) => void;
 }
 
-export interface TrainerCardI {
-  level: number;
-  title: string;
-  difficulty: string;
-  name: string;
-  pokemons: FetchedPokemon[];
-  profile: string;
-}
-
-
-const battleLevels: TrainerCardI[] = [
-  {
-    level: 1,
-    title: "Pokemon Trainer",
-    difficulty: "Beginner",
-    name: "Bug Catcher",
-    pokemons: [],
-    profile: BugCatcher
-  },
-  {
-    level: 3,
-    title: "Bandit Trainer",
-    difficulty: "Intermediate",
-    name: "Team Rocket Member",
-    pokemons: [],
-    profile: ''
-  },
-  {
-    level: 5,
-    title: "Gym Trainer",
-    difficulty: "Advanced",
-    name: "Gym Trainer",
-    pokemons: [],
-    profile: ''
-  },
-  {
-    level: 10,
-    title: "Elite Four Member",
-    difficulty: "Expert",
-    name: "Bug Catcher",
-    pokemons: [],
-    profile: BugCatcher
-  },
-  {
-    level: 20,
-    title: "Tournament Winner",
-    difficulty: "Champion",
-    name: "Ash Ketchum",
-    pokemons: [],
-    profile: ''
-  },
-  {
-    level: 50,
-    title: "Webmaster",
-    difficulty: "Legendary",
-    name: "Daniel Avzaradel",
-    pokemons: [],
-    profile: ''
-  },
-]
 
 const Battle = ({ user, updateUser }: BattleProps) => {
 
-  const [trainers, setTrainers] = useState<TrainerCardI[]>(battleLevels)
+  const [trainers, setTrainers] = useState<TrainerCardI[]>(trainersData)
 
   useEffect(() => {
     const fetchTeam = async () => {
-      const teamBugCatcher = await trainerPokemonGenerator(['rattata', 'caterpie', 'weedle', 'nidoran-m', 'beedrill']);
+      const teamBugCatcher = await trainerPokemonGenerator([{name: 'rattata'}, {name: 'caterpie'}, {name: 'weedle'}, {name: 'nidoran-m'}, {name: 'beedrill'}]);
+      const teamRocket = await trainerPokemonGenerator([{name: 'ekans'}, {name: 'koffing'}, {name: 'meowth'}, {name: 'lickitung'}, {name: 'golbat'}]);
+      const brock = await trainerPokemonGenerator([{name: 'geodude'}, {name: 'onix'}, {name: 'vulpix'}, {name: 'tauros'}, {name: 'golem'}]);
+      const ash = await trainerPokemonGenerator([{name: 'pikachu'}, {name: 'charizard'}, {name: 'blastoise'}, {name: 'primeape'}, {name: 'butterfree'}, {name: 'snorlax'}]);
+      const daniel = await trainerPokemonGenerator([{name: 'gengar'}, {name: 'jolteon', foil: true}, {name: 'blastoise'}, {name: 'dragonite', foil: true}, {name: 'arcanine'}, {name: 'articuno'}]);
       setTrainers(prev => {
-        return prev.map(t => t.name === 'Bug Catcher' ? {...t, pokemons: teamBugCatcher} : t)
+        return prev.map(t => {
+          return t.name === 'Bug Catcher' ? {...t, pokemons: teamBugCatcher} 
+          : t.name === 'Team Rocket' ? {...t, pokemons: teamRocket} 
+          : t.name === 'Brock' ? {...t, pokemons: brock} 
+          : t.name === 'Ash Ketchum' ? {...t, pokemons: ash} 
+          : t.name === 'Daniel Avzaradel' ? {...t, pokemons: daniel} 
+          : t
+        })
       })
     };
     fetchTeam();
@@ -93,12 +43,13 @@ const Battle = ({ user, updateUser }: BattleProps) => {
       <BattleHeader>
       </BattleHeader>
       <IconWrapper>
-        <Swords size={90} color='rgb(127, 29, 29)' />
-        <h1>Battle Arena</h1>
+        <span>Battle</span>
+        <Swords size={48} color='rgb(127, 29, 29)' />
+        <span>Arena</span>
       </IconWrapper>
       <LevelContainer>
         {trainers.map((trainer: TrainerCardI, i: number) => {
-          return <TrainerCard {...trainer} key={trainer.name + i} />
+          return <TrainerCard {...{ trainer, user, updateUser}} key={trainer.name + i} />
         })}
       </LevelContainer>
     </BattleContainer>

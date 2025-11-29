@@ -61,6 +61,17 @@ export const CardsGrid = styled.div<{ $columns?: number }>`
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  & > *:hover {
+    transform: scale(1.05);
+    transition: 0.2s ease-in-out;
+  }
+  &:hover > *:not(:hover) {
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+  }
+  * > * {
+    transition: .5s ease; /* make sure hover transition is smooth */
+  }
 `;
 
 export const CardContainer = styled.div`

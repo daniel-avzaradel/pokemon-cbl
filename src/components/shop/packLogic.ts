@@ -17,36 +17,36 @@ export const boosterPacks: BoosterPack[] = [
     tag: 'basic',
     name: 'Basic Pack',
     price: 100,
-    cardCount: 3,
-    description: 'Contains 3 random cards with common chances'
+    cardCount: 2,
+    description: 'Contains 2 random cards with common chances'
   },
   {
     id: 2,
     tag: 'great',
     name: 'Great Pack',
-    price: 200,
-    cardCount: 4,
-    description: 'Contains 4 cards with one higher rare chances'
+    price: 250,
+    cardCount: 3,
+    description: 'Contains 3 cards with one higher rare chances'
   },
   {
     id: 3,
     tag: 'ultra',
     name: 'Ultra Pack',
     price: 500,
-    cardCount: 5,
-    description: 'Contains 5 cards with higher rare chance'
+    cardCount: 4,
+    description: 'Contains 4 cards with higher rare chance'
   },
   {
     id: 4,
     tag: 'master',
     name: 'Master Pack',
     price: 1000,
-    cardCount: 10,
-    description: 'Contains 10 cards with two guaranteed rares'
+    cardCount: 6,
+    description: 'Contains 6 cards with two guaranteed rares'
   }
 ];
 
-function applyFoilBoost(stats: Stats, boost = 0.1) {
+export function applyFoilBoost(stats: Stats, boost = 0.1) {
   const result: Stats = { ...stats };
 
   for (const key in stats) {

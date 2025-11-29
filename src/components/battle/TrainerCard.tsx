@@ -1,26 +1,42 @@
-import { Star, Trophy, Zap } from 'lucide-react';
-import { TrainerCardI } from './Battle';
-import { EmptyState, LevelBadge, PokemonList, PokemonSection, ProfileCard, ProfileContent, ProfileHeader, ProfileImage, ProfileImageBorder, ProfileImageWrapper, SectionTitle, StatBox, StatIcon, StatLabel, StatsGrid, StatValue, TrainerName, TrainerTitle } from './TrainerCard.styles';
+import { Star, Coins, Zap, LockIcon, Swords } from 'lucide-react';
+import { ActionButton, EmptyState, LevelBadge, LockedDiv, LockWrapper, PokemonList, PokemonSection, ProfileCard, ProfileContent, ProfileHeader, ProfileImage, ProfileImageBorder, ProfileImageWrapper, SectionTitle, StatBox, StatIcon, StatLabel, StatsGrid, StatValue, TrainerName, TrainerTitle } from './TrainerCard.styles';
 
 import PokeBall from '../../assets/pokeball.png'
+import { TrainerCardI } from './trainersData';
+import { UserData } from '../../App';
+import { Link } from 'react-router-dom';
 
-export function TrainerCard(trainer : TrainerCardI) {
+interface TrainerCardProps {
+  trainer: TrainerCardI;
+  user: UserData;
+  updateUser: (user: UserData) => void;
+}
+
+export function TrainerCard({ trainer, user, updateUser }: TrainerCardProps) {
   
   // Calculate total battles won (using coins as proxy)
   const battlesWon = 3
+  const userArenaTrainer = user.arena?.find(t => t.name === trainer.name)
+
+  const isUnlocked = () => {
+    if(userArenaTrainer) {
+      return userArenaTrainer.unlocked
+    }
+    return false
+  }
 
   return (
-    <ProfileCard>
+    <ProfileCard $unlocked={isUnlocked()}>
       <ProfileContent>
         <ProfileHeader>
           <ProfileImageWrapper>
             <ProfileImageBorder>
-              <ProfileImage $imageUrl={trainer.profile} />
+              <ProfileImage $imageUrl={isUnlocked() ? trainer.profile : ""} />
             </ProfileImageBorder>
             <LevelBadge>{trainer.level}</LevelBadge>
           </ProfileImageWrapper>
           <TrainerName>{trainer.name}</TrainerName>
-          <TrainerTitle>Pokemon Trainer</TrainerTitle>
+          <TrainerTitle>{trainer.title}</TrainerTitle>
         </ProfileHeader>
 
         <StatsGrid>
@@ -34,10 +50,10 @@ export function TrainerCard(trainer : TrainerCardI) {
 
           <StatBox>
             <StatIcon>
-              <Trophy style={{ width: '1.5rem', height: '1.5rem' }} />
+              <Coins style={{ width: '1.5rem', height: '1.5rem' }} />
             </StatIcon>
-            <StatValue>{battlesWon}</StatValue>
-            <StatLabel>Battles Won</StatLabel>
+            <StatValue>{trainer.rewardCoins}</StatValue>
+            <StatLabel>Reward Coins</StatLabel>
           </StatBox>
 
           <StatBox>
@@ -52,24 +68,38 @@ export function TrainerCard(trainer : TrainerCardI) {
         <PokemonSection>
           <SectionTitle>
             <Zap style={{ width: '1.25rem', height: '1.25rem', color: '#eab308' }} />
-            My Pokemon Collection
+            Pokemon
           </SectionTitle>
           
-          {trainer.pokemons.length > 0 ? (
+          {trainer.pokemons.length > 0 && userArenaTrainer?.unlocked ? (
             <PokemonList>
-              {trainer.pokemons.map((pokemon) => {
+              {trainer.pokemons.map((pokemon, i: number) => {
                 return (
-                  <div style={{ display: 'flex', gap: '1rem' }}>
-                  <img src={PokeBall} width={30} />
+                  <div style={{ display: 'flex', gap: '.5rem' }} key={pokemon.uid + i}>
+                  <img src={PokeBall} width={22} />
                   <span>{pokemon.name}</span>
                   </div>
                 )
               })}
             </PokemonList>
-          ) : (
+          ) : userArenaTrainer?.unlocked ? (
             <EmptyState>
               No Pokemon collected yet. Visit the shop to start your collection!
             </EmptyState>
+          ) : (
+            <LockedDiv>
+              <LockWrapper>
+                <LockIcon size={40} />
+              </LockWrapper>
+              <span>Unlock this trainer by defeating all previous trainer challenges.</span>
+            </LockedDiv>
+          )}
+          {userArenaTrainer?.unlocked && (
+            <Link to={`/battle/:${trainer.id}`}>
+              <ActionButton>
+                <Swords /> Battle
+              </ActionButton>
+            </Link>
           )}
         </PokemonSection>
       </ProfileContent>

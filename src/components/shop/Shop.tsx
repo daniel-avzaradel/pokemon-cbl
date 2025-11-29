@@ -13,8 +13,8 @@ interface ShopProps {
 }
 
 export const boosterColors: Record<string, string> = {
-  basic: '#d1d1d1',
-  great: 'linear-gradient(to bottom right, #e4e4e4ff, #4d4d4dff, #ffffffff, #4d4d4dff, #8d8d8dff)',
+  basic: 'linear-gradient(to bottom right, #e4e4e4ff, #4d4d4dff, #ffffffff, #4d4d4dff, #8d8d8dff)',
+  great: 'linear-gradient(to bottom right, #74b0ffff, #163c6dff, #509cffff, #092f5cff, #0059ffff)',
   ultra: 'linear-gradient(to bottom right, #eed253ff, #574207ff, #ffe397ff, #574207ff, #dfad0aff)',
   master: 'linear-gradient(to bottom right, #d453eeff, #5f1359ff, #ec8affff, #581753ff, #ff07f3ff)',
 };
@@ -75,7 +75,7 @@ export function Shop({ user, updateUser }: ShopProps) {
 
       <PacksGrid>
         {boosterPacks.map((pack, i) => (
-          <PackCard key={pack.id + '-' + i} $type={boosterColors[pack.tag]}>
+          <PackCard key={pack.id + '-' + i} $type={boosterColors[pack.tag]} $show $delay={i * 0.25}>
             <PackContent>
               <IconWrapper>
                 <Package style={{ width: '2.5rem', height: '2.5rem', color: '#eab308' }} />

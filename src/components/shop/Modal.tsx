@@ -27,7 +27,7 @@ const ModalComponent = ({ revealedCards, user, loading, closePackOpening }: Moda
                     </ModalTitle>
                 </ModalHeader>
 
-                <CardsGrid>
+                <CardsGrid $cards={revealedCards.length}>
                     {revealedCards.map((card, index) => (
                         <CardWrapper key={card.id + '-' + index} $delay={index * 0.2}>
                             <PokemonCard {...{ user }} card={card} />

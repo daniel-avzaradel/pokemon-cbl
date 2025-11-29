@@ -1,3 +1,4 @@
+import { applyFoilBoost } from '../components/shop/packLogic';
 import { FetchedPokemon, PokemonTypes, Stats } from '../hooks/usePokemon';
 import { apiURL } from './constants';
 
@@ -19,7 +20,7 @@ export class FetchedPokemonClass {
     }
 }
 
-export async function generateCardFromPokemon(pokemonId?: number): Promise<FetchedPokemon> {
+export async function generateCardFromPokemon(pokemonId?: number, foil?: boolean): Promise<FetchedPokemon> {
 
     const id = Math.floor(Math.random() * 151);
 
@@ -51,6 +52,11 @@ export async function generateCardFromPokemon(pokemonId?: number): Promise<Fetch
             imageUrl: imageUrl,
             stats: stats
         });
+
+        if(foil) {
+            applyFoilBoost(pokemon.stats, 0.15)
+        }
+
         return pokemon;
 
     } catch (error) {
