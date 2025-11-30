@@ -1,15 +1,18 @@
-import { UserData } from '../../../App'
+import { Card, UserData } from '../../../App'
 import { DivColumn, FaintedPokemonStatus, Header, PokemonBox, PokemonTray, TrainerHeaderName, TrainerPokemonStats, TrainerPokemonStatsWrapper, TrainerProfilePic, TrainerStatsContainer, TrainerStatsHeader } from './TrainerStats.styles'
 import DefaultTrainer from '../../../assets/default-trainer-m.jpg';
 import Pokeball from '../../../assets/pokeball2.png';
 
 import { Gem } from 'lucide-react';
+import { selectedPokemonProps } from '../BattleSystem';
 
 interface TrainerStatsProps {
-    trainer: UserData
+    trainer: UserData;
+    selectedPokemon?: selectedPokemonProps;
 }
 
-const TrainerStats = ({trainer}: TrainerStatsProps) => {
+const TrainerStats = ({trainer, selectedPokemon}: TrainerStatsProps) => {
+
   return (
     <TrainerStatsContainer>
         <TrainerStatsHeader>
@@ -49,7 +52,7 @@ const TrainerStats = ({trainer}: TrainerStatsProps) => {
                             {trainer.battleDeck?.map((el, i) => {
                                 return (
                                 <div key={el.uid + i}>
-                                    {el.stats.hp < 80 ? <FaintedPokemonStatus  /> : <img src={Pokeball} />}
+                                    {el.stats.hp <= 0 ? <FaintedPokemonStatus  /> : <img src={Pokeball} />}
                                 </div>
                                 )
                             })}
@@ -58,7 +61,8 @@ const TrainerStats = ({trainer}: TrainerStatsProps) => {
                         <TrainerPokemonStats>
                             {trainer.battleDeck?.length > 0 && (
                                 trainer.battleDeck.map((p, i) => {
-                                    return <PokemonBox key={p.uid + i} $fainted={p.stats.hp < 80} $image={p.imageUrl ?? ""} />
+                                    let fainted = selectedPokemon && selectedPokemon?.currentStats?.hp <= 0
+                                    return <PokemonBox $selected={selectedPokemon?.uid === p.uid} key={p.uid + i} $fainted={fainted} $image={p.imageUrl ?? ""} />
                                 })
                             )}
                         </TrainerPokemonStats>

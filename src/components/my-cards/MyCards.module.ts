@@ -63,11 +63,7 @@ export const CardsGrid = styled.div<{ $columns?: number }>`
   box-sizing: border-box;
   & > *:hover {
     transform: scale(1.05);
-    transition: 0.2s ease-in-out;
-  }
-  &:hover > *:not(:hover) {
-    opacity: 0.7;
-    transition: opacity 0.3s ease;
+    transition: 0.3s all ease-in-out;
   }
   * > * {
     transition: .5s ease; /* make sure hover transition is smooth */

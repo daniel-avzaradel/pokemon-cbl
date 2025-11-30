@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import Pokeball from '../../../assets/pokeball.png'
 
 export const TrainerStatsContainer = styled.div`
@@ -89,14 +89,21 @@ export const TrainerPokemonStats = styled.main`
     gap: 4px;
 `
 
+const borderGlow = keyframes`
+  0% { border-color: #1eff00ff; }
+  50% { border-color: #085a0086; }
+  100% { border-color: #1eff00ff; }
+`;
+
 export const PokemonBox = styled.div<{
   $image: string;
   $fainted?: boolean;
+  $selected?: boolean;
 }>`
   position: relative;
   width: 100%;
   height: 100%;
-  border: 2px solid #111;
+  border: 4px solid #111;
   border-radius: 6px;
 
   /* Combined background: overlay color + image */
@@ -111,6 +118,11 @@ export const PokemonBox = styled.div<{
   background-blend-mode: ${p => p.$fainted ? 'hue' : 'soft-light'};
 
   filter: ${p => p.$fainted ? 'brightness(0.2)' : 'none'};
+  ${p => 
+    p.$selected &&
+    css`
+      animation: ${borderGlow} 1s linear infinite;
+    `}
 `;
 
 export const PokemonTray = styled.div`
