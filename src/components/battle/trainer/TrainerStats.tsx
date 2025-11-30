@@ -4,11 +4,11 @@ import DefaultTrainer from '../../../assets/default-trainer-m.jpg';
 import Pokeball from '../../../assets/pokeball2.png';
 
 import { Gem } from 'lucide-react';
-import { useState } from 'react';
+import { selectedPokemonProps } from '../BattleSystem';
 
 interface TrainerStatsProps {
     trainer: UserData;
-    selectedPokemon?: Card
+    selectedPokemon?: selectedPokemonProps;
 }
 
 const TrainerStats = ({trainer, selectedPokemon}: TrainerStatsProps) => {
@@ -52,7 +52,7 @@ const TrainerStats = ({trainer, selectedPokemon}: TrainerStatsProps) => {
                             {trainer.battleDeck?.map((el, i) => {
                                 return (
                                 <div key={el.uid + i}>
-                                    {el.stats.hp < 80 ? <FaintedPokemonStatus  /> : <img src={Pokeball} />}
+                                    {el.stats.hp <= 0 ? <FaintedPokemonStatus  /> : <img src={Pokeball} />}
                                 </div>
                                 )
                             })}
@@ -61,7 +61,8 @@ const TrainerStats = ({trainer, selectedPokemon}: TrainerStatsProps) => {
                         <TrainerPokemonStats>
                             {trainer.battleDeck?.length > 0 && (
                                 trainer.battleDeck.map((p, i) => {
-                                    return <PokemonBox $selected={selectedPokemon.uid === p.uid} key={p.uid + i} $fainted={p.stats.hp < 80} $image={p.imageUrl ?? ""} />
+                                    let fainted = selectedPokemon && selectedPokemon?.currentStats?.hp <= 0
+                                    return <PokemonBox $selected={selectedPokemon?.uid === p.uid} key={p.uid + i} $fainted={fainted} $image={p.imageUrl ?? ""} />
                                 })
                             )}
                         </TrainerPokemonStats>

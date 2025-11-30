@@ -57,6 +57,7 @@ export const HealthBarFill = styled.div<{ $width: number; $color: string }>`
   background: ${props => props.$color};
   transition: width 0.5s ease;
   width: ${props => props.$width}%;
+  transition: 0.5s ease-in-out;
 `;
 
 export const StatusCard = styled.div`
@@ -80,6 +81,21 @@ export const StatusHeader = styled.div`
     margin: 0;
   }
 `;
+
+export const LogBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  padding: 1rem;
+  background: #333;
+  border: 1px solid #d1d1d1;
+  border-radius: 6px;
+  width: 90%;
+  min-height: 50%;
+  margin: 1rem;
+  box-sizing: border-box;
+`
 
 export const MovesetContainer = styled.div`
   display: grid;
@@ -109,5 +125,25 @@ export const MovesetButton = styled.button<{$color?: string}>`
   width: 100px;
   &:hover {
     opacity: 1;
+  }
+`
+
+export const TurnEventsColumn = styled.div<{$rotate?: boolean}>`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  gap: 1rem;
+  & > h1 {
+    font-size: 2rem;
+    transition: 0.4s ease-in-out;
+  }
+  & > svg {
+    transition: 0.4s ease-in-out;
+    background: #111;
+    border-radius: 50%;
+    border: 1px solid #d1d1d1;
+    transform: rotate(${p => p.$rotate ? '-180deg' : '360deg'})
   }
 `
