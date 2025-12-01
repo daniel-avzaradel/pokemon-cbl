@@ -3,141 +3,160 @@ import { selectedPokemonProps } from "../BattleSystem";
 
 export type actionButton = "attack" | "defense" | "special" | "return";
 export type playerTurn = 'user' | 'enemy';
+export type speedCountType = {
+    defender: playerTurn,
+    count: number
+}
+
+function useSyncedRefState<T>(initial: T) {
+    const ref = useRef<T>(initial);
+    const [state, setState] = useState<T>(initial);
+
+    const setBoth = useCallback((value: T) => {
+        ref.current = value;  // instant update for logic
+        setState(value);      // UI re-render
+    }, []);
+
+    return [state, ref, setBoth] as const;
+}
 
 export function useBattle(userCard: selectedPokemonProps, enemyCard: selectedPokemonProps) {
     const [log, setLog] = useState<string[]>([]);
-    const [playerTurn, setPlayerTurn] = useState<playerTurn>("user");
-    const [speedCount, setSpeedCount] = useState(0);
     const [firstTurn, setFirstTurn] = useState(true);
 
     const [userPokemon, setUserPokemon] = useState<selectedPokemonProps>({ ...userCard });
     const [enemyPokemon, setEnemyPokemon] = useState<selectedPokemonProps>({ ...enemyCard });
 
+    // --- REPLACED turnRef with synced-ref-state ---
+    const [turnState, turnRef, setTurn] =
+        useSyncedRefState<playerTurn>("user");
+
+    // --- REPLACED speedRef with synced-ref-state ---
+    const [speedState, speedRef, setSpeed] =
+        useSyncedRefState<speedCountType>({
+            count: 0,
+            defender: "user"
+        });
+
+    // set initial speed immediately
+    useEffect(() => {
+        const initial = {
+            count: Math.abs(userPokemon.currentStats.spd - enemyPokemon.currentStats.spd),
+            defender: (userPokemon.currentStats.spd >= enemyPokemon.currentStats.spd ? "enemy" : "user") as playerTurn
+        };
+        setSpeed(initial);
+    }, []);
+
     const started = useRef(false);
 
     const delay = useCallback((ms: number) => new Promise(res => setTimeout(res, ms)), []);
 
-    // Pure function: determines whose turn it is based on a local speed
-    const getNextTurn = useCallback((localSpeed: number): playerTurn => {
-        if (localSpeed === 0) {
-            return userPokemon.currentStats.spd >= enemyPokemon.currentStats.spd ? "user" : "enemy";
-        }
-        if (localSpeed > 0) {
-            return localSpeed >= enemyPokemon.currentStats.spd ? "user" : "enemy";
-        }
-        return Math.abs(localSpeed) >= userPokemon.currentStats.spd ? "enemy" : "user";
-    }, [userPokemon, enemyPokemon]);
+    const capitalize = (name: string) => name.charAt(0).toUpperCase() + name.slice(1);
+    const userName = capitalize(userPokemon.name);
+    const enemyName = capitalize(enemyPokemon.name);
 
+    // -------------------------------------------------
     // Executes a single attack
-    const attack = useCallback((attacker: playerTurn) => {
-        if (attacker === "user") {
-            const dmg = Math.max(userPokemon.currentStats.atk - enemyPokemon.currentStats.def, 2);
-            setEnemyPokemon(prev => ({
-                ...prev,
-                currentStats: { ...prev.currentStats, hp: prev.currentStats.hp - dmg }
-            }));
-            setLog(prev => [...prev, `${userPokemon.name} attacks for ${dmg} damage!`]);
-            return dmg;
-        } else {
-            const dmg = Math.max(enemyPokemon.currentStats.atk - userPokemon.currentStats.def, 2);
-            setUserPokemon(prev => ({
-                ...prev,
-                currentStats: { ...prev.currentStats, hp: prev.currentStats.hp - dmg }
-            }));
-            setLog(prev => [...prev, `${enemyPokemon.name} attacks for ${dmg} damage!`]);
-            return dmg;
-        }
-    }, [userPokemon, enemyPokemon]);
+    // -------------------------------------------------
+    const attack = useCallback(
+        (attacker: playerTurn) => {
+            const crit = Math.random() <= 0.2;
+            const minDmg = 3;
 
-    // Automatic enemy turns
-    const enemyAutoTurn = useCallback(async (localSpeed: number) => {
-        while (getNextTurn(localSpeed) === "enemy") {
-            const enemyDelay = firstTurn ? 3500 : 2500; // 5s first turn, 1s otherwise
-            await delay(enemyDelay);
+            if (attacker === "user") {
+                const dmg = Math.max(userPokemon.currentStats.atk - enemyPokemon.currentStats.def, minDmg);
+                setEnemyPokemon(prev => ({
+                    ...prev,
+                    currentStats: { ...prev.currentStats, hp: prev.currentStats.hp - (crit ? dmg * 2 : dmg) }
+                }));
+                setLog(prev => [...prev, `${userName} attacks for ${crit ? dmg * 2 + " critical" : dmg} damage!`]);
+            } else {
+                const dmg = Math.max(enemyPokemon.currentStats.atk - userPokemon.currentStats.def, minDmg);
+                setUserPokemon(prev => ({
+                    ...prev,
+                    currentStats: { ...prev.currentStats, hp: prev.currentStats.hp - (crit ? dmg * 2 : dmg) }
+                }));
+                setLog(prev => [...prev, `${enemyName} attacks for ${crit ? dmg * 2 + " critical" : dmg} damage!`]);
+            }
+        },
+        [userPokemon, enemyPokemon, userName, enemyName]
+    );
 
-            attack("enemy");
-            localSpeed += userPokemon.currentStats.spd;
-            setFirstTurn(false);
-        }
+    // -------------------------------------------------
+    // Resolve turns automatically until it’s the player’s turn
+    // -------------------------------------------------
+    const resolveTurns = useCallback(async () => {
+        if (turnRef.current === "user") return;
+        await handleTurn("attack");
+    }, [attack, firstTurn, userPokemon, delay]);
 
-        setSpeedCount(localSpeed);
-        setPlayerTurn("user");
-    }, [getNextTurn, attack, firstTurn, userPokemon, delay]);
+    // -------------------------------------------------
+    // Your same logic for getting next attacker
+    // -------------------------------------------------
+    const getNextAttacker = (speedCount: speedCountType) => {
+        let next: playerTurn =
+            speedCount.defender === "user"
+                ? speedCount.count >= userPokemon.currentStats.spd
+                    ? "enemy"
+                    : "user"
+                : speedCount.count >= enemyPokemon.currentStats.spAtk
+                    ? "user"
+                    : "enemy";
 
+        setTurn(next); // <-- now uses synced-ref-state
+        return next;
+    };
+
+    // -------------------------------------------------
     // Player action (button click)
-    const handleTurn = useCallback(async (action: actionButton) => {
-        if (playerTurn !== "user") return;
+    // -------------------------------------------------
+    const handleTurn = useCallback(
+        async (action: actionButton) => {
+            if (action === "attack") {
+                if (turnRef.current === "enemy") await delay(2000);
+                attack(turnRef.current);
+            }
 
-        let localSpeed = speedCount;
+            // update next attacker
+            if (turnRef.current === "enemy") await delay(2000);
+            getNextAttacker(speedRef.current);
 
-        if (action === "attack") {
-            attack("user");
-            localSpeed -= enemyPokemon.currentStats.spd;
-        }
+            // auto-resolve
+            await resolveTurns();
+        },
+        [attack, resolveTurns]
+    );
 
-        // Resolve enemy turns automatically after player action
-        await enemyAutoTurn(localSpeed);
-    }, [playerTurn, speedCount, attack, enemyPokemon, enemyAutoTurn]);
-
-    // Battle start, runs only once
+    // -------------------------------------------------
+    // Battle start
+    // -------------------------------------------------
     const battleStart = useCallback(async () => {
         if (started.current) return;
         started.current = true;
 
         setLog(prev => [...prev, "Battle started!"]);
 
-        // Local copies to avoid render/stale issues
-        let localSpeed = userPokemon.currentStats.spd - enemyPokemon.currentStats.spd;
-        let localUserHP = userPokemon.currentStats.hp;
-        
-        const startingTurn: playerTurn = localSpeed >= 0 ? "user" : "enemy";
-        setPlayerTurn(startingTurn);
+        console.log(speedRef.current);
+
+        const startingTurn: playerTurn =
+            speedRef.current.defender === "enemy" ? "user" : "enemy";
+
+        setTurn(startingTurn);
 
         if (startingTurn === "enemy") {
             setFirstTurn(true);
-
-            // wait 5s for loading
-            await delay(3000);
-
-            // Enemy attacks using local variables
-            while (true) {
-                const nextAttacker = localSpeed >= 0 ? "user" : "enemy";
-                if (nextAttacker === "user") break; // stop loop when it’s player’s turn
-
-                // enemy attacks
-                const dmg = Math.max(enemyPokemon.currentStats.atk - userPokemon.currentStats.def, 2);
-                const crit = (Math.random() * 100) <= 99;
-                localUserHP -= dmg;
-                setUserPokemon(prev => ({
-                    ...prev,
-                    currentStats: { ...prev.currentStats, hp: localUserHP }
-                }));
-                setLog(prev => [...prev, `${enemyPokemon.name} attacks for ${crit ? (dmg * 2) + ' critical' : dmg} damage!`]);
-
-                await delay(1000);
-
-                // update local speed
-                localSpeed = enemyPokemon.currentStats.spd - userPokemon.currentStats.spd + localSpeed;
-            }
-
-            setSpeedCount(localSpeed);
-            setPlayerTurn("user");
-            setFirstTurn(false);
+            await resolveTurns();
         }
-    }, [userPokemon, enemyPokemon, delay]);
+    }, [userPokemon, enemyPokemon, resolveTurns]);
 
     useEffect(() => {
         battleStart();
     }, [battleStart]);
 
-    useEffect(() => {
-        console.log(playerTurn);
-    }, [playerTurn])
-
     return {
         log,
-        playerTurn,
-        speedCount,
+        turnState,
+        speedState,
         userPokemon,
         enemyPokemon,
         handleTurn

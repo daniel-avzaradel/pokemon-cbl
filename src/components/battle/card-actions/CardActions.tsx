@@ -1,5 +1,5 @@
 import { ArrowBigLeft, Shield, Sword, WandSparkles } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import { UserData } from '../../../App';
 import { PokemonCard } from '../../common/PokemonCard';
 import { CardGrid } from '../Battle.styled';
@@ -18,14 +18,21 @@ interface CardActionProps {
 interface PokemonActionsProps {
   user: UserData;
   card: selectedPokemonProps;
-  playerTurn: playerTurn,
+  turnState: playerTurn,
   handleTurn: (action: actionButton) => void;
 }
 
 
-const PokemonActions = ({ user, card, playerTurn, handleTurn }: PokemonActionsProps) => {
+const PokemonActions = ({ user, card, turnState, handleTurn }: PokemonActionsProps) => {
+  const [disableBtn, setDisableBtn] = useState(false);
 
-  let userCard = user.battleDeck.some(p => p.uid === card.uid)
+  const userCard = user.battleDeck.some(p => p.uid === card.uid);
+
+  const handleClick = async (action: actionButton) => {
+    setDisableBtn(true);
+    handleTurn(action);
+    setDisableBtn(false);
+  }
 
   return (
     <ActionsPageContainer>
@@ -33,10 +40,33 @@ const PokemonActions = ({ user, card, playerTurn, handleTurn }: PokemonActionsPr
       <ActionsContainer>
         <StatusCardComponent card={card} user={userCard} />
         <MovesetContainer>
-          <MovesetButton onClick={() => handleTurn('attack')}><Sword /> Attack</MovesetButton>
-          <MovesetButton onClick={() => handleTurn('defense')} $color='royalblue'><Shield /> Defense</MovesetButton>
-          <MovesetButton onClick={() => handleTurn('special')} $color='darkorange'><WandSparkles /> Special</MovesetButton>
-          <MovesetButton onClick={() => handleTurn('attack')} $color='#000'>Return</MovesetButton>
+          <MovesetButton
+            disabled={disableBtn || turnState === 'enemy'}
+            onClick={() => handleClick('attack')}
+          >
+            <Sword /> Attack
+          </MovesetButton>
+          <MovesetButton
+            disabled={disableBtn || turnState === 'enemy'}
+            onClick={() => handleClick('defense')}
+            $color='royalblue'
+          >
+            <Shield /> Defense
+          </MovesetButton>
+          <MovesetButton
+            disabled={disableBtn || turnState === 'enemy'}
+            onClick={() => handleClick('special')}
+            $color='darkorange'
+          >
+            <WandSparkles /> Special
+          </MovesetButton>
+          <MovesetButton
+            disabled={disableBtn || turnState === 'enemy'}
+            onClick={() => handleClick('return')}
+            $color='#000'
+          >
+            Return
+          </MovesetButton>
         </MovesetContainer>
       </ActionsContainer>
     </ActionsPageContainer>
@@ -44,47 +74,38 @@ const PokemonActions = ({ user, card, playerTurn, handleTurn }: PokemonActionsPr
 }
 
 interface TurnEventsProps {
-  playerTurn: playerTurn;
+  turnState: playerTurn;
   log: string[]
 }
 
 
-const TurnsEvents = ({ playerTurn, log }: TurnEventsProps) => {
+const TurnsEvents = ({ turnState, log }: TurnEventsProps) => {
 
   const contentRef = useRef<HTMLDivElement>(null);
-
-  let speedTurns = 0
-  let turn = 'YOUR TURN'
-
-  if (playerTurn == 'enemy') {
-    turn = "ENEMY'S TURN"
-  } else {
-    turn = "YOUR TURN"
-  }
-
-  let color = playerTurn == 'user' ? '#16a34a' : "#881e1eff"
-  let rotate = playerTurn == 'enemy' ? true : false;
+  let color = turnState == 'user' ? '#16a34a' : "#881e1eff"
+  let rotate = turnState == 'enemy' ? true : false;
 
   useEffect(() => {
     const container = contentRef.current;
     if (container) {
       container.scrollTop = container.scrollHeight;
     }
-  }, [log]);
+    
+  }, [log, turnState]);
 
   return (
     <TurnEventsColumn $rotate={rotate}>
-      <>
-        <h1>{turn}</h1>
-        <ArrowBigLeft color={color} fill={color} size={90} />
-      </>
+      <div>
+        <h1>{turnState == 'enemy' ? `ENEMY'S TURN` : 'YOUR TURN'}</h1>
+        <ArrowBigLeft color={color} fill={color} size={72} />
+      </div>
       <LogBox>
-          <h4>Battle Log</h4>
-          <LogContent ref={contentRef}>
-            {log.map((text, i) => {
-              return <TypingText key={i} $chars={text.length}>{text}</TypingText>
-            })}
-          </LogContent>
+        <h4>Battle Log</h4>
+        <LogContent ref={contentRef}>
+          {log.map((text, i) => {
+            return <TypingText key={i} $chars={text.length}>{text}</TypingText>
+          })}
+        </LogContent>
       </LogBox>
     </TurnEventsColumn>
   )
@@ -92,15 +113,15 @@ const TurnsEvents = ({ playerTurn, log }: TurnEventsProps) => {
 
 const CardActions = ({ user, userCard, enemyCard }: CardActionProps) => {
 
-  const { log, playerTurn, handleTurn, userPokemon, enemyPokemon } = useBattle(userCard, enemyCard);
+  const { log, turnState, speedState, handleTurn, userPokemon, enemyPokemon } = useBattle(userCard, enemyCard);
 
   return (
     <>
       {userCard && enemyCard && (
         <CardGrid>
-          <PokemonActions {...{ user, playerTurn, handleTurn }} card={userPokemon} />
-          <TurnsEvents {... { userCard, enemyCard, playerTurn, log }} />
-          <PokemonActions {...{ user, playerTurn, handleTurn }} card={enemyPokemon} />
+          <PokemonActions {...{ user, turnState, handleTurn }} card={userPokemon} />
+          <TurnsEvents {... { turnState, log }} />
+          <PokemonActions {...{ user, turnState, handleTurn }} card={enemyPokemon} />
         </CardGrid>
       )}
     </>

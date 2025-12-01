@@ -108,12 +108,12 @@ export const LogBox = styled.div`
 
 export const LogContent = styled.div`
   flex: 1 1 auto;
-  width: 100%;
+  width: 99%;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding-right: 0.5rem;
+  padding: 0.5rem;
   box-sizing: border-box;
 
   & > * {
@@ -158,14 +158,14 @@ export const MovesetContainer = styled.div`
   border-radius: 0.75rem;
 `
 
-export const MovesetButton = styled.button<{$color?: string}>`
+export const MovesetButton = styled.button<{$color?: string, disabled?: boolean}>`
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
   border: 1px solid #e1e1e1;
   border-radius: 4px;
-  background: ${p => p.$color ?? 'darkred'};
+  background: ${p => p.disabled ? '#555' : p.$color ?? 'darkred'};
   color: white;
   cursor: pointer;
   opacity: 0.8;
@@ -182,12 +182,21 @@ export const TurnEventsColumn = styled.div<{$rotate?: boolean}>`
   flex-direction: column;
   align-items: center;
   justify-content: start;
-  gap: 1rem;
+  gap: 2rem;
   & > h1 {
     font-size: 1.4rem;
     transition: 0.4s ease-in-out;
+    margin: 0;
   }
-  & > svg {
+  & > div {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+  & > div > svg {
     transition: 0.4s ease-in-out;
     background: #111;
     border-radius: 50%;
