@@ -5,6 +5,10 @@ export const BattleContainer = styled.div`
   flex-direction: column;
   gap: .5rem;
   color: white;
+  height: 100%;
+  & > div {
+    max-height: 100%;
+  }
 `;
 
 export const BattleHeader = styled.div`

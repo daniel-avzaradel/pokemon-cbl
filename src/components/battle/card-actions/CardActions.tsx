@@ -1,36 +1,38 @@
-import { PokemonCard } from '../../common/PokemonCard'
-import { UserData } from '../../../App'
-import { CardGrid } from '../Battle.styled';
-import { ActionsContainer, ActionsPageContainer, LogBox, MovesetButton, MovesetContainer, TurnEventsColumn } from './CardActions.styled';
-import { StatusCardComponent } from './StatusCardComponent';
 import { ArrowBigLeft, Shield, Sword, WandSparkles } from 'lucide-react';
+import { RefObject, useEffect, useRef, useState } from 'react';
+import { UserData } from '../../../App';
+import { PokemonCard } from '../../common/PokemonCard';
+import { CardGrid } from '../Battle.styled';
 import { selectedPokemonProps } from '../BattleSystem';
-import { useState } from 'react';
+import { actionButton, playerTurn, useBattle } from './battleActions';
+import { ActionsContainer, ActionsPageContainer, LogBox, LogContent, MovesetButton, MovesetContainer, TurnEventsColumn, TypingText } from './CardActions.styled';
+import { StatusCardComponent } from './StatusCardComponent';
 
 interface CardActionProps {
   user: UserData;
   enemy: UserData;
   userCard: selectedPokemonProps;
   enemyCard: selectedPokemonProps;
-  selectedPokemonUser: selectedPokemonProps;
-  selectedPokemonEnemy: selectedPokemonProps;
-  setSelectedPokemonUser: React.Dispatch<React.SetStateAction<selectedPokemonProps>>
-  setSelectedPokemonEnemy: React.Dispatch<React.SetStateAction<selectedPokemonProps>>
 }
 
 interface PokemonActionsProps {
   user: UserData;
   card: selectedPokemonProps;
-  playerTurn: playerTurn,
-  setPlayerTurn: React.Dispatch<React.SetStateAction<playerTurn>>;
+  turnState: playerTurn,
   handleTurn: (action: actionButton) => void;
 }
 
-type actionButton = "attack" | "defense" | "special" | "return"
 
-const PokemonActions = ({ user, card, playerTurn, setPlayerTurn, handleTurn }: PokemonActionsProps) => {
+const PokemonActions = ({ user, card, turnState, handleTurn }: PokemonActionsProps) => {
+  const [disableBtn, setDisableBtn] = useState(false);
 
-  let userCard = user.battleDeck.some(p => p.uid === card.uid)
+  const userCard = user.battleDeck.some(p => p.uid === card.uid);
+
+  const handleClick = async (action: actionButton) => {
+    setDisableBtn(true);
+    handleTurn(action);
+    setDisableBtn(false);
+  }
 
   return (
     <ActionsPageContainer>
@@ -38,10 +40,33 @@ const PokemonActions = ({ user, card, playerTurn, setPlayerTurn, handleTurn }: P
       <ActionsContainer>
         <StatusCardComponent card={card} user={userCard} />
         <MovesetContainer>
-          <MovesetButton onClick={() => handleTurn('attack')}><Sword /> Attack</MovesetButton>
-          <MovesetButton onClick={() => handleTurn('defense')} $color='royalblue'><Shield /> Defense</MovesetButton>
-          <MovesetButton onClick={() => handleTurn('special')} $color='darkorange'><WandSparkles /> Special</MovesetButton>
-          <MovesetButton onClick={() => handleTurn('attack')} $color='#000'>Return</MovesetButton>
+          <MovesetButton
+            disabled={disableBtn || turnState === 'enemy'}
+            onClick={() => handleClick('attack')}
+          >
+            <Sword /> Attack
+          </MovesetButton>
+          <MovesetButton
+            disabled={disableBtn || turnState === 'enemy'}
+            onClick={() => handleClick('defense')}
+            $color='royalblue'
+          >
+            <Shield /> Defense
+          </MovesetButton>
+          <MovesetButton
+            disabled={disableBtn || turnState === 'enemy'}
+            onClick={() => handleClick('special')}
+            $color='darkorange'
+          >
+            <WandSparkles /> Special
+          </MovesetButton>
+          <MovesetButton
+            disabled={disableBtn || turnState === 'enemy'}
+            onClick={() => handleClick('return')}
+            $color='#000'
+          >
+            Return
+          </MovesetButton>
         </MovesetContainer>
       </ActionsContainer>
     </ActionsPageContainer>
@@ -49,77 +74,66 @@ const PokemonActions = ({ user, card, playerTurn, setPlayerTurn, handleTurn }: P
 }
 
 interface TurnEventsProps {
-  userCard: selectedPokemonProps;
-  enemyCard: selectedPokemonProps;
-  playerTurn: playerTurn;
+  turnState: playerTurn;
+  log: string[]
 }
 
-type playerTurn = 'user' | 'enemy'
 
-const TurnsEvents = ({ userCard, enemyCard, playerTurn }: TurnEventsProps) => {
+const TurnsEvents = ({ turnState, log }: TurnEventsProps) => {
 
-  let speedTurns = 0
-  let turn = 'YOUR TURN'
+  const contentRef = useRef<HTMLDivElement>(null);
+  let color = turnState == 'user' ? '#16a34a' : "#881e1eff"
+  let rotate = turnState == 'enemy' ? true : false;
 
-  if (playerTurn == 'enemy') {
-    turn = "ENEMY'S TURN"
-  } else {
-    turn = "YOUR TURN"
-  }
-
-  let color = playerTurn == 'user' ? '#16a34a' : "#881e1eff"
-  let rotate = playerTurn == 'enemy' ? true : false;
+  useEffect(() => {
+    const container = contentRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+    
+  }, [log, turnState]);
 
   return (
     <TurnEventsColumn $rotate={rotate}>
-      <>
-        <h1>{turn}</h1>
-        <ArrowBigLeft color={color} fill={color} size={90} />
-      </>
+      <div>
+        <h1>{turnState == 'enemy' ? `ENEMY'S TURN` : 'YOUR TURN'}</h1>
+        <ArrowBigLeft color={color} fill={color} size={72} />
+      </div>
       <LogBox>
-          <h4>Battle Log</h4>
-          
+        <h4>Battle Log</h4>
+        <LogContent ref={contentRef}>
+          {log.map((text, i) => {
+            return <TypingText key={i} $chars={text.length}>{text}</TypingText>
+          })}
+        </LogContent>
       </LogBox>
     </TurnEventsColumn>
   )
 }
 
-const CardActions = ({ user, userCard, enemyCard, selectedPokemonUser, selectedPokemonEnemy, setSelectedPokemonUser, setSelectedPokemonEnemy }: CardActionProps) => {
+const CardActions = ({ user, userCard, enemyCard }: CardActionProps) => {
 
-  const [playerTurn, setPlayerTurn] = useState<playerTurn>("user")
-  const [log, setLog] = useState<string[]>([''])
+  const { log, turnState, speedState, handleTurn, userPokemon, enemyPokemon } = useBattle(userCard, enemyCard);
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  const handleTurn = async (action: actionButton) => {
-
-    let userDmgAtk = selectedPokemonUser.currentStats.atk - selectedPokemonEnemy.currentStats.def
-    let enemyDmgAtk = selectedPokemonEnemy.currentStats.atk - selectedPokemonUser.currentStats.def
-    if (action == "attack") {
-
-      let dmg =
-        playerTurn === "user"
-          ? userDmgAtk <= 0 ? 2 : userDmgAtk
-          : enemyDmgAtk <= 0 ? 2 : enemyDmgAtk;
-
-      playerTurn === 'user' ? setSelectedPokemonEnemy(prev => ({ ...prev, currentStats: { ...prev.currentStats, hp: prev.currentStats.hp - dmg } }))
-        : setSelectedPokemonUser(prev => ({ ...prev, currentStats: { ...prev.currentStats, hp: prev.currentStats.hp - dmg } }))
+  useEffect(() => {
+    const container = contentRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
     }
-
-    const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-    await sleep(1000);
-    setPlayerTurn(prev => prev === 'user' ? 'enemy' : 'user')
-
-  }
+    
+  }, [log, turnState]);
 
   return (
-    <>
+    <div>
       {userCard && enemyCard && (
         <CardGrid>
-          <PokemonActions {...{ user, playerTurn, setPlayerTurn, handleTurn }} card={userCard} />
-          <TurnsEvents {... { userCard, enemyCard, playerTurn, setPlayerTurn }} />
-          <PokemonActions {...{ user, playerTurn, setPlayerTurn, handleTurn }} card={enemyCard} />
+          <PokemonActions {...{ user, turnState, handleTurn }} card={userPokemon} />
+          <TurnsEvents {... { turnState, log }} />
+          <PokemonActions {...{ user, turnState, handleTurn }} card={enemyPokemon} />
         </CardGrid>
       )}
-    </>
+    </div>
   )
 }
 
