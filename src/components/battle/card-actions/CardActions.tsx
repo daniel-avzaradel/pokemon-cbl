@@ -77,7 +77,8 @@ const TurnsEvents = ({ userCard, enemyCard, playerTurn }: TurnEventsProps) => {
         <ArrowBigLeft color={color} fill={color} size={90} />
       </>
       <LogBox>
-
+          <h4>Battle Log</h4>
+          
       </LogBox>
     </TurnEventsColumn>
   )
@@ -86,6 +87,7 @@ const TurnsEvents = ({ userCard, enemyCard, playerTurn }: TurnEventsProps) => {
 const CardActions = ({ user, userCard, enemyCard, selectedPokemonUser, selectedPokemonEnemy, setSelectedPokemonUser, setSelectedPokemonEnemy }: CardActionProps) => {
 
   const [playerTurn, setPlayerTurn] = useState<playerTurn>("user")
+  const [log, setLog] = useState<string[]>([''])
 
   const handleTurn = async (action: actionButton) => {
 
