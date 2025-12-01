@@ -88,13 +88,19 @@ export const LogBox = styled.div`
   align-items: center;
   justify-content: start;
   padding: 1rem;
-  background: #333;
+  background: #111;
   border: 1px solid #d1d1d1;
   border-radius: 6px;
   width: 90%;
   min-height: 50%;
   margin: 1rem;
   box-sizing: border-box;
+  color: #e1e1e1;
+  gap: 1rem;
+  & > h4 {
+    font-size: 0.9rem;
+    font-family: arial;
+  }
 `
 
 export const MovesetContainer = styled.div`
