@@ -27,6 +27,8 @@ export function useBattle(userCard: selectedPokemonProps, enemyCard: selectedPok
     const [userPokemon, setUserPokemon] = useState<selectedPokemonProps>({ ...userCard });
     const [enemyPokemon, setEnemyPokemon] = useState<selectedPokemonProps>({ ...enemyCard });
 
+    const faintedRef = useRef<selectedPokemonProps>({ ...userCard })
+
     // --- REPLACED turnRef with synced-ref-state ---
     const [turnState, turnRef, setTurn] =
         useSyncedRefState<playerTurn>("user");
@@ -56,12 +58,31 @@ export function useBattle(userCard: selectedPokemonProps, enemyCard: selectedPok
     const enemyName = capitalize(enemyPokemon.name);
 
     // -------------------------------------------------
+    // Check for fainted
+    // -------------------------------------------------
+    const checkFaint = useCallback(async (pokemon: selectedPokemonProps, attacker: playerTurn, hp: number) => {
+        if (hp > 0) return false;
+
+        if (pokemon === userPokemon) {
+            setUserPokemon(prev => ({ ...prev, currentStats: { ...prev.currentStats, hp: 0 } }));
+            faintedRef.current = { ...userPokemon, currentStats: { ...userPokemon.currentStats, hp: 0 } };
+        } else {
+            setEnemyPokemon(prev => ({ ...prev, currentStats: { ...prev.currentStats, hp: 0 } }));
+            faintedRef.current = { ...enemyPokemon, currentStats: { ...enemyPokemon.currentStats, hp: 0 } };
+        }
+        await delay(1000)
+        setLog(prev => [...prev, `${pokemon.name} has fainted...`]);
+        return true;
+    }, [userPokemon, enemyPokemon]);
+
+    // -------------------------------------------------
     // Executes a single attack
     // -------------------------------------------------
     const attack = useCallback(
         (attacker: playerTurn) => {
-            const crit = Math.random() <= 0.2;
+            const crit = Math.random() <= 1.2;
             const minDmg = 3;
+            console.log('attacker', attacker);
 
             if (attacker === "user") {
                 const dmg = Math.max(userPokemon.currentStats.atk - enemyPokemon.currentStats.def, minDmg);
@@ -70,6 +91,8 @@ export function useBattle(userCard: selectedPokemonProps, enemyCard: selectedPok
                     currentStats: { ...prev.currentStats, hp: prev.currentStats.hp - (crit ? dmg * 2 : dmg) }
                 }));
                 setLog(prev => [...prev, `${userName} attacks for ${crit ? dmg * 2 + " critical" : dmg} damage!`]);
+                let faintHp = enemyPokemon.currentStats.hp - (crit ? dmg * 2 : dmg)
+                checkFaint(enemyPokemon, attacker, faintHp)
             } else {
                 const dmg = Math.max(enemyPokemon.currentStats.atk - userPokemon.currentStats.def, minDmg);
                 setUserPokemon(prev => ({
@@ -77,6 +100,8 @@ export function useBattle(userCard: selectedPokemonProps, enemyCard: selectedPok
                     currentStats: { ...prev.currentStats, hp: prev.currentStats.hp - (crit ? dmg * 2 : dmg) }
                 }));
                 setLog(prev => [...prev, `${enemyName} attacks for ${crit ? dmg * 2 + " critical" : dmg} damage!`]);
+                let faintHp = userPokemon.currentStats.hp - (crit ? dmg * 2 : dmg)
+                checkFaint(userPokemon, attacker, faintHp)
             }
         },
         [userPokemon, enemyPokemon, userName, enemyName]
@@ -86,10 +111,14 @@ export function useBattle(userCard: selectedPokemonProps, enemyCard: selectedPok
     // Resolve turns automatically until it’s the player’s turn
     // -------------------------------------------------
     const resolveTurns = useCallback(async () => {
+        if (faintedRef.current.currentStats.hp === 0) {
+            console.log('FAINTED!!');
+            return
+        }
         setFirstTurn(false);
         if (turnRef.current === "user") return;
         await handleTurn("attack");
-    }, [attack, firstTurn, userPokemon, delay]);
+    }, [attack, firstTurn, userPokemon, delay, faintedRef]);
 
     // -------------------------------------------------
     // Your same logic for getting next attacker
@@ -110,8 +139,6 @@ export function useBattle(userCard: selectedPokemonProps, enemyCard: selectedPok
             next = turnRef.current
             return next
         }
-        console.log(next, 'NEXT');
-        console.log(speedCount);
 
         let newCount = speedCount.defender === 'enemy' ? userPokemon.currentStats.spd - Math.abs(speedCount.count) : enemyPokemon.currentStats.spd - Math.abs(speedCount.count);
 
@@ -143,7 +170,6 @@ export function useBattle(userCard: selectedPokemonProps, enemyCard: selectedPok
             // update next attacker
             if (turnRef.current === "enemy") await delay(2000);
             getNextAttacker(speedRef.current);
-            console.log('NEXT ATTACKER AFTER ATTACK', turnRef.current);
 
             // auto-resolve
             await resolveTurns();
