@@ -18,7 +18,7 @@ export const ActionsPageContainer = styled.div`
     gap: 10px;
     & > div:first-child {
       width: 220px;
-      animation: ${fadeIn} 5s linear;
+      animation: ${fadeIn} 2s linear;
     }
 `
 
@@ -83,25 +83,67 @@ export const StatusHeader = styled.div`
 `;
 
 export const LogBox = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: start;
-  padding: 1rem;
+  padding: 1rem 10px;
   background: #111;
   border: 1px solid #d1d1d1;
   border-radius: 6px;
-  width: 90%;
-  min-height: 50%;
-  margin: 1rem;
+  width: 300px;
+  height: 250px;
   box-sizing: border-box;
   color: #e1e1e1;
-  gap: 1rem;
+  gap: 0.5rem;
+  z-index: 999;
+
   & > h4 {
     font-size: 0.9rem;
     font-family: arial;
+    color: goldenrod;
+    margin: 0;
   }
 `
+
+export const LogContent = styled.div`
+  flex: 1 1 auto;
+  width: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-right: 0.5rem;
+  box-sizing: border-box;
+
+  & > * {
+    flex-shrink: 0;
+    width: 100%;
+    word-wrap: break-word;
+    margin-bottom: 0.25rem;
+  }
+`
+
+const typing = (chars: number) => keyframes`
+  from { width: 0ch; }
+  to { width: 100%; }
+`;
+
+const blink = keyframes`
+  50% { border-color: transparent; }
+`;
+
+// Pass the text length as a prop
+export const TypingText = styled.span<{ $chars: number }>`
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: left;
+
+  animation:
+    ${props => typing(props.$chars)} 2s steps(35, end) forwards,
+    ${blink} 0.75s step-end infinite;
+`;
 
 export const MovesetContainer = styled.div`
   display: grid;
@@ -142,7 +184,7 @@ export const TurnEventsColumn = styled.div<{$rotate?: boolean}>`
   justify-content: start;
   gap: 1rem;
   & > h1 {
-    font-size: 2rem;
+    font-size: 1.4rem;
     transition: 0.4s ease-in-out;
   }
   & > svg {
