@@ -83,20 +83,20 @@ export const StatusHeader = styled.div`
 `;
 
 export const LogBox = styled.div`
-  position: relative;
   display: flex;
+  position: relative;
+  width: 100%;
   flex-direction: column;
   align-items: center;
-  padding: 1rem 10px;
+  padding: 1rem;
   background: #111;
   border: 1px solid #d1d1d1;
   border-radius: 6px;
-  width: 300px;
-  height: 250px;
   box-sizing: border-box;
   color: #e1e1e1;
   gap: 0.5rem;
   z-index: 999;
+  max-height: 260px;
 
   & > h4 {
     font-size: 0.9rem;
@@ -108,7 +108,7 @@ export const LogBox = styled.div`
 
 export const LogContent = styled.div`
   flex: 1 1 auto;
-  width: 99%;
+  width: 100%;
   overflow-y: auto;
   display: flex;
   flex-direction: column;

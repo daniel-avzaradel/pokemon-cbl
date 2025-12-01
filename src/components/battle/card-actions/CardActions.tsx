@@ -114,9 +114,18 @@ const TurnsEvents = ({ turnState, log }: TurnEventsProps) => {
 const CardActions = ({ user, userCard, enemyCard }: CardActionProps) => {
 
   const { log, turnState, speedState, handleTurn, userPokemon, enemyPokemon } = useBattle(userCard, enemyCard);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = contentRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+    
+  }, [log, turnState]);
 
   return (
-    <>
+    <div>
       {userCard && enemyCard && (
         <CardGrid>
           <PokemonActions {...{ user, turnState, handleTurn }} card={userPokemon} />
@@ -124,7 +133,7 @@ const CardActions = ({ user, userCard, enemyCard }: CardActionProps) => {
           <PokemonActions {...{ user, turnState, handleTurn }} card={enemyPokemon} />
         </CardGrid>
       )}
-    </>
+    </div>
   )
 }
 

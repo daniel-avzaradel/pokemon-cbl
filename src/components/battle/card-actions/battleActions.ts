@@ -86,6 +86,7 @@ export function useBattle(userCard: selectedPokemonProps, enemyCard: selectedPok
     // Resolve turns automatically until it’s the player’s turn
     // -------------------------------------------------
     const resolveTurns = useCallback(async () => {
+        setFirstTurn(false);
         if (turnRef.current === "user") return;
         await handleTurn("attack");
     }, [attack, firstTurn, userPokemon, delay]);
@@ -94,15 +95,34 @@ export function useBattle(userCard: selectedPokemonProps, enemyCard: selectedPok
     // Your same logic for getting next attacker
     // -------------------------------------------------
     const getNextAttacker = (speedCount: speedCountType) => {
-        let next: playerTurn =
-            speedCount.defender === "user"
-                ? speedCount.count >= userPokemon.currentStats.spd
-                    ? "enemy"
-                    : "user"
-                : speedCount.count >= enemyPokemon.currentStats.spAtk
-                    ? "user"
-                    : "enemy";
+        let next: playerTurn = speedCount.defender
+        if (firstTurn) {
+            console.log('first turn');
 
+            if (turnRef.current === "enemy") {
+                setTurn("user");
+                turnRef.current = 'user'
+            } else {
+                setTurn("enemy");
+                turnRef.current = "enemy"
+            }
+            console.log(turnRef.current);
+            next = turnRef.current
+            return next
+        }
+        console.log(next, 'NEXT');
+        console.log(speedCount);
+
+        let newCount = speedCount.defender === 'enemy' ? userPokemon.currentStats.spd - Math.abs(speedCount.count) : enemyPokemon.currentStats.spd - Math.abs(speedCount.count);
+
+        speedCount.count = newCount;
+        setSpeed({
+            count: newCount,
+            defender: "enemy"
+        });
+
+        next = speedCount.defender === "user" ? speedCount.count >= userPokemon.currentStats.spd ? "enemy" : "user"
+            : speedCount.defender === "enemy" && speedCount.count >= enemyPokemon.currentStats.spd ? "user" : "enemy";
         setTurn(next); // <-- now uses synced-ref-state
         return next;
     };
@@ -112,14 +132,18 @@ export function useBattle(userCard: selectedPokemonProps, enemyCard: selectedPok
     // -------------------------------------------------
     const handleTurn = useCallback(
         async (action: actionButton) => {
+            turnRef.current === "user" ? speedRef.current.defender = "enemy" : speedRef.current.defender = "user"
+            setTurn(turnRef.current);
+
             if (action === "attack") {
-                if (turnRef.current === "enemy") await delay(2000);
+                if (turnRef.current === "enemy") await delay(3000);
                 attack(turnRef.current);
             }
 
             // update next attacker
             if (turnRef.current === "enemy") await delay(2000);
             getNextAttacker(speedRef.current);
+            console.log('NEXT ATTACKER AFTER ATTACK', turnRef.current);
 
             // auto-resolve
             await resolveTurns();
@@ -136,8 +160,6 @@ export function useBattle(userCard: selectedPokemonProps, enemyCard: selectedPok
 
         setLog(prev => [...prev, "Battle started!"]);
 
-        console.log(speedRef.current);
-
         const startingTurn: playerTurn =
             speedRef.current.defender === "enemy" ? "user" : "enemy";
 
@@ -147,7 +169,7 @@ export function useBattle(userCard: selectedPokemonProps, enemyCard: selectedPok
             setFirstTurn(true);
             await resolveTurns();
         }
-    }, [userPokemon, enemyPokemon, resolveTurns]);
+    }, [userPokemon, enemyPokemon]);
 
     useEffect(() => {
         battleStart();
