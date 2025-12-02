@@ -1,10 +1,9 @@
 import { ArrowBigLeft, Shield, Sword, WandSparkles } from 'lucide-react';
-import { JSX, RefObject, useEffect, useRef, useState } from 'react';
+import { JSX, useEffect, useRef, useState } from 'react';
 import { UserData } from '../../../App';
 import { PokemonCard } from '../../common/PokemonCard';
 import { CardGrid } from '../Battle.styled';
 import { selectedPokemonProps } from '../BattleSystem';
-import { actionButton, playerTurn, useBattle } from './battleActions';
 import { ActionsContainer, ActionsPageContainer, LogBox, LogContent, MovesetButton, MovesetContainer, TurnEventsColumn, TypingText } from './CardActions.styled';
 import { StatusCardComponent } from './StatusCardComponent';
 
@@ -15,6 +14,8 @@ interface PokemonActionsProps {
   handleTurn: (action: actionButton) => void;
 }
 
+export type playerTurn = "user" | "enemy"
+export type actionButton = "attack" | "defense" | "special" | "return"
 
 const PokemonActions = ({ user, card, turnState, handleTurn }: PokemonActionsProps) => {
   const [disableBtn, setDisableBtn] = useState(false);

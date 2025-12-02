@@ -1,118 +1,107 @@
 import { Swords } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
-import { UserData } from '../../App';
-import { BattleContainer, BattleHeader, IconWrapper, PlayersGrid } from './Battle.styled';
-import { trainersData } from './trainersData';
-
+import { useEffect, useState } from 'react';
+import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { FetchedPokemon } from '../../hooks/usePokemon';
+import { BattleContainer, IconWrapper, PlayersGrid } from './Battle.styled';
+import { UserData } from '../../App';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../library/store';
+import { useBattleRedux } from '../library/battleActionsRedux';
+import { setUserPokemon, setEnemyPokemon, startBattle } from '../library/battleSlice';
 import CardActions from './card-actions/CardActions';
 import LoadingBattle from './LoadingBattle';
-import { useNPCs } from './npcs/useNpcs';
 import TrainerStats from './trainer/TrainerStats';
-import { useBattle } from './card-actions/battleActions';
+import { TrainerCardI, trainersData } from './trainersData';
+import { useNPCs } from './npcs/useNpcs';
 
-interface BattleSystemInterface {
-  user: UserData
-}
-
-export interface selectedPokemonProps extends FetchedPokemon {
-  currentStats: {
-    hp: number;
-    atk: number;
-    def: number;
-    spAtk: number;
-    spDef: number;
-    spd: number;
-  }
-}
-
-const BattleSystem = ({ user }: BattleSystemInterface) => {
+export const BattleSystem = () => {
 
   const { id } = useParams();
-  const [enemy, setEnemy] = useState<UserData>();
+  const location = useLocation();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const userFromState = location.state?.user as UserData | undefined;
+  const trainerFromState = location.state?.trainer as TrainerCardI | undefined;
+  let trainerAsUser: UserData | undefined = undefined;
+
+  const trainerData = trainerFromState ?? trainersData.find(t => t.id.toString() === id);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const [selectedPokemonUser, setSelectedPokemonUser] = useState<selectedPokemonProps>({...user?.battleDeck[0], currentStats: {
-          hp: user.battleDeck[0].stats.hp,
-          def: user.battleDeck[0].stats.defense,
-          atk: user.battleDeck[0].stats.attack,
-          spAtk: user.battleDeck[0].stats.specialAttack,
-          spDef: user.battleDeck[0].stats.specialDefense,
-          spd: user.battleDeck[0].stats.speed,
-        }})
-
-  const [selectedPokemonEnemy, setSelectedPokemonEnemy] = useState<selectedPokemonProps>({...user?.battleDeck[0], currentStats: {
-          hp: user.battleDeck[0].stats.hp,
-          def: user.battleDeck[0].stats.defense,
-          atk: user.battleDeck[0].stats.attack,
-          spAtk: user.battleDeck[0].stats.specialAttack,
-          spDef: user.battleDeck[0].stats.specialDefense,
-          spd: user.battleDeck[0].stats.speed,
-        }})
-
-  const trainer = useMemo(() => {
-    return trainersData.find(el => el.id.toString() === id);
-  }, [id]);
-
+  const { userPokemon, enemyPokemon, turnState, log, handleTurn } = useBattleRedux();
 
   useEffect(() => {
-    if (!trainer) return;
-    const load = async () => {
-      try {
-        setLoading(true);
-        const npc = await useNPCs({
-          username: trainer.name,
-          coins: trainer.rewardCoins,
-          pokemon: trainer.pokemons,
-          imageUrl: trainer.profile
-        });
-        setEnemy(npc);
-        setSelectedPokemonEnemy({...npc?.battleDeck[0], currentStats: {
-          hp: npc.battleDeck[0].stats.hp,
-          def: npc.battleDeck[0].stats.defense,
-          atk: npc.battleDeck[0].stats.attack,
-          spAtk: npc.battleDeck[0].stats.specialAttack,
-          spDef: npc.battleDeck[0].stats.specialDefense,
-          spd: npc.battleDeck[0].stats.speed,
-        }})
+    if (!userFromState || !trainerData) return;
 
+    const loadTrainerAndSetPokemons = async () => {
+      setLoading(true);
+      try {
+        // Fetch full trainer with pokemon deck
+        const fullTrainer = await useNPCs({
+          username: trainerData.name,
+          coins: trainerData.rewardCoins ?? 0,
+          pokemon: trainerData.pokemons ?? [],
+          imageUrl: trainerData.profile ?? '',
+        });
+        trainerAsUser = fullTrainer
+        // Get first Pokémon for user and enemy
+        const userPokemonToSet = userFromState.battleDeck[0];
+        const enemyPokemonToSet = fullTrainer.battleDeck[0];
+
+        if (!userPokemonToSet || !enemyPokemonToSet) {
+          throw new Error("No Pokémon available for battle");
+        }
+
+        // Dispatch to Redux
+        dispatch(setUserPokemon({
+          ...userPokemonToSet,
+          currentStats: {
+            hp: userPokemonToSet.stats.hp,
+            atk: userPokemonToSet.stats.attack,
+            def: userPokemonToSet.stats.defense,
+            spAtk: userPokemonToSet.stats.specialAttack,
+            spDef: userPokemonToSet.stats.specialDefense,
+            spd: userPokemonToSet.stats.speed,
+          }
+        }));
+
+        dispatch(setEnemyPokemon({
+          ...enemyPokemonToSet,
+          currentStats: {
+            hp: enemyPokemonToSet.stats.hp,
+            atk: enemyPokemonToSet.stats.attack,
+            def: enemyPokemonToSet.stats.defense,
+            spAtk: enemyPokemonToSet.stats.specialAttack,
+            spDef: enemyPokemonToSet.stats.specialDefense,
+            spd: enemyPokemonToSet.stats.speed,
+          }
+        }));
+
+        // Start battle
+        dispatch(startBattle());
       } catch (err) {
+        console.error(err);
         setError(true);
       } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, (Math.random() * 0) + 0)
+        setLoading(false);
       }
     };
 
-    load();
-  }, [trainer]);
+    loadTrainerAndSetPokemons();
+  }, [dispatch, trainerData, userFromState]);
 
-  const {
-    log,
-    turnState,
-    speedState,
-    userPokemon,
-    enemyPokemon,
-    handleTurn
-  } = useBattle(selectedPokemonUser, selectedPokemonEnemy);
-
-  if (!trainer) {
+  // Wait until Redux has Pokémon
+  if (loading) return <LoadingBattle />;
+  if (error) {
+    toast.error("Failed to load battle data");
     return <Navigate to="/battle" replace />;
   }
+  if (!userPokemon || !enemyPokemon || !userFromState || !trainerAsUser) return <LoadingBattle />;
 
-  if (loading) {
-    return <LoadingBattle />;
-  }
+  const userFainted = userPokemon.currentStats.hp <= 0;
+  const enemyFainted = enemyPokemon.currentStats.hp <= 0;
 
-  if (error || !enemy) {
-    toast.error("Could not fetch data for the battle");
-    return <Navigate to="/battle" replace />;
-  }
-  
   return (
     <BattleContainer>
       <IconWrapper>
@@ -121,17 +110,17 @@ const BattleSystem = ({ user }: BattleSystemInterface) => {
         <span>Arena</span>
       </IconWrapper>
 
-      {(user && enemy) && (
-      <div>
-        <PlayersGrid>
-          <TrainerStats selectedPokemon={selectedPokemonUser} trainer={user} />
-          <TrainerStats selectedPokemon={selectedPokemonEnemy} trainer={enemy} />
-        </PlayersGrid>
-        <CardActions {...{ user, enemy, log, turnState, handleTurn }} userCard={selectedPokemonUser} enemyCard={selectedPokemonEnemy ?? selectedPokemonUser} />
-      </div>
-      )}
-    </BattleContainer>
-  )
-}
+      <PlayersGrid>
+        <TrainerStats selectedPokemon={userPokemon} trainer={userFromState!} />
+        <TrainerStats selectedPokemon={enemyPokemon} trainer={trainerAsUser!} />
+      </PlayersGrid>
 
-export default BattleSystem
+      <CardActions
+        {...{ log, turnState, handleTurn }}
+        user={userFromState!}
+        userCard={userPokemon}
+        enemyCard={enemyPokemon}
+      />
+    </BattleContainer>
+  );
+};

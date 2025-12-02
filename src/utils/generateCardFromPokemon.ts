@@ -9,14 +9,16 @@ export class FetchedPokemonClass {
     types: PokemonTypes[];
     imageUrl: string | null;
     stats: Stats;
+    currentStats?: Stats;
 
-    constructor({ uid, id, name, types, imageUrl, stats }: { uid: number, id: number; name: string; types: PokemonTypes[]; imageUrl: string | null; stats: Stats }) {
+    constructor({ uid, id, name, types, imageUrl, stats, currentStats }: { uid: number, id: number; name: string; types: PokemonTypes[]; imageUrl: string | null; stats: Stats, currentStats: Stats }) {
         this.uid = uid;
         this.id = id;
         this.name = name;
         this.types = types;
         this.imageUrl = imageUrl;
         this.stats = stats;
+        this.currentStats = currentStats;
     }
 }
 
@@ -51,7 +53,8 @@ export async function generateCardFromPokemon(pokemonId?: number, foil?: boolean
             name: d.name,
             types: types,
             imageUrl: imageUrl,
-            stats: stats
+            stats: stats,
+            currentStats: stats
         });
 
         if(foil) {

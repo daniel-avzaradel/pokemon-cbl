@@ -16,7 +16,9 @@ import {
   Navigate,
   RouterProvider,
 } from "react-router";
-import BattleSystem from './components/battle/BattleSystem';
+import { BattleSystem } from './components/battle/BattleSystem';
+import { Provider } from 'react-redux';
+import { store } from './components/library/store';
 
 
 export type Card = HookFetchedPokemon;
@@ -111,7 +113,7 @@ export default function App() {
         },
         {
           path: "battle/:id",
-          element: <BattleSystem user={user} />,
+          element: <BattleSystem />,
         },
         { path: "*", element: <Navigate to="/library" replace /> },
       ],
@@ -120,8 +122,10 @@ export default function App() {
 
   return (
     <>
+    <Provider store={store}>
       <RouterProvider router={router} />
       <ToastContainer position="top-right" autoClose={3000} />
+    </Provider>
     </>
   );
 }
