@@ -11,6 +11,7 @@ import CardActions from './card-actions/CardActions';
 import LoadingBattle from './LoadingBattle';
 import { useNPCs } from './npcs/useNpcs';
 import TrainerStats from './trainer/TrainerStats';
+import { useBattle } from './card-actions/battleActions';
 
 interface BattleSystemInterface {
   user: UserData
@@ -56,9 +57,6 @@ const BattleSystem = ({ user }: BattleSystemInterface) => {
     return trainersData.find(el => el.id.toString() === id);
   }, [id]);
 
-  useEffect(() => {
-    
-  }, [selectedPokemonUser.currentStats])
 
   useEffect(() => {
     if (!trainer) return;
@@ -93,6 +91,15 @@ const BattleSystem = ({ user }: BattleSystemInterface) => {
     load();
   }, [trainer]);
 
+  const {
+    log,
+    turnState,
+    speedState,
+    userPokemon,
+    enemyPokemon,
+    handleTurn
+  } = useBattle(selectedPokemonUser, selectedPokemonEnemy);
+
   if (!trainer) {
     return <Navigate to="/battle" replace />;
   }
@@ -120,7 +127,7 @@ const BattleSystem = ({ user }: BattleSystemInterface) => {
           <TrainerStats selectedPokemon={selectedPokemonUser} trainer={user} />
           <TrainerStats selectedPokemon={selectedPokemonEnemy} trainer={enemy} />
         </PlayersGrid>
-        <CardActions {...{ user, enemy, setSelectedPokemonUser, setSelectedPokemonEnemy }} userCard={selectedPokemonUser} enemyCard={selectedPokemonEnemy ?? selectedPokemonUser} />
+        <CardActions {...{ user, enemy, log, turnState, handleTurn }} userCard={selectedPokemonUser} enemyCard={selectedPokemonEnemy ?? selectedPokemonUser} />
       </div>
       )}
     </BattleContainer>

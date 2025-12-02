@@ -8,13 +8,6 @@ import { actionButton, playerTurn, useBattle } from './battleActions';
 import { ActionsContainer, ActionsPageContainer, LogBox, LogContent, MovesetButton, MovesetContainer, TurnEventsColumn, TypingText } from './CardActions.styled';
 import { StatusCardComponent } from './StatusCardComponent';
 
-interface CardActionProps {
-  user: UserData;
-  enemy: UserData;
-  userCard: selectedPokemonProps;
-  enemyCard: selectedPokemonProps;
-}
-
 interface PokemonActionsProps {
   user: UserData;
   card: selectedPokemonProps;
@@ -54,12 +47,13 @@ const PokemonActions = ({ user, card, turnState, handleTurn }: PokemonActionsPro
       <ActionsContainer>
         <PokemonCard {...{ user }} card={card} />
         <MovesetContainer>
-          {moves.map((move) => {
+          {moves.map((move, i) => {
             return (
               <MovesetButton
                 disabled={disableBtn || turnState === 'enemy'}
                 onClick={() => handleClick(move)}
                 $color={colors[move]}
+                key={i}
               >
                 {icons[move as keyof typeof icons] ?? null} {move}
               </MovesetButton>
@@ -109,9 +103,17 @@ const TurnsEvents = ({ turnState, log }: TurnEventsProps) => {
   )
 }
 
-const CardActions = ({ user, userCard, enemyCard }: CardActionProps) => {
+interface CardActionProps {
+  user: UserData;
+  userCard: selectedPokemonProps;
+  enemyCard: selectedPokemonProps;
+  log: string[]; 
+  turnState: playerTurn; 
+  handleTurn: (action: actionButton) => Promise<void>;
+}
 
-  const { log, turnState, handleTurn, userPokemon, enemyPokemon } = useBattle(userCard, enemyCard);
+const CardActions = ({ log, turnState, handleTurn, user, userCard, enemyCard }: CardActionProps) => {
+
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -126,9 +128,9 @@ const CardActions = ({ user, userCard, enemyCard }: CardActionProps) => {
     <div>
       {userCard && enemyCard && (
         <CardGrid>
-          <PokemonActions {...{ user, turnState, handleTurn }} card={userPokemon} />
+          <PokemonActions {...{ user, turnState, handleTurn }} card={userCard} />
           <TurnsEvents {... { turnState, log }} />
-          <PokemonActions {...{ user, turnState, handleTurn }} card={enemyPokemon} />
+          <PokemonActions {...{ user, turnState, handleTurn }} card={enemyCard} />
         </CardGrid>
       )}
     </div>
