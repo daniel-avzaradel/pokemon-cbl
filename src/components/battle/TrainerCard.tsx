@@ -75,7 +75,7 @@ export function TrainerCard({ trainer, user, updateUser }: TrainerCardProps) {
             <PokemonList>
               {trainer.pokemons.map((pokemon, i: number) => {
                 return (
-                  <div style={{ display: 'flex', gap: '.5rem' }} key={Math.random() * 99999 + i}>
+                  <div style={{ display: 'flex', gap: '.5rem' }} key={Math.random() * 99999999 + i}>
                   <img src={PokeBall} width={22} />
                   <span>{pokemon.name}</span>
                   </div>
@@ -95,7 +95,7 @@ export function TrainerCard({ trainer, user, updateUser }: TrainerCardProps) {
             </LockedDiv>
           )}
           {userArenaTrainer?.unlocked && (
-            <Link to={`/battle/${trainer.id}`}>
+            <Link to={`/battle/${trainer.id}`} state={{user, trainer}}>
               <ActionButton>
                 <Swords /> Battle
               </ActionButton>

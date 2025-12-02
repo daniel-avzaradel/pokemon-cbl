@@ -55,8 +55,7 @@ const AllCards = ({ user, addToDeck, removeFromDeck, updateUser }: AllCardsProps
         <Section>
             <AllCardsHeader>
                 <h3>All Cards</h3>
-                <br />
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', gap: '1rem' }}>
                     <SortBy {...{ sort, handleSort }} />
                     <Filter {...{ filter, handleFilterChange, PokemonTypes }} />
                 </div>

@@ -91,7 +91,7 @@ export const OpeninBoosterPack = async (pack: BoosterPack) => {
     // 1) Forced guaranteed rares
     for (let i = 0; i < forcedRares; i++) {
       const rare = await generateValidPokemon(
-        (s) => s >= 280 && s <= rareMaxStats
+        (s) => s >= minNormalStats && s <= rareMaxStats
       );
       console.log('RARE', rare.name, getStatSum(rare));
       rares.push(rare);
@@ -112,12 +112,14 @@ export const OpeninBoosterPack = async (pack: BoosterPack) => {
         const extraRare = await generateValidPokemon(
           (s) => s >= 280 && s <= rareMaxStats
         );
+        console.log(extraRare.name, getStatSum(extraRare));
         rares.push(extraRare);
         continue;
       }
 
       // Otherwise produce a normal card that must be <= 500 stats
       const normal = await generateValidPokemon((s) => s >= minNormalStats && s <= rareMaxStats);
+      console.log(normal.name, getStatSum(normal));
       normals.push(normal);
     }
 
@@ -137,7 +139,7 @@ export const OpeninBoosterPack = async (pack: BoosterPack) => {
   let cards: Card[] = [];
 
   if (pack.id === 1) {
-    cards = await generatePack(1, /*rareChance*/ 2.5, /*rareMax*/ 340, /*minNormal*/ 250, /*foil*/ 2, /*legendary*/ 0);
+    cards = await generatePack(1, /*rareChance*/ 1, /*rareMax*/ 270, /*minNormal*/ 200, /*foil*/ 2, /*legendary*/ 0);
   }
 
   if (pack.id === 2) {

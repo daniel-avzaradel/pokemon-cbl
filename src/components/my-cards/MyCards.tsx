@@ -3,15 +3,18 @@ import { UserData, Card } from '../../App';
 import { PokemonCard } from '../common/PokemonCard';
 import { CardContainer, CardsGrid, Container, DeckEmpty, EmptyState, Header, Modal, ModalContent, Section } from './MyCards.module';
 import AllCards from './AllCards';
+import { RootState } from '../library/store';
+import { useSelector } from 'react-redux';
 
 interface MyCardsProps {
-  user: UserData;
   updateUser: (user: UserData) => void;
 }
 
-export function MyCards({ user, updateUser }: MyCardsProps) {
+export function MyCards({ updateUser }: MyCardsProps) {
 
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
+  const user = useSelector((state: RootState) => state.user);
+
 
   const addToDeck = (card: Card) => {
     if (user.battleDeck.length < 6) {

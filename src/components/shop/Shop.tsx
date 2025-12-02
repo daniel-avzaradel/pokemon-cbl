@@ -6,9 +6,10 @@ import { toast } from 'react-toastify';
 import { Card, UserData } from '../../App';
 import { Container, Header, IconWrapper, PackCard, PackContent, PackInfo, PacksGrid, PriceBox, PurchaseButton } from './Shop.styles';
 import { BoosterPack, boosterPacks, OpeninBoosterPack } from './packLogic';
+import { useSelector } from 'react-redux';
+import { RootState } from '../library/store';
 
 interface ShopProps {
-  user: UserData;
   updateUser: (user: UserData) => void;
 }
 
@@ -19,9 +20,12 @@ export const boosterColors: Record<string, string> = {
   master: 'linear-gradient(to bottom right, #d453eeff, #5f1359ff, #ec8affff, #581753ff, #ff07f3ff)',
 };
 
-export function Shop({ user, updateUser }: ShopProps) {
+export function Shop({ updateUser }: ShopProps) {
+
   const [openingPack, setOpeningPack] = useState(false);
   const [revealedCards, setRevealedCards] = useState<Card[]>([]);
+  
+  const user = useSelector((state: RootState) => state.user);
 
   const [loading, setLoading] = useState<boolean>(false);
 

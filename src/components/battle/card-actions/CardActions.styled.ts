@@ -14,22 +14,30 @@ const fadeIn = keyframes`
 
 export const ActionsPageContainer = styled.div`
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 10px;
-    & > div:first-child {
-      width: 220px;
-      animation: ${fadeIn} 2s linear;
-    }
+    max-height: 100%;
+    width: 100%;
 `
 
 export const ActionsContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
-  width: min-content;
+  width: 100%;
   height: 100%;
   gap: 10px;
+  
+  & > * {
+    width: fit-content;
+    max-width: 100%;
+    flex-shrink: 1;
+    animation: ${fadeIn} 0s linear;
+  }
+  & > div:last-child {
+    max-width: min-content;
+  }
 `
 
 export const HpDisplay = styled.div<{ $color: string }>`
@@ -37,6 +45,7 @@ export const HpDisplay = styled.div<{ $color: string }>`
   align-items: center;
   gap: 0.5rem;
   color: ${props => props.$color};
+  font-size: 0.9rem;
 `;
 
 export const HealthBarContainer = styled.div`
@@ -45,9 +54,9 @@ export const HealthBarContainer = styled.div`
 
 export const HealthBarBg = styled.div`
   width: 100%;
-  height: 0.75rem;
+  height: 0.6rem;
   background: #262626;
-  border-radius: 9999px;
+  border-radius: 50px;
   overflow: hidden;
   border: 1px solid #404040;
 `;
@@ -62,11 +71,8 @@ export const HealthBarFill = styled.div<{ $width: number; $color: string }>`
 
 export const StatusCard = styled.div`
   width: 100%;
-  background: #1a1a1a;
-  backdrop-filter: blur(12px);
-  border-radius: 0.75rem;
+  border-radius: 4px;
   padding: 10px;
-  border: 1px solid #2a2a2a;
 `;
 
 export const StatusHeader = styled.div`
@@ -79,50 +85,52 @@ export const StatusHeader = styled.div`
   h3 {
     color: white;
     margin: 0;
+    font-size: 0.9rem;
   }
 `;
 
 export const LogBox = styled.div`
   display: flex;
-  position: relative;
-  width: 100%;
   flex-direction: column;
-  align-items: center;
-  padding: 1rem;
+  width: 100%;
+  max-height: 100%;
+  flex: 1 1 auto;
+  overflow: hidden;
+  padding: 10px;
+
   background: #111;
   border: 1px solid #d1d1d1;
-  border-radius: 6px;
-  box-sizing: border-box;
+  border-radius: 4px;
   color: #e1e1e1;
-  gap: 0.5rem;
-  z-index: 999;
-  max-height: 260px;
 
   & > h4 {
     font-size: 0.9rem;
-    font-family: arial;
     color: goldenrod;
     margin: 0;
   }
-`
+`;
 
 export const LogContent = styled.div`
   flex: 1 1 auto;
   width: 100%;
+  min-height: 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  gap: 0.25rem;
   padding: 0.5rem;
-  box-sizing: border-box;
 
-  & > * {
-    flex-shrink: 0;
-    width: 100%;
-    word-wrap: break-word;
-    margin-bottom: 0.25rem;
+  &::-webkit-scrollbar {
+    width: 6px;
   }
-`
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,0,0,0.5);
+  }
+`;
 
 const typing = (chars: number) => keyframes`
   from { width: 0ch; }
@@ -146,19 +154,19 @@ export const TypingText = styled.span<{ $chars: number }>`
 `;
 
 export const MovesetContainer = styled.div`
-  display: grid;
-  place-items: start;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   gap: 10px;
   background: #1a1a1a;
   border: 1px solid #2a2a2a;
   padding: 10px;
   width: 100%;
-  height: auto;
-  border-radius: 0.75rem;
+  height: 100%;
+  border-radius: 4px;
 `
 
-export const MovesetButton = styled.button<{$color?: string, disabled?: boolean}>`
+export const MovesetButton = styled.button<{ $color?: string, disabled?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -176,18 +184,21 @@ export const MovesetButton = styled.button<{$color?: string, disabled?: boolean}
   }
 `
 
-export const TurnEventsColumn = styled.div<{$rotate?: boolean}>`
+export const TurnEventsColumn = styled.div<{ $rotate?: boolean }>`
   display: flex;
+  flex: 1;
   width: 100%;
   flex-direction: column;
   align-items: center;
   justify-content: start;
   gap: 2rem;
+
   & > h1 {
     font-size: 1.4rem;
     transition: 0.4s ease-in-out;
     margin: 0;
   }
+
   & > div {
     margin: 0;
     display: flex;
@@ -196,6 +207,7 @@ export const TurnEventsColumn = styled.div<{$rotate?: boolean}>`
     justify-content: center;
     gap: 1rem;
   }
+
   & > div > svg {
     transition: 0.4s ease-in-out;
     background: #111;

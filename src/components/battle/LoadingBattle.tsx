@@ -1,5 +1,8 @@
 import styled, { keyframes } from 'styled-components';
 import Pokeball from '../../assets/pokeball2.png';
+import { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const spin = keyframes`
     0% {
@@ -79,6 +82,20 @@ const ModalContent = styled.div`
 `
 
 const LoadingBattle = () => {
+
+  const [redirect, setRedirect] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setRedirect(true);
+    }, 5000)
+  }, [])
+
+  if(redirect) {
+    toast.error("failed to fetch data");
+    return <Navigate to="/battle" replace />
+  }
+
   return (
     <LoadingContainer>
         <ModalContent>
