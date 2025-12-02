@@ -2,9 +2,10 @@ import styled from 'styled-components';
 import { BookMarked, Library, ShoppingBag, Swords, Coins, LogOut } from 'lucide-react';
 import { UserData } from '../App';
 import { Link, useLocation, Outlet } from 'react-router-dom'
+import { useSelector } from 'react-redux';
+import { RootState } from './library/store';
 
 interface NavigationProps {
-  user: UserData;
   onLogout: () => void;
 }
 
@@ -126,9 +127,10 @@ const FullPageWrapper = styled.div`
   padding: 1rem;
 `;
 
-export function NavigationComponent({ user, onLogout }: NavigationProps) {
+export function NavigationComponent({ onLogout }: NavigationProps) {
 
   const location = useLocation();
+  const user = useSelector((state: RootState) => state.user);
   const isActive = (path: string) => location.pathname === path;
 
   return (

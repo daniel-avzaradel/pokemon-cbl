@@ -1,18 +1,18 @@
 import { Swords } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { BattleContainer, IconWrapper, PlayersGrid } from './Battle.styled';
 import { UserData } from '../../App';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../library/store';
 import { useBattleRedux } from '../library/battleActionsRedux';
-import { setUserPokemon, setEnemyPokemon, startBattle } from '../library/battleSlice';
+import { resetBattle, setEnemyPokemon, setUserPokemon, startBattle } from '../library/battleSlice';
+import { AppDispatch } from '../library/store';
+import { BattleContainer, IconWrapper, PlayersGrid } from './Battle.styled';
 import CardActions from './card-actions/CardActions';
 import LoadingBattle from './LoadingBattle';
+import { useNPCs } from './npcs/useNpcs';
 import TrainerStats from './trainer/TrainerStats';
 import { TrainerCardI, trainersData } from './trainersData';
-import { useNPCs } from './npcs/useNpcs';
 
 export const BattleSystem = () => {
   const { id } = useParams();
@@ -32,6 +32,8 @@ export const BattleSystem = () => {
   const { userPokemon, enemyPokemon, turnState, log, handleTurn } = useBattleRedux();
 
   useEffect(() => {
+    dispatch(resetBattle())
+
     if (!userFromState || !trainerData) return;
 
     const loadTrainerAndSetPokemons = async () => {

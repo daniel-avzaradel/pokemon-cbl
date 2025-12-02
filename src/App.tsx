@@ -17,8 +17,9 @@ import {
   RouterProvider,
 } from "react-router";
 import { BattleSystem } from './components/battle/BattleSystem';
-import { Provider } from 'react-redux';
-import { store } from './components/library/store';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import { RootState, store } from './components/library/store';
+import { setUser } from './components/library/userSlice';
 
 
 export type Card = HookFetchedPokemon;
@@ -51,19 +52,21 @@ const MainContent = styled.main`
 
 
 export default function App() {
-  const [user, setUser] = useState<UserData | null>(null);
+
+  const [user, setNewUser] = useState<UserData | null>();
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const savedUser = localStorage.getItem("pokemonUser");
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      dispatch(setUser(JSON.parse(savedUser)))
     }
   }, []);
 
   const handleLogin = (username: string) => {
     const newUser: UserData = {
       username,
-      coins: 20000,
+      coins: 200,
       collection: [],
       battleDeck: [],
       arena: trainersData.map(t => ({
@@ -71,29 +74,33 @@ export default function App() {
         unlocked: t.name === "Bug Catcher",
       })),
     };
-
-    setUser(newUser);
+    setNewUser(newUser)
+    dispatch(setUser(newUser));
     localStorage.setItem("pokemonUser", JSON.stringify(newUser));
   };
 
   const handleLogout = () => {
-    setUser(null);
+    dispatch(setUser(null));
+    setNewUser(null)
     localStorage.removeItem("pokemonUser");
   };
 
   const updateUser = (updatedUser: UserData) => {
-    setUser(updatedUser);
+    setNewUser(updatedUser);
+    dispatch(setUser(updatedUser));
     localStorage.setItem("pokemonUser", JSON.stringify(updatedUser));
   };
 
-  if (!user) return <Login onLogin={handleLogin} />;
+  if(!user?.username) {
+    return <Login onLogin={handleLogin} />
+  }
 
   const router = createBrowserRouter([
     {
       path: "/",
       element: (
         <AppContainer>
-          <NavigationComponent user={user} onLogout={handleLogout} />
+          <NavigationComponent onLogout={handleLogout} />
         </AppContainer>
       ),
       children: [
@@ -101,15 +108,15 @@ export default function App() {
         { path: "library", element: <Library /> },
         {
           path: "my-cards",
-          element: <MyCards user={user} updateUser={updateUser} />,
+          element: <MyCards updateUser={updateUser} />,
         },
         {
           path: "shop",
-          element: <Shop user={user} updateUser={updateUser} />,
+          element: <Shop updateUser={updateUser} />,
         },
         {
           path: "battle",
-          element: <Battle user={user} updateUser={updateUser} />,
+          element: <Battle updateUser={updateUser} />,
         },
         {
           path: "battle/:id",
@@ -120,12 +127,19 @@ export default function App() {
     },
   ]);
 
+  if (!user) return (
+    <>
+      <RouterProvider router={router} />
+      <Login onLogin={handleLogin} />
+    </>
+  );
+
   return (
     <>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-      <ToastContainer position="top-right" autoClose={3000} />
-    </Provider>
+      <Provider store={store}>
+        <RouterProvider router={router} />
+        <ToastContainer position="top-right" autoClose={3000} />
+      </Provider>
     </>
   );
 }

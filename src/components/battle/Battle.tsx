@@ -5,16 +5,18 @@ import { TrainerCard } from './TrainerCard';
 
 import { useState } from 'react';
 import { TrainerCardI, trainersData } from './trainersData';
+import { useSelector } from 'react-redux';
+import { RootState } from '../library/store';
 
 export interface BattleProps {
-  user: UserData;
   updateUser: (user: UserData) => void;
 }
 
 
-const Battle = ({ user, updateUser }: BattleProps) => {
+const Battle = ({ updateUser }: BattleProps) => {
 
   const [trainers, ] = useState<TrainerCardI[]>(trainersData)
+  const user = useSelector((state: RootState) => state.user);
 
   return (
     <BattleContainer>
