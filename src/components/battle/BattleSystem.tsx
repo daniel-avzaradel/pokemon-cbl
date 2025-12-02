@@ -108,14 +108,11 @@ const BattleSystem = ({ user }: BattleSystemInterface) => {
   
   return (
     <BattleContainer>
-      <BattleHeader>
-      </BattleHeader>
       <IconWrapper>
         <span>Battle</span>
         <Swords size={60} color='rgb(127, 29, 29)' />
         <span>Arena</span>
       </IconWrapper>
-      <br />
 
       {(user && enemy) && (
       <div>

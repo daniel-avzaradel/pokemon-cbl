@@ -70,7 +70,7 @@ export function useBattle(userCard: selectedPokemonProps, enemyCard: selectedPok
             setEnemyPokemon(prev => ({ ...prev, currentStats: { ...prev.currentStats, hp: 0 } }));
             faintedRef.current = { ...enemyPokemon, currentStats: { ...enemyPokemon.currentStats, hp: 0 } };
         }
-        await delay(1000)
+        await delay(2000)
         setLog(prev => [...prev, `${pokemon.name} has fainted...`]);
         return true;
     }, [userPokemon, enemyPokemon]);

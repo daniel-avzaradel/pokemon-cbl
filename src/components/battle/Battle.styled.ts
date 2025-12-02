@@ -3,9 +3,9 @@ import styled, { keyframes } from "styled-components";
 export const BattleContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: .5rem;
   color: white;
   height: 100%;
+
   & > div {
     max-height: 100%;
   }
