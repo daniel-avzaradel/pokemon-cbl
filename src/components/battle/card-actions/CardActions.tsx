@@ -1,5 +1,5 @@
 import { ArrowBigLeft, Shield, Sword, WandSparkles } from 'lucide-react';
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { JSX, RefObject, useEffect, useRef, useState } from 'react';
 import { UserData } from '../../../App';
 import { PokemonCard } from '../../common/PokemonCard';
 import { CardGrid } from '../Battle.styled';
@@ -34,39 +34,37 @@ const PokemonActions = ({ user, card, turnState, handleTurn }: PokemonActionsPro
     setDisableBtn(false);
   }
 
+  const moves: actionButton[] = ['attack', 'defense', 'special', 'return']
+  const icons: Record<string, JSX.Element | null> = {
+    attack: <Sword />,
+    defense: <Shield />,
+    special: <WandSparkles />,
+    return: null,
+  };
+  const colors: Record<string, string> = {
+    attack: "darkred",
+    defense: "darkblue",
+    special: "darkorange",
+    return: "#111",
+  };
+
   return (
     <ActionsPageContainer>
-      <PokemonCard {...{ user }} card={card} />
+      <StatusCardComponent card={card} user={userCard} />
       <ActionsContainer>
-        <StatusCardComponent card={card} user={userCard} />
+        <PokemonCard {...{ user }} card={card} />
         <MovesetContainer>
-          <MovesetButton
-            disabled={disableBtn || turnState === 'enemy'}
-            onClick={() => handleClick('attack')}
-          >
-            <Sword /> Attack
-          </MovesetButton>
-          <MovesetButton
-            disabled={disableBtn || turnState === 'enemy'}
-            onClick={() => handleClick('defense')}
-            $color='royalblue'
-          >
-            <Shield /> Defense
-          </MovesetButton>
-          <MovesetButton
-            disabled={disableBtn || turnState === 'enemy'}
-            onClick={() => handleClick('special')}
-            $color='darkorange'
-          >
-            <WandSparkles /> Special
-          </MovesetButton>
-          <MovesetButton
-            disabled={disableBtn || turnState === 'enemy'}
-            onClick={() => handleClick('return')}
-            $color='#000'
-          >
-            Return
-          </MovesetButton>
+          {moves.map((move) => {
+            return (
+              <MovesetButton
+                disabled={disableBtn || turnState === 'enemy'}
+                onClick={() => handleClick(move)}
+                $color={colors[move]}
+              >
+                {icons[move as keyof typeof icons] ?? null} {move}
+              </MovesetButton>
+            )
+          })}
         </MovesetContainer>
       </ActionsContainer>
     </ActionsPageContainer>
@@ -90,7 +88,7 @@ const TurnsEvents = ({ turnState, log }: TurnEventsProps) => {
     if (container) {
       container.scrollTop = container.scrollHeight;
     }
-    
+
   }, [log, turnState]);
 
   return (
@@ -121,7 +119,7 @@ const CardActions = ({ user, userCard, enemyCard }: CardActionProps) => {
     if (container) {
       container.scrollTop = container.scrollHeight;
     }
-    
+
   }, [log, turnState]);
 
   return (

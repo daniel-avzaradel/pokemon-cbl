@@ -79,8 +79,9 @@ export const CardGrid = styled.div`
   padding: 1rem;
   width: 100%;
   height: 100%;
+  max-height: 50%;
 
-  & > div:last-child {
+  & > div:last-child > div {
     flex-direction: row-reverse;
   }
 `
