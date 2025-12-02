@@ -128,6 +128,7 @@ export const ModalContent = styled.div`
 export const AllCardsHeader = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 1rem;
   margin-bottom: 2rem;
 `;
