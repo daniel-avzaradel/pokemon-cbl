@@ -15,19 +15,19 @@ import { TrainerCardI, trainersData } from './trainersData';
 import { useNPCs } from './npcs/useNpcs';
 
 export const BattleSystem = () => {
-
   const { id } = useParams();
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
 
   const userFromState = location.state?.user as UserData | undefined;
   const trainerFromState = location.state?.trainer as TrainerCardI | undefined;
-  let trainerAsUser: UserData | undefined = undefined;
 
   const trainerData = trainerFromState ?? trainersData.find(t => t.id.toString() === id);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [fullTrainer, setFullTrainer] = useState<UserData | null>(null);
+
 
   const { userPokemon, enemyPokemon, turnState, log, handleTurn } = useBattleRedux();
 
@@ -38,16 +38,17 @@ export const BattleSystem = () => {
       setLoading(true);
       try {
         // Fetch full trainer with pokemon deck
-        const fullTrainer = await useNPCs({
+        const fetchedTrainer = await useNPCs({
           username: trainerData.name,
           coins: trainerData.rewardCoins ?? 0,
           pokemon: trainerData.pokemons ?? [],
           imageUrl: trainerData.profile ?? '',
         });
-        trainerAsUser = fullTrainer
+        setFullTrainer(fetchedTrainer);
+
         // Get first Pokémon for user and enemy
         const userPokemonToSet = userFromState.battleDeck[0];
-        const enemyPokemonToSet = fullTrainer.battleDeck[0];
+        const enemyPokemonToSet = fetchedTrainer.battleDeck[0];
 
         if (!userPokemonToSet || !enemyPokemonToSet) {
           throw new Error("No Pokémon available for battle");
@@ -91,16 +92,24 @@ export const BattleSystem = () => {
     loadTrainerAndSetPokemons();
   }, [dispatch, trainerData, userFromState]);
 
+  const userFainted = userPokemon?.currentStats.hp! <= 0;
+  const enemyFainted = enemyPokemon?.currentStats.hp! <= 0;
+
+  useEffect(() => {
+    if (userFainted) console.log("USER FAINTED!");
+  }, [userFainted]);
+
+  useEffect(() => {
+    if (enemyFainted) console.log("ENEMY FAINTED!");
+  }, [enemyFainted]);
+
   // Wait until Redux has Pokémon
   if (loading) return <LoadingBattle />;
   if (error) {
     toast.error("Failed to load battle data");
     return <Navigate to="/battle" replace />;
   }
-  if (!userPokemon || !enemyPokemon || !userFromState || !trainerAsUser) return <LoadingBattle />;
-
-  const userFainted = userPokemon.currentStats.hp <= 0;
-  const enemyFainted = enemyPokemon.currentStats.hp <= 0;
+  if (!userPokemon || !enemyPokemon) return <LoadingBattle />;
 
   return (
     <BattleContainer>
@@ -112,7 +121,7 @@ export const BattleSystem = () => {
 
       <PlayersGrid>
         <TrainerStats selectedPokemon={userPokemon} trainer={userFromState!} />
-        <TrainerStats selectedPokemon={enemyPokemon} trainer={trainerAsUser!} />
+        <TrainerStats selectedPokemon={enemyPokemon} trainer={fullTrainer!} />
       </PlayersGrid>
 
       <CardActions

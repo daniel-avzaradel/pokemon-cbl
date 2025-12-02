@@ -87,12 +87,12 @@ const LoadingBattle = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      toast.error("failed to fetch data");
       setRedirect(true);
-    }, 3000)
+    }, 5000)
   }, [])
 
   if(redirect) {
+    toast.error("failed to fetch data");
     return <Navigate to="/battle" replace />
   }
 
