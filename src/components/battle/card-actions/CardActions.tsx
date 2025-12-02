@@ -113,7 +113,7 @@ const TurnsEvents = ({ turnState, log }: TurnEventsProps) => {
 
 const CardActions = ({ user, userCard, enemyCard }: CardActionProps) => {
 
-  const { log, turnState, speedState, handleTurn, userPokemon, enemyPokemon } = useBattle(userCard, enemyCard);
+  const { log, turnState, handleTurn, userPokemon, enemyPokemon } = useBattle(userCard, enemyCard);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

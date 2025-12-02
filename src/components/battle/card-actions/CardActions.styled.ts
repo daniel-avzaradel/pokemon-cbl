@@ -16,8 +16,14 @@ export const ActionsPageContainer = styled.div`
     display: flex;
     align-items: center;
     gap: 10px;
+    max-height: 100%;
+    width: 100%;
+
     & > div:first-child {
-      width: 220px;
+      animation: ${fadeIn} 2s linear;
+    }
+    & > div:last-child {
+      width: 60%;
       animation: ${fadeIn} 2s linear;
     }
 `
@@ -37,6 +43,7 @@ export const HpDisplay = styled.div<{ $color: string }>`
   align-items: center;
   gap: 0.5rem;
   color: ${props => props.$color};
+  font-size: 0.9rem;
 `;
 
 export const HealthBarContainer = styled.div`
@@ -45,9 +52,9 @@ export const HealthBarContainer = styled.div`
 
 export const HealthBarBg = styled.div`
   width: 100%;
-  height: 0.75rem;
+  height: 0.6rem;
   background: #262626;
-  border-radius: 9999px;
+  border-radius: 50px;
   overflow: hidden;
   border: 1px solid #404040;
 `;
@@ -64,7 +71,7 @@ export const StatusCard = styled.div`
   width: 100%;
   background: #1a1a1a;
   backdrop-filter: blur(12px);
-  border-radius: 0.75rem;
+  border-radius: 4px;
   padding: 10px;
   border: 1px solid #2a2a2a;
 `;
@@ -79,6 +86,7 @@ export const StatusHeader = styled.div`
   h3 {
     color: white;
     margin: 0;
+    font-size: 0.9rem;
   }
 `;
 
@@ -88,7 +96,7 @@ export const LogBox = styled.div`
   width: 100%;
   flex-direction: column;
   align-items: center;
-  padding: 1rem;
+  padding: 10px;
   background: #111;
   border: 1px solid #d1d1d1;
   border-radius: 6px;
@@ -96,7 +104,27 @@ export const LogBox = styled.div`
   color: #e1e1e1;
   gap: 0.5rem;
   z-index: 999;
-  max-height: 260px;
+  height: 260px;
+  min-width: 100%;
+
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,0,0,0.5);
+  }
 
   & > h4 {
     font-size: 0.9rem;
@@ -146,16 +174,16 @@ export const TypingText = styled.span<{ $chars: number }>`
 `;
 
 export const MovesetContainer = styled.div`
-  display: grid;
-  place-items: start;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   gap: 10px;
   background: #1a1a1a;
   border: 1px solid #2a2a2a;
   padding: 10px;
   width: 100%;
-  height: auto;
-  border-radius: 0.75rem;
+  height: 100%;
+  border-radius: 4px;
 `
 
 export const MovesetButton = styled.button<{$color?: string, disabled?: boolean}>`

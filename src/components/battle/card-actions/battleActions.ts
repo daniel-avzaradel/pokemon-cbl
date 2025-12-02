@@ -80,9 +80,8 @@ export function useBattle(userCard: selectedPokemonProps, enemyCard: selectedPok
     // -------------------------------------------------
     const attack = useCallback(
         (attacker: playerTurn) => {
-            const crit = Math.random() <= 1.2;
+            const crit = Math.random() <= 0.2;
             const minDmg = 3;
-            console.log('attacker', attacker);
 
             if (attacker === "user") {
                 const dmg = Math.max(userPokemon.currentStats.atk - enemyPokemon.currentStats.def, minDmg);
@@ -126,8 +125,6 @@ export function useBattle(userCard: selectedPokemonProps, enemyCard: selectedPok
     const getNextAttacker = (speedCount: speedCountType) => {
         let next: playerTurn = speedCount.defender
         if (firstTurn) {
-            console.log('first turn');
-
             if (turnRef.current === "enemy") {
                 setTurn("user");
                 turnRef.current = 'user'
@@ -135,7 +132,6 @@ export function useBattle(userCard: selectedPokemonProps, enemyCard: selectedPok
                 setTurn("enemy");
                 turnRef.current = "enemy"
             }
-            console.log(turnRef.current);
             next = turnRef.current
             return next
         }

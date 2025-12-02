@@ -5,6 +5,7 @@ export const BattleContainer = styled.div`
   flex-direction: column;
   color: white;
   height: 100%;
+  padding: 0 1rem;
 
   & > div {
     max-height: 100%;
@@ -32,6 +33,8 @@ export const IconWrapper = styled.div`
   justify-content: center;
   gap: 1rem;
   font-size: 1.8rem;
+  margin-bottom: 1rem;
+  
   & > svg {
     margin: 0;
     filter: drop-shadow(0px 2px 2px rgba(255, 255, 255, 0.9));
@@ -41,9 +44,9 @@ export const IconWrapper = styled.div`
 export const LevelContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  width: 100%;
   gap: 1.25rem;
   border-radius: 10px;
-  padding: 1rem;
 `
 
 export const slideL = keyframes`
@@ -73,7 +76,7 @@ export const CardGrid = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   justify-content: center;
   gap: 0.5rem;
-  padding: .5rem;
+  padding: 1rem;
   width: 100%;
   height: 100%;
 
@@ -91,12 +94,11 @@ export const PlayersGrid = styled.div`
   border-radius: 15px;
   width: 100%;
   height: 100%;
-
-  & > img {
-    position: absolute;
-    left: 44%;
-  }
   
+  & > * {
+    flex: 1;
+  }
+
   & > div:first-child {
     animation: ${slideL} 3s linear;
     transition: 0.2s ease-in-out;

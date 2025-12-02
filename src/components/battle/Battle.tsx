@@ -18,8 +18,6 @@ const Battle = ({ user, updateUser }: BattleProps) => {
 
   return (
     <BattleContainer>
-      <BattleHeader>
-      </BattleHeader>
       <IconWrapper>
         <span>Battle</span>
         <Swords size={48} color='rgb(127, 29, 29)' />
