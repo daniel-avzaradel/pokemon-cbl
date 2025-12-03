@@ -10,6 +10,15 @@ export type Stats = {
   speed: number;
 };
 
+export type currentStats = {
+  hp: number;
+  atk: number;
+  def: number;
+  spAtk: number;
+  spDef: number;
+  spd: number;
+};
+
 export type PokemonTypes = 'fire' | 'water'| 'grass'| 'electric' | 'psychic' | 'fighting' | 'normal' | 'ice' | 'poison' | 'ground' | 'flying' | 'bug' | 'rock' | 'ghost' | 'dragon' | 'dark' | 'steel' | 'fairy';
 
 export const PokemonTypes = [ 'fire', 'water', 'grass', 'electric', 'psychic', 'fighting', 'normal', 'ice', 'poison', 'ground', 'flying', 'bug', 'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy' ] as Array<PokemonTypes>;
@@ -22,6 +31,7 @@ export type FetchedPokemon = {
   imageUrl: string | null;
   stats: Stats;
   isFoil?: boolean;
+  currentStats: currentStats
 };
 
 export function usePokemon() {
@@ -81,7 +91,14 @@ export function usePokemon() {
           });
         }
 
-        fetched.push({ uid, id, name: d.name, types, imageUrl, stats });
+        fetched.push({ uid, id, name: d.name, types, imageUrl, stats, currentStats: {
+          hp: stats.hp,
+          atk: stats.attack,
+          def: stats.defense,
+          spAtk: stats.specialAttack,
+          spDef: stats.specialDefense,
+          spd: stats.speed
+        } });
           });
         }
 

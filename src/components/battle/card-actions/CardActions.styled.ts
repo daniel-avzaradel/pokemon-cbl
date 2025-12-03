@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 
 const fadeIn = keyframes`
   0% {
@@ -13,16 +13,17 @@ const fadeIn = keyframes`
 `
 
 export const ActionsPageContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    max-height: 100%;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-height: 100%;
+  width: 100%;
 `
 
-export const ActionsContainer = styled.div`
+export const ActionsContainer = styled.div<{ $return?: boolean }>`
   display: flex;
+  position: relative;
   justify-content: flex-start;
   align-items: center;
   width: 100%;
@@ -33,7 +34,10 @@ export const ActionsContainer = styled.div`
     width: fit-content;
     max-width: 100%;
     flex-shrink: 1;
-    animation: ${fadeIn} 0s linear;
+    ${p => p.$return
+      ? css`animation: none;`
+      : css`animation: ${fadeIn} 2s linear;`
+    }
   }
   & > div:last-child {
     max-width: min-content;
@@ -93,8 +97,8 @@ export const LogBox = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-height: 100%;
-  flex: 1 1 auto;
+  max-height: 400px;
+  flex: 1 1 0;
   overflow: hidden;
   padding: 10px;
 
@@ -113,8 +117,7 @@ export const LogBox = styled.div`
 export const LogContent = styled.div`
   flex: 1 1 auto;
   width: 100%;
-  min-height: 0;
-  overflow-y: auto;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;

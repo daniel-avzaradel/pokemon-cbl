@@ -1,9 +1,10 @@
 import { ArrowBigLeft, Shield, Sword, WandSparkles } from 'lucide-react';
 import { JSX, useEffect, useRef, useState } from 'react';
 import { UserData } from '../../../App';
+import { PokemonPoof } from '../../../utils/SmokeBomb';
 import { PokemonCard } from '../../common/PokemonCard';
+import { selectedPokemonProps } from '../../library/battleSlice';
 import { CardGrid } from '../Battle.styled';
-import { selectedPokemonProps } from '../BattleSystem';
 import { ActionsContainer, ActionsPageContainer, LogBox, LogContent, MovesetButton, MovesetContainer, TurnEventsColumn, TypingText } from './CardActions.styled';
 import { StatusCardComponent } from './StatusCardComponent';
 
@@ -42,11 +43,17 @@ const PokemonActions = ({ user, card, turnState, handleTurn }: PokemonActionsPro
     return: "#111",
   };
 
+  let returnPokemon = card.currentStats.hp <= 0
+
   return (
     <ActionsPageContainer>
       <StatusCardComponent card={card} user={userCard} />
-      <ActionsContainer>
-        <PokemonCard {...{ user }} card={card} />
+      <ActionsContainer $return={returnPokemon}>
+        {returnPokemon ? (
+          <div style={{ position: "relative", width: "250px", height: "250px" }}>
+            <PokemonPoof />
+          </div>
+        ) : <PokemonCard {...{ user }} card={card} />}
         <MovesetContainer>
           {moves.map((move, i) => {
             return (
@@ -108,8 +115,8 @@ interface CardActionProps {
   user: UserData;
   userCard: selectedPokemonProps;
   enemyCard: selectedPokemonProps;
-  log: string[]; 
-  turnState: playerTurn; 
+  log: string[];
+  turnState: playerTurn;
   handleTurn: (action: actionButton) => Promise<void>;
 }
 

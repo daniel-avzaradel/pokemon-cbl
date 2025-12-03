@@ -13,6 +13,7 @@ import LoadingBattle from './LoadingBattle';
 import { useNPCs } from './npcs/useNpcs';
 import TrainerStats from './trainer/TrainerStats';
 import { TrainerCardI, trainersData } from './trainersData';
+import { FetchedPokemon } from '../../hooks/usePokemon';
 
 export const BattleSystem = () => {
   const { id } = useParams();
@@ -27,7 +28,7 @@ export const BattleSystem = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [fullTrainer, setFullTrainer] = useState<UserData | null>(null);
-
+  const [faintedList, setFaintedList] = useState<FetchedPokemon[]>([]);
 
   const { userPokemon, enemyPokemon, turnState, log, handleTurn } = useBattleRedux();
 
@@ -46,40 +47,19 @@ export const BattleSystem = () => {
           pokemon: trainerData.pokemons ?? [],
           imageUrl: trainerData.profile ?? '',
         });
-        setFullTrainer(fetchedTrainer);
+        setFullTrainer(fetchedTrainer.toJSON());
 
         // Get first Pokémon for user and enemy
         const userPokemonToSet = userFromState.battleDeck[0];
-        const enemyPokemonToSet = fetchedTrainer.battleDeck[0];
+        const enemyPokemonToSet = fetchedTrainer.toJSON().battleDeck[0];
 
         if (!userPokemonToSet || !enemyPokemonToSet) {
           throw new Error("No Pokémon available for battle");
         }
 
         // Dispatch to Redux
-        dispatch(setUserPokemon({
-          ...userPokemonToSet,
-          currentStats: {
-            hp: userPokemonToSet.stats.hp,
-            atk: userPokemonToSet.stats.attack,
-            def: userPokemonToSet.stats.defense,
-            spAtk: userPokemonToSet.stats.specialAttack,
-            spDef: userPokemonToSet.stats.specialDefense,
-            spd: userPokemonToSet.stats.speed,
-          }
-        }));
-
-        dispatch(setEnemyPokemon({
-          ...enemyPokemonToSet,
-          currentStats: {
-            hp: enemyPokemonToSet.stats.hp,
-            atk: enemyPokemonToSet.stats.attack,
-            def: enemyPokemonToSet.stats.defense,
-            spAtk: enemyPokemonToSet.stats.specialAttack,
-            spDef: enemyPokemonToSet.stats.specialDefense,
-            spd: enemyPokemonToSet.stats.speed,
-          }
-        }));
+        dispatch(setUserPokemon(userPokemonToSet));
+        dispatch(setEnemyPokemon(enemyPokemonToSet));
 
         // Start battle
         dispatch(startBattle());
@@ -98,12 +78,49 @@ export const BattleSystem = () => {
   const enemyFainted = enemyPokemon?.currentStats.hp! <= 0;
 
   useEffect(() => {
-    if (userFainted) console.log("USER FAINTED!");
-  }, [userFainted]);
 
-  useEffect(() => {
-    if (enemyFainted) console.log("ENEMY FAINTED!");
-  }, [enemyFainted]);
+    if (!userPokemon || !enemyPokemon) return;
+
+    const handleFaint = (
+      fainted: boolean,
+      pokemon: FetchedPokemon | undefined,
+      deck: FetchedPokemon[] | undefined,
+      setPokemon: (p: any) => void,
+      owner: "user" | "enemy"
+    ) => {
+
+      if (!fainted || !pokemon || !deck) return;
+
+      // Compute the new fainted list without updating state yet
+      const newFaintedList = [...faintedList, pokemon];
+
+      // Filter remaining Pokémon
+      const remaining = deck.filter(p => !newFaintedList.some(f => f.uid === p.uid));
+
+      if (remaining.length === 0) {
+        // Trigger toast ONCE and stop
+        toast.error(`${owner === "user" ? "Your" : "Enemy"} has no Pokémon left!`);
+        return;
+      }
+
+      // Pick random new Pokémon
+      const randomIndex = Math.floor(Math.random() * remaining.length);
+      const newPokemon = remaining[randomIndex];
+
+      // Update state
+      setFaintedList(newFaintedList);
+      setPokemon({...newPokemon});
+    };
+
+    handleFaint(userFainted, userPokemon, userFromState?.battleDeck,
+      p => dispatch(setUserPokemon(p)), "user");
+
+    handleFaint(enemyFainted, enemyPokemon, fullTrainer?.battleDeck,
+      p => dispatch(setEnemyPokemon(p)), "enemy");
+
+  }, [userFainted, enemyFainted, userPokemon, enemyPokemon, userFromState?.battleDeck, fullTrainer?.battleDeck, dispatch]);
+
+
 
   // Wait until Redux has Pokémon
   if (loading) return <LoadingBattle />;

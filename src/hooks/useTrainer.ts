@@ -32,4 +32,15 @@ export class User implements UserData {
   setProfilePicture(pic: string) {
     this.profilePicture = pic;
   }
+
+  toJSON() {
+  return {
+    username: this.username,
+    coins: this.coins,
+    collection: this.collection,
+    battleDeck: this.battleDeck,
+    arena: this.arena,
+    profilePicture: this.profilePicture
+  };
+}
 }

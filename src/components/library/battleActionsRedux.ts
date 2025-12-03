@@ -1,6 +1,6 @@
 import { AppDispatch, RootState } from "./store";
 import { useDispatch, useSelector } from "react-redux";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import {
     updateUserHp,
     updateEnemyHp,
@@ -57,6 +57,13 @@ export function useBattleRedux() {
             dispatch(setTurn("user"));
         }
     }, [turn, attack, userPokemon, enemyPokemon, dispatch]);
+
+    useEffect(() =>{
+        if(userPokemon?.currentStats.hp! <= 0) {
+            console.log('dead');
+            
+        }
+    }, [userPokemon])
 
     return {
         userPokemon,
