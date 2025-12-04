@@ -33,6 +33,7 @@ export const BattleSystem = () => {
   const { userPokemon, enemyPokemon, turnState, log, handleTurn } = useBattleRedux();
 
   useEffect(() => {
+
     dispatch(resetBattle())
 
     if (!userFromState || !trainerData) return;
@@ -125,6 +126,10 @@ export const BattleSystem = () => {
   // Wait until Redux has Pokémon
   if (loading) return <LoadingBattle />;
   if (error) {
+    if(userFromState?.battleDeck.length === 0) {
+      toast.error("You dont have any cards in your deck")
+      return <Navigate to="/battle" replace />;
+    }
     toast.error("Failed to load battle data");
     return <Navigate to="/battle" replace />;
   }
