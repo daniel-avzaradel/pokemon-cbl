@@ -60,10 +60,17 @@ export function useBattleRedux() {
 
     useEffect(() =>{
         if(userPokemon?.currentStats.hp! <= 0) {
-            console.log('dead');
+            console.log('dead', userPokemon);
             
         }
     }, [userPokemon])
+
+    useEffect(() =>{
+        if(enemyPokemon?.currentStats.hp! <= 0) {
+            console.log('dead', enemyPokemon);
+            
+        }
+    }, [enemyPokemon])
 
     return {
         userPokemon,

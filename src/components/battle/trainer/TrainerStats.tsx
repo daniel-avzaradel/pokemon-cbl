@@ -14,10 +14,6 @@ interface TrainerStatsProps {
 
 const TrainerStats = ({ trainer, selectedPokemon }: TrainerStatsProps) => {
 
-    useEffect(() => {
-        console.log(selectedPokemon);
-    }, [selectedPokemon])
-
     return (
         <TrainerStatsContainer>
             <TrainerStatsHeader>

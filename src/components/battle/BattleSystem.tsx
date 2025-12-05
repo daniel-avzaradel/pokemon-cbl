@@ -125,7 +125,7 @@ export const BattleSystem = () => {
     handleFaint(enemyFainted, enemyPokemon, fullTrainer?.battleDeck,
       p => dispatch(setEnemyPokemon(p)), "enemy");
 
-  }, [userFainted, enemyFainted, userPokemon, enemyPokemon, userFromState?.battleDeck, fullTrainer?.battleDeck, dispatch]);
+  }, [userFainted, enemyFainted, userFromState?.battleDeck, fullTrainer?.battleDeck, dispatch]);
 
 
 

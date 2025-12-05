@@ -17,7 +17,7 @@ export const ActionsPageContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  max-height: 100%;
+  height: 500px;
   width: 100%;
 `
 
@@ -97,9 +97,7 @@ export const LogBox = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-height: 400px;
-  flex: 1 1 0;
-  overflow: hidden;
+  max-height: 350px;
   padding: 10px;
 
   background: #111;
@@ -116,8 +114,9 @@ export const LogBox = styled.div`
 
 export const LogContent = styled.div`
   flex: 1 1 auto;
+  min-height: 0;
   width: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -127,11 +126,11 @@ export const LogContent = styled.div`
     width: 6px;
   }
   &::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,0.3);
+    background: rgba(255,255,255,0.2);
     border-radius: 10px;
   }
   &::-webkit-scrollbar-thumb:hover {
-    background: rgba(0,0,0,0.5);
+    background: rgba(255,255,255,0.4);
   }
 `;
 
@@ -147,7 +146,6 @@ const blink = keyframes`
 // Pass the text length as a prop
 export const TypingText = styled.span<{ $chars: number }>`
   display: inline-block;
-  overflow: hidden;
   white-space: nowrap;
   text-align: left;
 
@@ -193,8 +191,10 @@ export const TurnEventsColumn = styled.div<{ $rotate?: boolean }>`
   width: 100%;
   flex-direction: column;
   align-items: center;
-  justify-content: start;
+  justify-content: space-between;
   gap: 2rem;
+  height: 500px;
+  box-sizing: border-box;
 
   & > h1 {
     font-size: 1.4rem;
