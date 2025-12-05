@@ -5,7 +5,7 @@ import { Navigate, useLocation, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { UserData } from '../../App';
 import { useBattleRedux } from '../library/battleActionsRedux';
-import { resetBattle, setEnemyPokemon, setUserPokemon, startBattle } from '../library/battleSlice';
+import { addLog, resetBattle, setEnemyPokemon, setUserPokemon, startBattle } from '../library/battleSlice';
 import { AppDispatch } from '../library/store';
 import { BattleContainer, IconWrapper, PlayersGrid } from './Battle.styled';
 import CardActions from './card-actions/CardActions';
@@ -82,7 +82,7 @@ export const BattleSystem = () => {
 
     if (!userPokemon || !enemyPokemon) return;
 
-    const handleFaint = (
+    const handleFaint = async (
       fainted: boolean,
       pokemon: FetchedPokemon | undefined,
       deck: FetchedPokemon[] | undefined,
@@ -110,7 +110,13 @@ export const BattleSystem = () => {
 
       // Update state
       setFaintedList(newFaintedList);
+      const delay = (ms: number) => new Promise(resolve => setTimeout(() => resolve('delay'), ms))
+      let capitalize = (pokemonName: string) => pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1);
+      dispatch(addLog(`${capitalize(pokemon.name)} fainted...`));
+      await delay(1000);
+      dispatch(addLog(`${capitalize(newPokemon.name)} has entered the battlefield`));
       setPokemon({...newPokemon});
+      await delay(1000);
     };
 
     handleFaint(userFainted, userPokemon, userFromState?.battleDeck,
