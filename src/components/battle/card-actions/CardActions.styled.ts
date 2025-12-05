@@ -30,7 +30,7 @@ export const ActionsContainer = styled.div<{ $return?: boolean }>`
   height: 100%;
   gap: 10px;
   
-  & > * {
+  & > *:first-child {
     width: fit-content;
     max-width: 100%;
     flex-shrink: 1;
@@ -97,8 +97,9 @@ export const LogBox = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-height: 350px;
   padding: 10px;
+  flex: 1;
+  min-height: 0;
 
   background: #111;
   border: 1px solid #d1d1d1;
@@ -191,7 +192,7 @@ export const TurnEventsColumn = styled.div<{ $rotate?: boolean }>`
   width: 100%;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 2rem;
   height: 500px;
   box-sizing: border-box;

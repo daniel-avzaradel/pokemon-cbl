@@ -1,11 +1,10 @@
-import { Card, UserData } from '../../../App'
-import { DivColumn, FaintedPokemonStatus, Header, PokemonBox, PokemonTray, TrainerHeaderName, TrainerPokemonStats, TrainerPokemonStatsWrapper, TrainerProfilePic, TrainerStatsContainer, TrainerStatsHeader } from './TrainerStats.styles'
+import { UserData } from '../../../App';
 import DefaultTrainer from '../../../assets/default-trainer-m.jpg';
 import Pokeball from '../../../assets/pokeball2.png';
+import { DivColumn, FaintedPokemonStatus, Header, PokemonBox, PokemonTray, TrainerHeaderName, TrainerPokemonStats, TrainerPokemonStatsWrapper, TrainerProfilePic, TrainerStatsContainer, TrainerStatsHeader } from './TrainerStats.styles';
 
 import { Gem } from 'lucide-react';
 import { selectedPokemonProps } from '../../library/battleSlice';
-import { useEffect } from 'react';
 
 interface TrainerStatsProps {
     trainer: UserData;
@@ -28,7 +27,7 @@ const TrainerStats = ({ trainer, selectedPokemon }: TrainerStatsProps) => {
                             <h2>Achievements:</h2>
                         </div>
                     </Header>
-                    <div style={{ display: 'flex', width: '100%', height: '100%', gap: '2rem' }}>
+                    <div style={{ display: 'flex', width: '100%', height: '100%', gap: '2rem', flexDirection: `${trainer.isNPC ? 'row-reverse' : 'row'}` }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             <TrainerProfilePic $image={trainer.profilePicture ?? DefaultTrainer} />
                             <DivColumn>

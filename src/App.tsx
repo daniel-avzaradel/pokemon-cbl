@@ -36,6 +36,7 @@ export interface UserData {
   battleDeck: Card[];
   arena: ArenaTrainersUnlock[]
   profilePicture?: string;
+  isNPC?: boolean;
 }
 
 const AppContainer = styled.div`

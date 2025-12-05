@@ -12,7 +12,7 @@ interface PokemonActionsProps {
   user: UserData;
   card: selectedPokemonProps;
   turnState: playerTurn,
-  handleTurn: (action: actionButton) => void;
+  handleTurn: (action: actionButton) => Promise<void>;
 }
 
 export type playerTurn = "user" | "enemy"
@@ -24,10 +24,16 @@ const PokemonActions = ({ user, card, turnState, handleTurn }: PokemonActionsPro
   const userCard = user.battleDeck.some(p => p.uid === card.uid);
 
   const handleClick = async (action: actionButton) => {
+    if (disableBtn) return; // hard block spam
+
     setDisableBtn(true);
-    handleTurn(action);
-    setDisableBtn(false);
-  }
+
+    try {
+      await handleTurn(action);  // ← wait until damage, logs, switching, animations finish
+    } finally {
+      setDisableBtn(false);
+    }
+  };
 
   const moves: actionButton[] = ['attack', 'defense', 'special', 'return']
   const icons: Record<string, JSX.Element | null> = {

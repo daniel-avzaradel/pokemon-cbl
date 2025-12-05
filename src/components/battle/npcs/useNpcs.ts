@@ -9,6 +9,7 @@ interface NPCProps {
     coins: number;
     pokemon: TeamProps[];
     imageUrl?: string;
+    isNPC?: boolean;
 }
 
 export interface Root {
@@ -23,9 +24,9 @@ export interface Result {
   url: string
 }
 
-export async function useNPCs({ username, coins, pokemon, imageUrl }: NPCProps) {
+export async function useNPCs({ username, coins, pokemon, imageUrl, isNPC }: NPCProps) {
 
-  let trainer = new User({ username, coins, profilePicture: imageUrl });
+  let trainer = new User({ username, coins, profilePicture: imageUrl, isNPC });
   let pokemons: Root = await fetch(apiURL()).then(res => res.json());
 
   await Promise.all(

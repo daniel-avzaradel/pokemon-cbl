@@ -47,6 +47,7 @@ export const BattleSystem = () => {
           coins: trainerData.rewardCoins ?? 0,
           pokemon: trainerData.pokemons ?? [],
           imageUrl: trainerData.profile ?? '',
+          isNPC: true
         });
         setFullTrainer(fetchedTrainer.toJSON());
 
@@ -114,9 +115,9 @@ export const BattleSystem = () => {
       let capitalize = (pokemonName: string) => pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1);
       dispatch(addLog(`${capitalize(pokemon.name)} fainted...`));
       await delay(1000);
-      dispatch(addLog(`${capitalize(newPokemon.name)} has entered the battlefield`));
       setPokemon({...newPokemon});
       await delay(1000);
+      dispatch(addLog(`${capitalize(newPokemon.name)} has entered the battlefield`));
     };
 
     handleFaint(userFainted, userPokemon, userFromState?.battleDeck,
