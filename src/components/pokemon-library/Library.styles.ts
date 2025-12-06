@@ -30,13 +30,24 @@ export const Header = styled.div`
 
 export const LibraryCardContainer = styled.div`
   display: flex;
+  flex-basis: 960px;
   flex-wrap: wrap;
-  padding: 1rem;
+  min-height: 0;
+  overflow-y: scroll;
+  padding-right: 1rem;
   gap: 1rem;
-  border-radius: 10px;
   width: 100%;
-  height: 100%;
   box-sizing: border-box;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.4);
+  }
 `
 
 export const LibraryCardWrapper = styled.div<{$type?: string}>`
@@ -120,4 +131,32 @@ export const TypeTag = styled.div<{$type?: string}>`
   border-radius: 4px;
   border: ${p => p.$type ? '1px solid' + singleTypeColors[p.$type as keyof typeof singleTypeColors] : "1px solid #333"};;
   color: ${p => p.$type ? singleTypeColors[p.$type as keyof typeof singleTypeColors] : "#e1e1e1"};
+`
+
+export const ModalPageContainer = styled.div`
+  display: flex;
+  position: absolute;
+  top: 0;  
+  justify-content: center;
+  align-items: center;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 2rem;
+  background: rgba(0,0,0, 0.6);
+`
+
+export const ModalContentContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 50%;
+  box-sizing: border-box;
+  padding: 2rem;
+  background: #1a1a1a;
+  border-radius: 6px;
+  border: 1px solid #444;
+  box-shadow: 0 1px 6px 1px #444;
 `

@@ -4,7 +4,11 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../lib/store'
 import { capitalize } from '../common/utils'
 
-const LibraryCard = () => {
+interface LibraryCardProps {
+    setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const LibraryCard = ({ setOpenModal }: LibraryCardProps) => {
 
     const catalog = useSelector((state: RootState) => state.library.catalog)
     const pokedexEntry = (id: number) => {
@@ -13,11 +17,13 @@ const LibraryCard = () => {
                 : id
     }
 
+    const handleClick = () => setOpenModal(true)
+
     return (
         <LibraryCardContainer>
             {catalog.map(p => {
                 return (
-                <LibraryCardWrapper $type={p.types[0]} key={p.uid}>
+                <LibraryCardWrapper $type={p.types[0]} key={p.uid} onClick={handleClick}>
                     <img src={p.sprite} width={100} />
                     <CardDataDiv>
                         <span>#{pokedexEntry(p.id)} {capitalize(p.name)}</span>
