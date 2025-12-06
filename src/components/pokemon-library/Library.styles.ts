@@ -157,29 +157,47 @@ export const ModalContentContainer = styled.div`
   width: 50%;
   height: 50%;
   box-sizing: border-box;
-  background: #1a1a1a;
+  background: #111;
   border-radius: 6px;
   border: 1px solid #444;
 `
 
-export const ModalContentGrid = styled.div`
+export const ModalContentGrid = styled.div<{$img: string}>`
   display: grid;
   grid-template-columns: 2fr 2fr;
   width: 100%;
   height: 100%;
   place-items: center;
-`
+  background-image: url(${p => p.$img ?? ""});
+  background-size: 75%;
+  background-repeat: no-repeat;
+
+  background-position: -35% 50%;
+`;
 
 export const ModalPokemonDataDiv = styled.div`
-  
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  border: 1px solid #1a1a1a;
+  border-radius: 6px;
+  background: rgba(0,0,0, 0.2);
+  border: 1px solid red;
 `
 
-export const ImageHolder = styled.div<{$img: string}>`
+export const ModalDataHeader = styled.div`
   display: flex;
-  background: url(${p => p.$img ?? ""});
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
+  justify-content: flex-start;
+  padding: 1rem;
+  width: 100%;
+  height: auto;
+  border: 1px solid #ccc;
+`
+
+export const ImageHolder = styled.div`
+  display: flex;
   width: 100%;
   height: 100%;
 `
