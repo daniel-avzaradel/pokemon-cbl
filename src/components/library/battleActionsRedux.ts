@@ -1,6 +1,6 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Card, UserData } from "../../App";
-import { capitalize } from "../common/utils";
+import { capitalize, delay } from "../common/utils";
 
 export type TurnState =
     | "idle"
@@ -93,7 +93,9 @@ export function useBattleRedux(userTrainer: UserData, enemyTrainer: UserData) {
     // -----------------------------
     if (u.stats.speed === e.stats.speed) {
       // Speed tie → show coin toss
-      setShowCoinOverlay(true);
+      setTimeout(() => {
+        setShowCoinOverlay(true);
+      }, 1500)
     } else if (u.stats.speed > e.stats.speed) {
       pushLog(`${capitalize(u.name)} will act first!`);
       setTurnState("user-turn");
@@ -109,14 +111,14 @@ export function useBattleRedux(userTrainer: UserData, enemyTrainer: UserData) {
   const handleCoinResult = async (side: "heads" | "tails") => {
     if (!userPokemon || !enemyPokemon) return;
 
-    await new Promise(resolve => setTimeout(resolve, 1000)); // slight delay before logging
+    await delay(500)
 
     pushLog(`Coin toss result: ${side}`);
     if (side === "heads") {
       pushLog(`${userTrainer.username}'s ${' ' + capitalize(userPokemon.name)} will act first!`);
       setTurnState("user-turn");
     } else {
-      pushLog(`${userTrainer.username}'s ${' ' + capitalize(enemyPokemon.name)} will act first!`);
+      pushLog(`${enemyTrainer.username}'s ${' ' + capitalize(enemyPokemon.name)} will act first!`);
       setTurnState("enemy-turn");
     }
 

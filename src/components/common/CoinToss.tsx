@@ -34,8 +34,8 @@ export const CoinFlipOverlay: React.FC<CoinFlipOverlayProps> = ({
   setSide(null);
 
   const random = Math.random();
-  const result: CoinSide = random < 0.5 ? "heads" : "tails";
-  const spins = Math.floor(random * 4) + 4;
+  const result: CoinSide = random <= 0.5 ? "heads" : "tails";
+  const spins = 6;
   const finalRotation = result === "heads" ? 360 * spins : 360 * spins + 180;
 
   setRotation(finalRotation);
