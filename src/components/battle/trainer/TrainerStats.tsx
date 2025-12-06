@@ -1,6 +1,6 @@
 import { UserData } from '../../../App';
-import DefaultTrainer from '../../../assets/default-trainer-m.jpg';
-import Pokeball from '../../../assets/pokeball2.png';
+import DefaultTrainer from '/assets/default-trainer-m.jpg';
+import Pokeball from '/assets/pokeball2.png';
 import { DivColumn, FaintedPokemonStatus, Header, PokemonBox, PokemonTray, TrainerHeaderName, TrainerPokemonStats, TrainerPokemonStatsWrapper, TrainerProfilePic, TrainerStatsContainer, TrainerStatsHeader } from './TrainerStats.styles';
 
 import { Gem } from 'lucide-react';

@@ -1,5 +1,5 @@
 import styled, { css, keyframes } from "styled-components";
-import Pokeball from '../../../assets/pokeball.png'
+import Pokeball from '/assets/pokeball.png'
 
 export const TrainerStatsContainer = styled.div`
     display: flex;

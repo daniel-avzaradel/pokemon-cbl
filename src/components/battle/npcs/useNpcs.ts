@@ -1,16 +1,10 @@
+import { Card } from "../../../App";
 import { User } from "../../../hooks/useTrainer";
 import { apiURL } from "../../../utils/constants";
 import { generateCardFromPokemon } from "../../../utils/generateCardFromPokemon";
 import { TeamProps } from "../trainerUtils";
 import { PokemonRoot } from "./jsonTypes";
 
-interface NPCProps {
-    username: string;
-    coins: number;
-    pokemon: TeamProps[];
-    imageUrl?: string;
-    isNPC?: boolean;
-}
 
 export interface Root {
   count: number
@@ -24,25 +18,43 @@ export interface Result {
   url: string
 }
 
-export async function useNPCs({ username, coins, pokemon, imageUrl, isNPC }: NPCProps) {
+interface NPCProps {
+    username: string;
+    coins: number;
+    pokemon: TeamProps[];
+    imageUrl?: string;
+    isNPC?: boolean;
+}
 
-  let trainer = new User({ username, coins, profilePicture: imageUrl, isNPC });
-  let pokemons: Root = await fetch(apiURL()).then(res => res.json());
+export async function generateTeamFromNPCPokemons(pokemonList: TeamProps[]) {
+  const pokemons: Root = await fetch(apiURL()).then(res => res.json());
+  const outputTeam: Card[] = [];
 
   await Promise.all(
-    pokemon.map(async (p) => {
+    pokemonList.map(async (p) => {
       try {
-        let find = pokemons.results.find(pok => pok.name === p.name);
-        if (find) {
-          let pokemonData: PokemonRoot = await fetch(find.url).then(res => res.json());
-          let final = await generateCardFromPokemon(pokemonData.id);
-          trainer.addCardToDeck(final);
-        }
-      } catch (error) {
-        throw new Error("Error while fetching Pokemon");
+        const found = pokemons.results.find(pk => pk.name === p.name);
+        if (!found) return;
+
+        const pokemonData: PokemonRoot = await fetch(found.url).then(res => res.json());
+        const finalCard = await generateCardFromPokemon(pokemonData.id);
+
+        outputTeam.push(finalCard);
+      } catch (e) {
+        console.error("Error generating NPC team card:", e);
       }
     })
   );
+
+  return outputTeam;
+}
+
+export async function useNPCs({ username, coins, pokemon, imageUrl, isNPC }: NPCProps) {
+  const trainer = new User({ username, coins, profilePicture: imageUrl, isNPC });
+
+  const fullTeam = await generateTeamFromNPCPokemons(pokemon);
+
+  fullTeam.forEach(card => trainer.addCardToDeck(card));
 
   return trainer;
 }

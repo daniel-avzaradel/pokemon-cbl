@@ -2,23 +2,23 @@ import { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { Login } from './components/Login';
 import { NavigationComponent } from './components/Navigation';
+import { trainersData } from './components/battle/trainersData';
 import { MyCards } from './components/my-cards/MyCards';
 import { Shop } from './components/shop/Shop';
 import { FetchedPokemon as HookFetchedPokemon } from './hooks/usePokemon';
-import { trainersData } from './components/battle/trainersData';
 
-import Library from './components/library/Library';
-import Battle from './components/battle/Battle';
 import styled from 'styled-components';
+import Battle from './components/battle/Battle';
+import Library from './components/library/Library';
 
+import { Provider, useDispatch } from 'react-redux';
 import {
   createBrowserRouter,
   Navigate,
   RouterProvider,
 } from "react-router";
 import { BattleSystem } from './components/battle/BattleSystem';
-import { Provider, useDispatch, useSelector } from 'react-redux';
-import { RootState, store } from './components/library/store';
+import { store } from './components/library/store';
 import { setUser } from './components/library/userSlice';
 
 
@@ -67,7 +67,7 @@ export default function App() {
   const handleLogin = (username: string) => {
     const newUser: UserData = {
       username,
-      coins: 200,
+      coins: 1200,
       collection: [],
       battleDeck: [],
       arena: trainersData.map(t => ({

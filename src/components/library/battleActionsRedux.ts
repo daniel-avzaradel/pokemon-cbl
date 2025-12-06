@@ -1,99 +1,135 @@
-import { AppDispatch, RootState } from "./store";
-import { useDispatch, useSelector } from "react-redux";
-import { useCallback, useEffect } from "react";
-import {
-    updateUserHp,
-    updateEnemyHp,
-    addLog,
-    setTurn,
-} from "./battleSlice.ts";
+import { useEffect, useState, useCallback, useRef } from "react";
+import { Card, UserData } from "../../App";
+import { capitalize } from "../common/utils";
 
-export type PlayerTurn = 'user' | 'enemy';
-export type ActionButton = "attack" | "defense" | "special" | "return";
+export type TurnState =
+    | "idle"
+    | "user-turn"
+    | "enemy-turn"
+    | "resolving"
+    | "finished";
 
-export function useBattleRedux() {
+export function useBattleRedux(userTrainer: UserData, enemyTrainer: UserData) {
+  const [userPokemon, setUserPokemon] = useState<Card | null>(null);
+  const [enemyPokemon, setEnemyPokemon] = useState<Card | null>(null);
 
-    const dispatch = useDispatch<AppDispatch>();
-    const { userPokemon, enemyPokemon, turn, log } = useSelector((state: RootState) => state.battle);
+  const [turnState, setTurnState] = useState<TurnState>("idle");
+  const [log, setLog] = useState<string[]>([]);
 
-    const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
-    const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+  // -----------------------------
+  // Coin toss overlay control
+  // -----------------------------
+  const [showCoinOverlay, setShowCoinOverlay] = useState(false);
 
-    const attack = useCallback(async (attacker: PlayerTurn) => {
-        if (!userPokemon || !enemyPokemon) return;
+  // Logging queue
+  const logQueue = useRef<string[]>([]);
+  const isLogging = useRef(false);
 
-        const isUser = attacker === "user";
-        const attackerPoke = isUser ? userPokemon : enemyPokemon;
-        const defenderPoke = isUser ? enemyPokemon : userPokemon;
+  // -----------------------------
+  // Logging function
+  // -----------------------------
+  const pushLog = useCallback((text: string) => {
+    logQueue.current.push(text);
 
-        if (attackerPoke.currentStats.hp <= 0 || defenderPoke.currentStats.hp <= 0) return;
+    if (!isLogging.current) {
+      isLogging.current = true;
+      processLogQueue();
+    }
+  }, []);
 
-        const minDmg = 3;
-        const crit = Math.random() <= 0.2;
+  const processLogQueue = useCallback(() => {
+    if (logQueue.current.length === 0) {
+      isLogging.current = false;
+      return;
+    }
 
-        const rawDmg = Math.max(attackerPoke.currentStats.atk - defenderPoke.currentStats.def, minDmg);
-        const finalDmg = crit ? rawDmg * 2 : rawDmg;
+    const next = logQueue.current.shift()!;
+    setLog(prev => [...prev, next]);
+    setTimeout(processLogQueue, 600);
+  }, []);
 
-        // ❗ Clamp HP to 0
-        const newHp = Math.max(defenderPoke.currentStats.hp - finalDmg, 0);
+  // -----------------------------
+  // Initialize battle
+  // -----------------------------
+  useEffect(() => {
+    if (!userTrainer || !enemyTrainer) return;
 
-        if (isUser) {
-            dispatch(updateEnemyHp(newHp));
-        } else {
-            dispatch(updateUserHp(newHp));
-        }
+    const u = userTrainer.battleDeck[0];
+    const e = enemyTrainer.battleDeck[0];
 
-        dispatch(addLog(
-            `${capitalize(attackerPoke.name)} attacks for ${finalDmg}${crit ? " (critical!)" : ""} damage!`
-        ));
+    if (!u || !e) return;
 
-        await delay(500);
+    // initialize currentStats
+    setUserPokemon({
+      ...u,
+      currentStats: {
+        hp: u.stats.hp,
+        atk: u.stats.attack,
+        def: u.stats.defense,
+        spAtk: u.stats.specialAttack,
+        spDef: u.stats.specialDefense,
+        spd: u.stats.speed
+      }
+    });
 
-        return newHp === 0;
-    }, [userPokemon, enemyPokemon, dispatch]);
+    setEnemyPokemon({
+      ...e,
+      currentStats: {
+        hp: e.stats.hp,
+        atk: e.stats.attack,
+        def: e.stats.defense,
+        spAtk: e.stats.specialAttack,
+        spDef: e.stats.specialDefense,
+        spd: e.stats.speed
+      }
+    });
 
-    const handleTurn = useCallback(async (action: ActionButton) => {
-        if (!userPokemon || !enemyPokemon) return;
+    pushLog("The battle begins!");
+    pushLog(`${userTrainer.username} sends out ${u.name}!`);
+    pushLog(`${enemyTrainer.username} sends out ${e.name}!`);
 
-        if (userPokemon.currentStats.hp <= 0 || enemyPokemon.currentStats.hp <= 0) return;
+    // -----------------------------
+    // Decide who goes first
+    // -----------------------------
+    if (u.stats.speed === e.stats.speed) {
+      // Speed tie → show coin toss
+      setShowCoinOverlay(true);
+    } else if (u.stats.speed > e.stats.speed) {
+      pushLog(`${capitalize(u.name)} will act first!`);
+      setTurnState("user-turn");
+    } else {
+      pushLog(`${capitalize(e.name)} will act first!`);
+      setTurnState("enemy-turn");
+    }
+  }, [userTrainer, enemyTrainer, pushLog]);
 
-        if (action === "attack") {
-            const fainted = await attack(turn);
-            if (fainted) return;
-        }
+  // -----------------------------
+  // Handle coin toss result
+  // -----------------------------
+  const handleCoinResult = async (side: "heads" | "tails") => {
+    if (!userPokemon || !enemyPokemon) return;
 
-        const nextTurn: PlayerTurn = turn === "user" ? "enemy" : "user";
-        dispatch(setTurn(nextTurn));
+    await new Promise(resolve => setTimeout(resolve, 1000)); // slight delay before logging
 
-        if (turn === "user" && nextTurn === "enemy") {
-            if (enemyPokemon.currentStats.hp <= 0) return;
+    pushLog(`Coin toss result: ${side}`);
+    if (side === "heads") {
+      pushLog(`${userTrainer.username}'s ${' ' + capitalize(userPokemon.name)} will act first!`);
+      setTurnState("user-turn");
+    } else {
+      pushLog(`${userTrainer.username}'s ${' ' + capitalize(enemyPokemon.name)} will act first!`);
+      setTurnState("enemy-turn");
+    }
 
-            await delay(500);
-            const fainted = await attack("enemy");
-            if (fainted) return;
-            dispatch(setTurn("user"));
-        }
-    }, [turn, attack, userPokemon, enemyPokemon, dispatch]);
+    setShowCoinOverlay(false);
+  };
 
-    useEffect(() => {
-        if (userPokemon?.currentStats.hp! <= 0) {
-            console.log('dead', userPokemon);
-
-        }
-    }, [userPokemon])
-
-    useEffect(() => {
-        if (enemyPokemon?.currentStats.hp! <= 0) {
-            console.log('dead', enemyPokemon);
-
-        }
-    }, [enemyPokemon])
-
-    return {
-        userPokemon,
-        enemyPokemon,
-        turnState: turn,
-        log,
-        handleTurn,
-    };
+  return {
+    userPokemon,
+    enemyPokemon,
+    turnState,
+    log,
+    pushLog,
+    showCoinOverlay,
+    handleCoinResult
+  };
 }
