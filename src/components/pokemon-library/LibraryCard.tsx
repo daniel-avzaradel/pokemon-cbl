@@ -3,12 +3,14 @@ import { CardDataDiv, LibraryCardContainer, LibraryCardWrapper, TypeTag } from '
 import { useSelector } from 'react-redux'
 import { RootState } from '../lib/store'
 import { capitalize } from '../common/utils'
+import { FetchedPokemon } from 'src/hooks/usePokemon'
 
 interface LibraryCardProps {
     setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+    setSelectedPokemon: React.Dispatch<React.SetStateAction<FetchedPokemon | null>>;
 }
 
-const LibraryCard = ({ setOpenModal }: LibraryCardProps) => {
+const LibraryCard = ({ setOpenModal, setSelectedPokemon }: LibraryCardProps) => {
 
     const catalog = useSelector((state: RootState) => state.library.catalog)
     const pokedexEntry = (id: number) => {
@@ -17,13 +19,16 @@ const LibraryCard = ({ setOpenModal }: LibraryCardProps) => {
                 : id
     }
 
-    const handleClick = () => setOpenModal(true)
+    const handleClick = (pokemon: FetchedPokemon) => {
+        setOpenModal(true)
+        setSelectedPokemon(pokemon)
+    }
 
     return (
         <LibraryCardContainer>
             {catalog.map(p => {
                 return (
-                <LibraryCardWrapper $type={p.types[0]} key={p.uid} onClick={handleClick}>
+                <LibraryCardWrapper $type={p.types[0]} key={p.uid} onClick={() => handleClick(p)}>
                     <img src={p.sprite} width={100} />
                     <CardDataDiv>
                         <span>#{pokedexEntry(p.id)} {capitalize(p.name)}</span>

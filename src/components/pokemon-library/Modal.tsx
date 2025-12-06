@@ -1,18 +1,25 @@
 import React from 'react'
-import { ModalContentContainer, ModalPageContainer } from './Library.styles'
+import { ImageHolder, ModalButton, ModalContentContainer, ModalContentGrid, ModalPageContainer } from './Library.styles'
+import { FetchedPokemon } from 'src/hooks/usePokemon';
+import { Navigate } from 'react-router-dom';
 
 interface ModalProps {
     setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+    selectedPokemon: FetchedPokemon | null
 }
 
-const Modal = ({ setOpenModal }: ModalProps) => {
+const Modal = ({ selectedPokemon, setOpenModal }: ModalProps) => {
 
     const handleClick = () => setOpenModal(false)
+    if(!selectedPokemon) return <Navigate to="/library" replace />
 
     return (
-        <ModalPageContainer>
-            <ModalContentContainer onClick={handleClick}>
-                <h1>MODAL CONTENT</h1>
+        <ModalPageContainer onClick={handleClick}>
+            <ModalContentContainer onClick={(e) => e.stopPropagation()}>
+                <ModalContentGrid>
+                    <ImageHolder $img={selectedPokemon.imageUrl} />
+                </ModalContentGrid>
+                <ModalButton onClick={handleClick}>Close</ModalButton>
             </ModalContentContainer>
         </ModalPageContainer>
     )

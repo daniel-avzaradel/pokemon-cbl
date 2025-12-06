@@ -35,6 +35,7 @@ export const LibraryCardContainer = styled.div`
   min-height: 0;
   overflow-y: scroll;
   padding-right: 1rem;
+  padding-top: 4px;
   gap: 1rem;
   width: 100%;
   box-sizing: border-box;
@@ -50,7 +51,7 @@ export const LibraryCardContainer = styled.div`
   }
 `
 
-export const LibraryCardWrapper = styled.div<{$type?: string}>`
+export const LibraryCardWrapper = styled.div<{ $type?: string }>`
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -64,11 +65,11 @@ export const LibraryCardWrapper = styled.div<{$type?: string}>`
   gap: 0 1rem;
   border: 1px solid #555;
   &:hover {
-    transform: scale(1.05);
+    background: ${p => darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 80)}
   }
 `
 
-export const CardDataDiv = styled.div<{$type?: string}>`
+export const CardDataDiv = styled.div<{ $type?: string }>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -83,7 +84,7 @@ export const CardDataDiv = styled.div<{$type?: string}>`
  * @param percent - how much to darken (0-100)
  */
 function darkenHex(hex: string, percent: number): string {
-  if(!hex) return ""
+  if (!hex) return ""
   // Remove the hash if present
   hex = hex.replace(/^#/, '');
 
@@ -121,7 +122,7 @@ function darkenHex(hex: string, percent: number): string {
   return rgbHex;
 }
 
-export const TypeTag = styled.div<{$type?: string}>`
+export const TypeTag = styled.div<{ $type?: string }>`
   display: flex;
   padding: 2px 6px;
   font-size: 0.7rem;
@@ -149,14 +150,67 @@ export const ModalPageContainer = styled.div`
 
 export const ModalContentContainer = styled.div`
   display: flex;
+  position: relative;
   justify-content: center;
   align-items: center;
+  padding: 10px;
   width: 50%;
   height: 50%;
   box-sizing: border-box;
-  padding: 2rem;
   background: #1a1a1a;
   border-radius: 6px;
   border: 1px solid #444;
-  box-shadow: 0 1px 6px 1px #444;
 `
+
+export const ModalContentGrid = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 2fr;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+`
+
+export const ModalPokemonDataDiv = styled.div`
+  
+`
+
+export const ImageHolder = styled.div<{$img: string}>`
+  display: flex;
+  background: url(${p => p.$img ?? ""});
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+`
+
+export const ModalButton = styled.button`
+  position: absolute;
+  background: linear-gradient(to right, #7f1d1d, #450a0a);
+  color: white;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(202, 138, 4, 0.3);
+  cursor: pointer;
+  transition: all 0.5s ease;
+  animation: fadeIn 0.5s ease-in-out;
+  animation-fill-mode: backwards;
+  margin-top: 2rem;
+  bottom: 5%;
+  transition: 0.5s ease-in-out;
+
+  animation-delay: .2s;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  &:hover {
+    background: linear-gradient(to right, #991b1b, #7f1d1d);
+  }
+`;
