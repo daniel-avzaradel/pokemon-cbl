@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { singleTypeColors } from "../common/PokemonCards.styles";
+import { singleTypeColors, singleTypeColorsLib } from "../common/PokemonCards.styles";
 
 export const Container = styled.div`
     display: flex;
@@ -33,8 +33,6 @@ export const LibraryCardContainer = styled.div`
   flex-wrap: wrap;
   padding: 1rem;
   gap: 1rem;
-  background: #333;
-  border: 1px solid #444;
   border-radius: 10px;
   width: 100%;
   height: 100%;
@@ -49,22 +47,24 @@ export const LibraryCardWrapper = styled.div<{$type?: string}>`
   width: 24%;
   color: #333;
   box-sizing: border-box;
-  background: ${p => p.$type ? singleTypeColors[p.$type as keyof typeof singleTypeColors] : "#333"};
+  background: ${p => p.$type ? darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 60) : "#333"};;
   transition: 0.2s ease-in-out;
   cursor: pointer;
   padding: 2px 10px;
   gap: 0 1rem;
-
+  border: 1px solid #ccc;
   &:hover {
     transform: scale(1.05);
   }
 `
 
-export const CardDataDiv = styled.div`
+export const CardDataDiv = styled.div<{$type?: string}>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+  border: ${p => p.$type ? '1px solid' + singleTypeColors[p.$type as keyof typeof singleTypeColors] : "#333"};
+  color: #d1d1d1;
 `
 
 /**
@@ -115,7 +115,10 @@ export const TypeTag = styled.div<{$type?: string}>`
   display: flex;
   padding: 2px 6px;
   font-size: 0.7rem;
+  font-family: Arial, Helvetica, sans-serif;
   color: white;
-  background: ${p => p.$type ? darkenHex(singleTypeColors[p.$type as keyof typeof singleTypeColors], 50) : "#333"};
+  background: ${p => p.$type ? darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 20) : "#333"};
   border-radius: 4px;
+  border: ${p => p.$type ? '1px solid' + singleTypeColors[p.$type as keyof typeof singleTypeColors] : "#333"};;
+  color: ${p => p.$type ? singleTypeColors[p.$type as keyof typeof singleTypeColors] : "#e1e1e1"};
 `

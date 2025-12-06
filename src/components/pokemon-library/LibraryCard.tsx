@@ -22,7 +22,7 @@ const LibraryCard = () => {
                     <CardDataDiv>
                         <span>#{pokedexEntry(p.id)} {capitalize(p.name)}</span>
                         <div style={{display: 'flex', gap: '4px'}}>
-                            {p.types.map((type, i) => <TypeTag key={i} $type={type}>{type}</TypeTag>)}
+                            {p.types.map((type, i) => <TypeTag key={i} $type={type}>{capitalize(type)}</TypeTag>)}
                         </div>
                     </CardDataDiv>
                 </LibraryCardWrapper>)
