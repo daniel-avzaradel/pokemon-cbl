@@ -13,6 +13,8 @@ interface TrainerStatsProps {
 
 const TrainerStats = ({ trainer, selectedPokemon }: TrainerStatsProps) => {
 
+    const isNpc = trainer.isNPC
+
     return (
         <TrainerStatsContainer>
             <TrainerStatsHeader>
@@ -48,7 +50,7 @@ const TrainerStats = ({ trainer, selectedPokemon }: TrainerStatsProps) => {
 
                         <DivColumn>
 
-                            <PokemonTray>
+                            <PokemonTray $reverse={isNpc}>
                                 {trainer.battleDeck?.map((el, i) => {
                                     return (
                                         <div key={el.uid + i}>
