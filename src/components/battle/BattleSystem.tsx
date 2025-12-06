@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { UserData } from "../../App";
 import { useBattleRedux } from "../library/battleActionsRedux";
 import { BattleContainer, IconWrapper, PlayersGrid } from "./Battle.styled";
-import CardActions from "./card-actions/CardActions";
+import CardActions, { actionButton } from "./card-actions/CardActions";
 import LoadingBattle from "./LoadingBattle";
 import {
   generateTeamFromNPCPokemons,
@@ -114,7 +114,6 @@ export const BattleSystem = () => {
     enemyPokemon,
     turnState,
     log,
-    handleTurn,
     showCoinOverlay,
     handleCoinResult
   } = useBattleRedux(userFromState, safeEnemyTrainer);
@@ -137,6 +136,8 @@ export const BattleSystem = () => {
 
   // In case hook still preparing initial Pokémon
   if (!userPokemon || !enemyPokemon) return <LoadingBattle />;
+
+  const handleTurn = (action: actionButton) => {}
 
   return (
     <BattleContainer>
