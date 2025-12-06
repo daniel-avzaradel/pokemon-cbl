@@ -83,7 +83,7 @@ export const CardDataDiv = styled.div<{ $type?: string }>`
  * @param hex - color in hex format, e.g. "#ff0000"
  * @param percent - how much to darken (0-100)
  */
-function darkenHex(hex: string, percent: number): string {
+export function darkenHex(hex: string, percent: number): string {
   if (!hex) return ""
   // Remove the hash if present
   hex = hex.replace(/^#/, '');
@@ -148,7 +148,7 @@ export const ModalPageContainer = styled.div`
   background: rgba(0,0,0, 0.6);
 `
 
-export const ModalContentContainer = styled.div`
+export const ModalContentContainer = styled.div<{$type: string}>`
   display: flex;
   position: relative;
   justify-content: center;
@@ -157,7 +157,7 @@ export const ModalContentContainer = styled.div`
   width: 50%;
   height: 50%;
   box-sizing: border-box;
-  background: #111;
+  background: ${p => p.$type ? `linear-gradient(to bottom right, ${darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 60)}, ${darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 95)})` : '#444'};
   border-radius: 6px;
   border: 1px solid #444;
 `
@@ -184,7 +184,7 @@ export const ModalPokemonDataDiv = styled.div`
   border: 1px solid #1a1a1a;
   border-radius: 6px;
   background: rgba(0,0,0, 0.2);
-  border: 1px solid red;
+  border: 1px solid #1a1a1a;
 `
 
 export const ModalDataHeader = styled.div`
@@ -194,6 +194,7 @@ export const ModalDataHeader = styled.div`
   width: 100%;
   height: auto;
   border: 1px solid #ccc;
+  border-radius: 4px;
 `
 
 export const ImageHolder = styled.div`
@@ -215,6 +216,7 @@ export const ModalButton = styled.button`
   animation-fill-mode: backwards;
   margin-top: 2rem;
   bottom: 5%;
+  left: 10%;
   transition: 0.5s ease-in-out;
 
   animation-delay: .2s;

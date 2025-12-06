@@ -15,7 +15,7 @@ const Modal = ({ selectedPokemon, setOpenModal }: ModalProps) => {
 
     return (
         <ModalPageContainer onClick={handleClick}>
-            <ModalContentContainer onClick={(e) => e.stopPropagation()}>
+            <ModalContentContainer onClick={(e) => e.stopPropagation()} $type={selectedPokemon.types[0]}>
                 <ModalContentGrid $img={selectedPokemon.imageUrl ?? ""}>
                     <div></div>
                     <ModalPokemonDataDiv>
