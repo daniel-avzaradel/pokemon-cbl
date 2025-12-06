@@ -2,24 +2,26 @@ import { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { Login } from './components/Login';
 import { NavigationComponent } from './components/Navigation';
+import { trainersData } from './components/battle/trainersData';
 import { MyCards } from './components/my-cards/MyCards';
 import { Shop } from './components/shop/Shop';
-import { FetchedPokemon as HookFetchedPokemon } from './hooks/usePokemon';
-import { trainersData } from './components/battle/trainersData';
+import { FetchedPokemon, FetchedPokemon as HookFetchedPokemon } from './hooks/usePokemon';
 
-import Library from './components/library/Library';
-import Battle from './components/battle/Battle';
 import styled from 'styled-components';
+import Battle from './components/battle/Battle';
+import Library from './components/library/Library';
 
+import { Provider, useDispatch } from 'react-redux';
 import {
   createBrowserRouter,
   Navigate,
   RouterProvider,
+  useNavigate,
 } from "react-router";
 import { BattleSystem } from './components/battle/BattleSystem';
-import { Provider, useDispatch, useSelector } from 'react-redux';
-import { RootState, store } from './components/library/store';
+import { store } from './components/library/store';
 import { setUser } from './components/library/userSlice';
+import { generateCardFromPokemon } from './utils/generateCardFromPokemon';
 
 
 export type Card = HookFetchedPokemon;
@@ -36,6 +38,7 @@ export interface UserData {
   battleDeck: Card[];
   arena: ArenaTrainersUnlock[]
   profilePicture?: string;
+  isNPC?: boolean;
 }
 
 const AppContainer = styled.div`
@@ -63,10 +66,11 @@ export default function App() {
     }
   }, []);
 
+
   const handleLogin = (username: string) => {
-    const newUser: UserData = {
+    let newUser: UserData = {
       username,
-      coins: 200,
+      coins: 1500,
       collection: [],
       battleDeck: [],
       arena: trainersData.map(t => ({
@@ -74,9 +78,21 @@ export default function App() {
         unlocked: t.name === "Bug Catcher",
       })),
     };
-    setNewUser(newUser)
-    dispatch(setUser(newUser));
-    localStorage.setItem("pokemonUser", JSON.stringify(newUser));
+
+    async function addRattata() {
+      const rattata = await generateCardFromPokemon(19);
+      console.log(rattata);
+
+      newUser.collection.push(rattata);
+      console.log(newUser);
+
+      // ✅ Update state and dispatch AFTER Pokémon is added
+      setNewUser(newUser);
+      dispatch(setUser(newUser));
+      localStorage.setItem("pokemonUser", JSON.stringify(newUser));
+    }
+
+    addRattata(); // call async function
   };
 
   const handleLogout = () => {
@@ -91,55 +107,30 @@ export default function App() {
     localStorage.setItem("pokemonUser", JSON.stringify(updatedUser));
   };
 
-  if(!user?.username) {
+  if (!user?.username) {
     return <Login onLogin={handleLogin} />
   }
 
   const router = createBrowserRouter([
     {
       path: "/",
-      element: (
-        <AppContainer>
-          <NavigationComponent onLogout={handleLogout} />
-        </AppContainer>
-      ),
+      element: <AppContainer><NavigationComponent onLogout={handleLogout} /></AppContainer>,
       children: [
-        { index: true, element: <Navigate to="/library" replace /> },
+        { index: true, element: user ? <Navigate to="/library" /> : <Login onLogin={handleLogin} /> },
         { path: "library", element: <Library /> },
-        {
-          path: "my-cards",
-          element: <MyCards updateUser={updateUser} />,
-        },
-        {
-          path: "shop",
-          element: <Shop updateUser={updateUser} />,
-        },
-        {
-          path: "battle",
-          element: <Battle updateUser={updateUser} />,
-        },
-        {
-          path: "battle/:id",
-          element: <BattleSystem />,
-        },
+        { path: "my-cards", element: <MyCards updateUser={updateUser} /> },
+        { path: "shop", element: <Shop updateUser={updateUser} /> },
+        { path: "battle", element: <Battle updateUser={updateUser} /> },
+        { path: "battle/:id", element: <BattleSystem /> },
         { path: "*", element: <Navigate to="/library" replace /> },
       ],
     },
   ]);
 
-  if (!user) return (
-    <>
-      <RouterProvider router={router} />
-      <Login onLogin={handleLogin} />
-    </>
-  );
-
   return (
-    <>
-      <Provider store={store}>
-        <RouterProvider router={router} />
-        <ToastContainer position="top-right" autoClose={3000} />
-      </Provider>
-    </>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+      <ToastContainer position="top-right" autoClose={3000} />
+    </Provider>
   );
 }

@@ -1,11 +1,10 @@
-import { FetchedPokemon } from "../../hooks/usePokemon";
 
-import BugCatcher from '../../assets/bug-catcher.jpg';
-import Brock from '../../assets/brock.jpg';
-import TeamRocket from '../../assets/team-rocket.jpg'
-import Daniel from '../../assets/daniel2.png'
-import Ash from '../../assets/ash.png'
 import { TeamProps } from "./trainerUtils";
+import Ash from '/assets/ash.png';
+import Brock from '/assets/brock.jpg';
+import BugCatcher from '/assets/bug-catcher.jpg';
+import Daniel from '/assets/daniel2.png';
+import TeamRocket from '/assets/team-rocket.jpg';
 
 export interface TrainerCardI {
   id: number;

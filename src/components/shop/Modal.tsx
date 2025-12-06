@@ -4,7 +4,7 @@ import { PokemonCard } from '../common/PokemonCard'
 import { FetchedPokemon } from '../../hooks/usePokemon'
 import { UserData } from '../../App';
 
-import PokeBall from '../../assets/pokeball.png'
+import PokeBall from '/assets/pokeball.png'
 
 interface ModalProps {
     revealedCards: FetchedPokemon[];

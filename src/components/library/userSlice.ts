@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Card, UserData } from '../../App';
+import { UserData } from '../../App';
 
 const initialState: UserData = {
   username: '',

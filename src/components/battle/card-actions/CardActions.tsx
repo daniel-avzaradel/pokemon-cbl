@@ -1,20 +1,21 @@
 import { ArrowBigLeft, Shield, Sword, WandSparkles } from 'lucide-react';
 import { JSX, useEffect, useRef, useState } from 'react';
 import { UserData } from '../../../App';
+import { PokemonPoof } from '../../../utils/SmokeBomb';
 import { PokemonCard } from '../../common/PokemonCard';
+import { selectedPokemonProps } from '../../library/battleSlice';
 import { CardGrid } from '../Battle.styled';
-import { selectedPokemonProps } from '../BattleSystem';
 import { ActionsContainer, ActionsPageContainer, LogBox, LogContent, MovesetButton, MovesetContainer, TurnEventsColumn, TypingText } from './CardActions.styled';
 import { StatusCardComponent } from './StatusCardComponent';
+import { TurnState } from '../../library/battleActionsRedux';
 
 interface PokemonActionsProps {
   user: UserData;
   card: selectedPokemonProps;
-  turnState: playerTurn,
+  turnState: TurnState,
   handleTurn: (action: actionButton) => void;
 }
 
-export type playerTurn = "user" | "enemy"
 export type actionButton = "attack" | "defense" | "special" | "return"
 
 const PokemonActions = ({ user, card, turnState, handleTurn }: PokemonActionsProps) => {
@@ -23,10 +24,16 @@ const PokemonActions = ({ user, card, turnState, handleTurn }: PokemonActionsPro
   const userCard = user.battleDeck.some(p => p.uid === card.uid);
 
   const handleClick = async (action: actionButton) => {
+    if (disableBtn) return; // hard block spam
+
     setDisableBtn(true);
-    handleTurn(action);
-    setDisableBtn(false);
-  }
+
+    try {
+      await handleTurn(action);  // ← wait until damage, logs, switching, animations finish
+    } finally {
+      setDisableBtn(false);
+    }
+  };
 
   const moves: actionButton[] = ['attack', 'defense', 'special', 'return']
   const icons: Record<string, JSX.Element | null> = {
@@ -42,16 +49,22 @@ const PokemonActions = ({ user, card, turnState, handleTurn }: PokemonActionsPro
     return: "#111",
   };
 
+  let returnPokemon = card.currentStats.hp <= 0
+
   return (
     <ActionsPageContainer>
       <StatusCardComponent card={card} user={userCard} />
-      <ActionsContainer>
-        <PokemonCard {...{ user }} card={card} />
+      <ActionsContainer $return={returnPokemon}>
+        {returnPokemon ? (
+          <div style={{ position: "relative", width: "250px", height: "250px" }}>
+            <PokemonPoof />
+          </div>
+        ) : <PokemonCard {...{ user }} card={card} />}
         <MovesetContainer>
           {moves.map((move, i) => {
             return (
               <MovesetButton
-                disabled={disableBtn || turnState === 'enemy'}
+                disabled={disableBtn}
                 onClick={() => handleClick(move)}
                 $color={colors[move]}
                 key={i}
@@ -67,7 +80,7 @@ const PokemonActions = ({ user, card, turnState, handleTurn }: PokemonActionsPro
 }
 
 interface TurnEventsProps {
-  turnState: playerTurn;
+  turnState: TurnState;
   log: string[]
 }
 
@@ -75,8 +88,9 @@ interface TurnEventsProps {
 const TurnsEvents = ({ turnState, log }: TurnEventsProps) => {
 
   const contentRef = useRef<HTMLDivElement>(null);
-  let color = turnState == 'user' ? '#16a34a' : "#881e1eff"
-  let rotate = turnState == 'enemy' ? true : false;
+  // let color = turnState == 'user' ? '#16a34a' : "#881e1eff"
+  let color = "#16a34a";
+  let rotate = true;
 
   useEffect(() => {
     const container = contentRef.current;
@@ -89,7 +103,7 @@ const TurnsEvents = ({ turnState, log }: TurnEventsProps) => {
   return (
     <TurnEventsColumn $rotate={rotate}>
       <div>
-        <h1>{turnState == 'enemy' ? `ENEMY'S TURN` : 'YOUR TURN'}</h1>
+        {/* <h1>{turnState == 'enemy' ? `ENEMY'S TURN` : 'YOUR TURN'}</h1> */}
         <ArrowBigLeft color={color} fill={color} size={72} />
       </div>
       <LogBox>
@@ -108,9 +122,9 @@ interface CardActionProps {
   user: UserData;
   userCard: selectedPokemonProps;
   enemyCard: selectedPokemonProps;
-  log: string[]; 
-  turnState: playerTurn; 
-  handleTurn: (action: actionButton) => Promise<void>;
+  log: string[];
+  turnState: TurnState;
+  handleTurn: (action: actionButton) => void;
 }
 
 const CardActions = ({ log, turnState, handleTurn, user, userCard, enemyCard }: CardActionProps) => {

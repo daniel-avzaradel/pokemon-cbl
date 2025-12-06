@@ -1,68 +1,137 @@
-import { AppDispatch, RootState } from "./store";
-import { useDispatch, useSelector } from "react-redux";
-import { useCallback } from "react";
-import {
-    updateUserHp,
-    updateEnemyHp,
-    addLog,
-    setTurn,
-} from "./battleSlice.ts";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Card, UserData } from "../../App";
+import { capitalize, delay } from "../common/utils";
 
-export type PlayerTurn = 'user' | 'enemy';
-export type ActionButton = "attack" | "defense" | "special" | "return";
+export type TurnState =
+    | "idle"
+    | "user-turn"
+    | "enemy-turn"
+    | "resolving"
+    | "finished";
 
-// Custom hook to replace useBattle
-export function useBattleRedux() {
-    
-    const dispatch = useDispatch<AppDispatch>();
-    const { userPokemon, enemyPokemon, turn, log } = useSelector((state: RootState) => state.battle);
+export function useBattleRedux(userTrainer: UserData, enemyTrainer: UserData) {
+  const [userPokemon, setUserPokemon] = useState<Card | null>(null);
+  const [enemyPokemon, setEnemyPokemon] = useState<Card | null>(null);
 
-    const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
-    const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+  const [turnState, setTurnState] = useState<TurnState>("idle");
+  const [log, setLog] = useState<string[]>([]);
 
-    const attack = useCallback(async (attacker: PlayerTurn) => {
-        if (!userPokemon || !enemyPokemon) return;
+  // -----------------------------
+  // Coin toss overlay control
+  // -----------------------------
+  const [showCoinOverlay, setShowCoinOverlay] = useState(false);
 
-        const crit = Math.random() <= 0.2;
-        const minDmg = 3;
+  // Logging queue
+  const logQueue = useRef<string[]>([]);
+  const isLogging = useRef(false);
 
-        if (attacker === "user") {
-            const dmg = Math.max(userPokemon.currentStats.atk - enemyPokemon.currentStats.def, minDmg);
-            dispatch(updateEnemyHp(enemyPokemon.currentStats.hp - (crit ? dmg * 2 : dmg)));
-            dispatch(addLog(`${capitalize(userPokemon.name)} attacks for ${crit ? dmg * 2 + " critical" : dmg} damage!`));
-        } else {
-            const dmg = Math.max(enemyPokemon.currentStats.atk - userPokemon.currentStats.def, minDmg);
-            dispatch(updateUserHp(userPokemon.currentStats.hp - (crit ? dmg * 2 : dmg)));
-            dispatch(addLog(`${capitalize(enemyPokemon.name)} attacks for ${crit ? dmg * 2 + " critical" : dmg} damage!`));
-        }
+  // -----------------------------
+  // Logging function
+  // -----------------------------
+  const pushLog = useCallback((text: string) => {
+    logQueue.current.push(text);
 
-        await delay(500);
-    }, [userPokemon, enemyPokemon, dispatch]);
+    if (!isLogging.current) {
+      isLogging.current = true;
+      processLogQueue();
+    }
+  }, []);
 
-    const handleTurn = useCallback(async (action: ActionButton) => {
-        if (!userPokemon || !enemyPokemon) return;
+  const processLogQueue = useCallback(() => {
+    if (logQueue.current.length === 0) {
+      isLogging.current = false;
+      return;
+    }
 
-        if (action === "attack") {
-            await attack(turn);
-        }
+    const next = logQueue.current.shift()!;
+    setLog(prev => [...prev, next]);
+    setTimeout(processLogQueue, 600);
+  }, []);
 
-        // Switch turn
-        const nextTurn: PlayerTurn = turn === "user" ? "enemy" : "user";
-        dispatch(setTurn(nextTurn));
+  // -----------------------------
+  // Initialize battle
+  // -----------------------------
+  useEffect(() => {
+    if (!userTrainer || !enemyTrainer) return;
 
-        // Auto-resolve enemy turn if needed
-        if (turn === "user" && nextTurn === "enemy") {
-            await delay(500);
-            await attack("enemy");
-            dispatch(setTurn("user"));
-        }
-    }, [turn, attack, userPokemon, enemyPokemon, dispatch]);
+    const u = userTrainer.battleDeck[0];
+    const e = enemyTrainer.battleDeck[0];
 
-    return {
-        userPokemon,
-        enemyPokemon,
-        turnState: turn,
-        log,
-        handleTurn,
-    };
+    if (!u || !e) return;
+
+    // initialize currentStats
+    setUserPokemon({
+      ...u,
+      currentStats: {
+        hp: u.stats.hp,
+        atk: u.stats.attack,
+        def: u.stats.defense,
+        spAtk: u.stats.specialAttack,
+        spDef: u.stats.specialDefense,
+        spd: u.stats.speed
+      }
+    });
+
+    setEnemyPokemon({
+      ...e,
+      currentStats: {
+        hp: e.stats.hp,
+        atk: e.stats.attack,
+        def: e.stats.defense,
+        spAtk: e.stats.specialAttack,
+        spDef: e.stats.specialDefense,
+        spd: e.stats.speed
+      }
+    });
+
+    pushLog("The battle begins!");
+    pushLog(`${userTrainer.username} sends out ${u.name}!`);
+    pushLog(`${enemyTrainer.username} sends out ${e.name}!`);
+
+    // -----------------------------
+    // Decide who goes first
+    // -----------------------------
+    if (u.stats.speed === e.stats.speed) {
+      // Speed tie → show coin toss
+      setTimeout(() => {
+        setShowCoinOverlay(true);
+      }, 1500)
+    } else if (u.stats.speed > e.stats.speed) {
+      pushLog(`${capitalize(u.name)} will act first!`);
+      setTurnState("user-turn");
+    } else {
+      pushLog(`${capitalize(e.name)} will act first!`);
+      setTurnState("enemy-turn");
+    }
+  }, [userTrainer, enemyTrainer, pushLog]);
+
+  // -----------------------------
+  // Handle coin toss result
+  // -----------------------------
+  const handleCoinResult = async (side: "heads" | "tails") => {
+    if (!userPokemon || !enemyPokemon) return;
+
+    await delay(500)
+
+    pushLog(`Coin toss result: ${side}`);
+    if (side === "heads") {
+      pushLog(`${userTrainer.username}'s ${' ' + capitalize(userPokemon.name)} will act first!`);
+      setTurnState("user-turn");
+    } else {
+      pushLog(`${enemyTrainer.username}'s ${' ' + capitalize(enemyPokemon.name)} will act first!`);
+      setTurnState("enemy-turn");
+    }
+
+    setShowCoinOverlay(false);
+  };
+
+  return {
+    userPokemon,
+    enemyPokemon,
+    turnState,
+    log,
+    pushLog,
+    showCoinOverlay,
+    handleCoinResult
+  };
 }

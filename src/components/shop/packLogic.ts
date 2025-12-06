@@ -110,7 +110,7 @@ export const OpeninBoosterPack = async (pack: BoosterPack) => {
       // Try to produce an extra rare with rareChance
       if (Math.random() * 100 <= rareChance) {
         const extraRare = await generateValidPokemon(
-          (s) => s >= 280 && s <= rareMaxStats
+          (s) => s >= 260 && s <= rareMaxStats
         );
         console.log(extraRare.name, getStatSum(extraRare));
         rares.push(extraRare);

@@ -1,5 +1,5 @@
 import styled, { keyframes } from 'styled-components';
-import Pokeball from '../../assets/pokeball2.png';
+import Pokeball from '/assets/pokeball2.png';
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';

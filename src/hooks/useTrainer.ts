@@ -7,6 +7,7 @@ export class User implements UserData {
   battleDeck: Card[];
   arena: ArenaTrainersUnlock[];
   profilePicture?: string;
+  isNPC?: boolean;
 
   constructor(data: Partial<UserData> = {}) {
     this.username = data.username ?? "";
@@ -15,6 +16,7 @@ export class User implements UserData {
     this.battleDeck = data.battleDeck ?? [];
     this.arena = data.arena ?? [];
     this.profilePicture = data.profilePicture;
+    this.isNPC = data.isNPC;
   }
 
   addCoins(amount: number) {
@@ -32,4 +34,16 @@ export class User implements UserData {
   setProfilePicture(pic: string) {
     this.profilePicture = pic;
   }
+
+  toJSON() {
+  return {
+    username: this.username,
+    coins: this.coins,
+    collection: this.collection,
+    battleDeck: this.battleDeck,
+    arena: this.arena,
+    profilePicture: this.profilePicture,
+    isNPC: this.isNPC
+  };
+}
 }

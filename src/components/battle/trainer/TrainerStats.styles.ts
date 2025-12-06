@@ -1,5 +1,5 @@
 import styled, { css, keyframes } from "styled-components";
-import Pokeball from '../../../assets/pokeball.png'
+import Pokeball from '/assets/pokeball.png'
 
 export const TrainerStatsContainer = styled.div`
     display: flex;
@@ -79,6 +79,7 @@ export const TrainerPokemonStatsWrapper = styled.main`
 export const TrainerPokemonStats = styled.main`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     align-items: center;
     height: auto;
     border-radius: 4px;

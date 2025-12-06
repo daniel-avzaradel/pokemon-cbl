@@ -1,7 +1,7 @@
 import { Star, Coins, Zap, LockIcon, Swords } from 'lucide-react';
 import { ActionButton, EmptyState, LevelBadge, LockedDiv, LockWrapper, PokemonList, PokemonSection, ProfileCard, ProfileContent, ProfileHeader, ProfileImage, ProfileImageBorder, ProfileImageWrapper, SectionTitle, StatBox, StatIcon, StatLabel, StatsGrid, StatValue, TrainerName, TrainerTitle } from './TrainerCard.styles';
 
-import PokeBall from '../../assets/pokeball.png'
+import PokeBall from '/assets/pokeball.png'
 import { TrainerCardI } from './trainersData';
 import { UserData } from '../../App';
 import { Link } from 'react-router-dom';
