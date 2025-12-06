@@ -139,7 +139,7 @@ const CardActions = ({ log, turnState, handleTurn, user, userCard, enemyCard }: 
   const [activeTurn, setActiveTurn] = useState<TurnState | null>("user-turn");
   useEffect(() => {
     if (turnState === "user-turn" || turnState === "enemy-turn") {
-      setActiveTurn("enemy-turn");
+      setActiveTurn(turnState);
     }
     // else keep previous activeTurn
   }, [turnState]);
