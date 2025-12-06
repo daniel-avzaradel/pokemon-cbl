@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
-import battleReducer from './battleSlice.ts';
-import userReducer from './userSlice.ts';
+import battleReducer from './battleSlice.js';
+import userReducer from './userSlice.js';
+import libraryReducer from './librarySlice.js';
 
 export const store = configureStore({
   reducer: {
     battle: battleReducer,
-    user: userReducer
+    user: userReducer,
+    library: libraryReducer
   },
 });
 

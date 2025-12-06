@@ -4,7 +4,7 @@ import Pokeball from '/assets/pokeball2.png';
 import { DivColumn, FaintedPokemonStatus, Header, PokemonBox, PokemonTray, TrainerHeaderName, TrainerPokemonStats, TrainerPokemonStatsWrapper, TrainerProfilePic, TrainerStatsContainer, TrainerStatsHeader } from './TrainerStats.styles';
 
 import { Gem } from 'lucide-react';
-import { selectedPokemonProps } from '../../library/battleSlice';
+import { selectedPokemonProps } from '../../lib/battleSlice';
 
 interface TrainerStatsProps {
     trainer: UserData;

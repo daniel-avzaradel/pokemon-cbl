@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Navigate, useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { UserData } from "../../App";
-import { useBattleRedux } from "../library/battleActionsRedux";
+import { useBattleRedux } from "../lib/battleActionsRedux";
 import { BattleContainer, IconWrapper, PlayersGrid } from "./Battle.styled";
 import CardActions, { actionButton } from "./card-actions/CardActions";
 import LoadingBattle from "./LoadingBattle";
@@ -16,7 +16,7 @@ import { TrainerCardI, trainersData } from "./trainersData";
 import { CoinFlipOverlay } from "../common/CoinToss";
 import coinFront from '/assets/pokemon-coin.png';
 import coinBack from '/assets/pokemon-coin-back.png';
-import { store } from "../library/store";
+import { store } from "../lib/store";
 
 
 export const BattleSystem = () => {

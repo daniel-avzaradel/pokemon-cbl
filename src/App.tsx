@@ -5,24 +5,24 @@ import { NavigationComponent } from './components/Navigation';
 import { trainersData } from './components/battle/trainersData';
 import { MyCards } from './components/my-cards/MyCards';
 import { Shop } from './components/shop/Shop';
-import { FetchedPokemon, FetchedPokemon as HookFetchedPokemon } from './hooks/usePokemon';
+import { FetchedPokemon as HookFetchedPokemon } from './hooks/usePokemon';
 
 import styled from 'styled-components';
 import Battle from './components/battle/Battle';
-import Library from './components/library/Library';
 
-import { Provider, useDispatch } from 'react-redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import {
   createBrowserRouter,
   Navigate,
-  RouterProvider,
-  useNavigate,
+  RouterProvider
 } from "react-router";
 import { BattleSystem } from './components/battle/BattleSystem';
-import { store } from './components/library/store';
-import { setUser } from './components/library/userSlice';
+import { fetchPokemonCatalog } from './components/lib/libraryThunk';
+import { AppDispatch, RootState, store } from './components/lib/store';
+import { setUser } from './components/lib/userSlice';
 import { generateCardFromPokemon } from './utils/generateCardFromPokemon';
 
+import Library from './components/pokemon-library/Library';
 
 export type Card = HookFetchedPokemon;
 
@@ -47,24 +47,25 @@ const AppContainer = styled.div`
   box-sizing: border-box;
 `;
 
-const MainContent = styled.main`
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 1rem;
-`;
-
-
 export default function App() {
 
   const [user, setNewUser] = useState<UserData | null>();
-  const dispatch = useDispatch()
-
+  const dispatch = useDispatch<AppDispatch>()
+  const catalog = useSelector((state: RootState) => state.library.catalog);
+  
   useEffect(() => {
     const savedUser = localStorage.getItem("pokemonUser");
     if (savedUser) {
       dispatch(setUser(JSON.parse(savedUser)))
     }
   }, []);
+
+  useEffect(() => {
+    // Only fetch if catalog is empty
+    if (catalog.length === 0) {
+      dispatch(fetchPokemonCatalog());
+    }
+  }, [catalog, dispatch]);
 
 
   const handleLogin = (username: string) => {
@@ -81,10 +82,7 @@ export default function App() {
 
     async function addRattata() {
       const rattata = await generateCardFromPokemon(19);
-      console.log(rattata);
-
       newUser.collection.push(rattata);
-      console.log(newUser);
 
       // ✅ Update state and dispatch AFTER Pokémon is added
       setNewUser(newUser);

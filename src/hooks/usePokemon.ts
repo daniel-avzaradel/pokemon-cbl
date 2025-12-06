@@ -30,8 +30,9 @@ export type FetchedPokemon = {
   types: PokemonTypes[];
   imageUrl: string | null;
   stats: Stats;
-  isFoil?: boolean;
   currentStats: currentStats
+  isFoil?: boolean;
+  sprite?: string;
 };
 
 export function usePokemon() {

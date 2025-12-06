@@ -3,7 +3,7 @@ import { BookMarked, Library, ShoppingBag, Swords, Coins, LogOut } from 'lucide-
 import { UserData } from '../App';
 import { Link, useLocation, Outlet } from 'react-router-dom'
 import { useSelector } from 'react-redux';
-import { RootState } from './library/store';
+import { RootState } from './lib/store';
 
 interface NavigationProps {
   onLogout: () => void;

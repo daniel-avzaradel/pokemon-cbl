@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react'
-import { Card } from '../../../App'
-import { selectedPokemonProps } from '../BattleSystem'
 import { StatusCard, HealthBarBg, HealthBarContainer, HealthBarFill, HpDisplay, StatusHeader } from './CardActions.styled'
 import { Heart } from 'lucide-react'
+import { selectedPokemonProps } from 'src/components/lib/battleSlice';
 
 interface StatusProps {
     card: selectedPokemonProps;

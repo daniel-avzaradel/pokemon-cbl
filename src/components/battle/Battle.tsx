@@ -6,7 +6,7 @@ import { TrainerCard } from './TrainerCard';
 import { useState } from 'react';
 import { TrainerCardI, trainersData } from './trainersData';
 import { useSelector } from 'react-redux';
-import { RootState } from '../library/store';
+import { RootState } from '../lib/store';
 
 export interface BattleProps {
   updateUser: (user: UserData) => void;

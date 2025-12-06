@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { UserData } from '../../../App';
 import { PokemonPoof } from '../../../utils/SmokeBomb';
 import { PokemonCard } from '../../common/PokemonCard';
-import { selectedPokemonProps } from '../../library/battleSlice';
+import { selectedPokemonProps } from '../../lib/battleSlice';
 import { CardGrid } from '../Battle.styled';
 import {
   ActionsContainer,
@@ -16,7 +16,7 @@ import {
   TypingText
 } from './CardActions.styled';
 import { StatusCardComponent } from './StatusCardComponent';
-import { TurnState } from '../../library/battleActionsRedux';
+import { TurnState } from '../../lib/battleActionsRedux';
 
 export type actionButton = "attack" | "defense" | "special" | "return";
 
