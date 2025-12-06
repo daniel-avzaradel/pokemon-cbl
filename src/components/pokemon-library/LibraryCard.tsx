@@ -9,7 +9,7 @@ const LibraryCard = () => {
     const catalog = useSelector((state: RootState) => state.library.catalog)
     const pokedexEntry = (id: number) => {
         return id < 10 ? id.toString().padStart(3, "0")
-            : (id >= 10 && id < 100) ? id.toString().padStart(2, "0")
+            : (id >= 10 && id < 100) ? id.toString().padStart(3, "0")
                 : id
     }
 
@@ -18,7 +18,7 @@ const LibraryCard = () => {
             {catalog.map(p => {
                 return (
                 <LibraryCardWrapper $type={p.types[0]} key={p.uid}>
-                    <img src={p.sprite} width={70} />
+                    <img src={p.sprite} width={100} />
                     <CardDataDiv>
                         <span>#{pokedexEntry(p.id)} {capitalize(p.name)}</span>
                         <div style={{display: 'flex', gap: '4px'}}>

@@ -45,14 +45,13 @@ export const LibraryCardWrapper = styled.div<{$type?: string}>`
   align-items: center;
   border-radius: 4px;
   width: 24%;
-  color: #333;
   box-sizing: border-box;
   background: ${p => p.$type ? darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 60) : "#333"};;
   transition: 0.2s ease-in-out;
   cursor: pointer;
   padding: 2px 10px;
   gap: 0 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid #555;
   &:hover {
     transform: scale(1.05);
   }
@@ -119,6 +118,6 @@ export const TypeTag = styled.div<{$type?: string}>`
   color: white;
   background: ${p => p.$type ? darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 20) : "#333"};
   border-radius: 4px;
-  border: ${p => p.$type ? '1px solid' + singleTypeColors[p.$type as keyof typeof singleTypeColors] : "#333"};;
+  border: ${p => p.$type ? '1px solid' + singleTypeColors[p.$type as keyof typeof singleTypeColors] : "1px solid #333"};;
   color: ${p => p.$type ? singleTypeColors[p.$type as keyof typeof singleTypeColors] : "#e1e1e1"};
 `
