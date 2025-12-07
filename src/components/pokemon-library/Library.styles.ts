@@ -146,6 +146,7 @@ export const ModalPageContainer = styled.div`
   box-sizing: border-box;
   padding: 2rem;
   background: rgba(0,0,0, 0.8);
+  transition: 0.2s ease-in-out;
 `
 
 export const ModalContentContainer = styled.div<{$type: string}>`
@@ -153,13 +154,14 @@ export const ModalContentContainer = styled.div<{$type: string}>`
   position: relative;
   justify-content: center;
   align-items: center;
-  padding: 10px;
   width: 55%;
   height: auto;
   box-sizing: border-box;
   background: ${p => p.$type ? `linear-gradient(to bottom right, ${darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 60)}, ${darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 95)})` : '#444'};
-  border-radius: 6px;
-  border: 1px solid #444;
+  border-radius: 10px;
+  transition: 0.2s ease-in-out;
+  border: 5px solid #000;
+  box-sizing: border-box;
 `
 
 export const ModalContentGrid = styled.div<{$img: string}>`
@@ -169,10 +171,12 @@ export const ModalContentGrid = styled.div<{$img: string}>`
   height: 100%;
   place-items: center;
   background-image: url(${p => p.$img ?? ""});
-  background-size: 75%;
+  background-size: 70%;
   background-repeat: no-repeat;
 
-  background-position: -35% 50%;
+  background-position: -30% 50%;
+  box-sizing: border-box;
+  padding: 10px;
 `;
 
 export const ModalPokemonDataDiv = styled.div`
@@ -186,6 +190,7 @@ export const ModalPokemonDataDiv = styled.div`
   background: rgba(0,0,0, 0.8);
   border: 1px solid #1a1a1a;
   gap: 10px;
+  box-sizing: border-box;
 `
 
 export const ModalDataHeader = styled.div`

@@ -3,6 +3,7 @@ import { DivColumn, ImageHolder, ModalButton, ModalContentContainer, ModalConten
 import { FetchedPokemon } from 'src/hooks/usePokemon';
 import { Navigate } from 'react-router-dom';
 import { capitalize, pokedexEntry } from '../common/utils';
+import { Star } from 'lucide-react';
 
 interface ModalProps {
     setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,6 +26,8 @@ const Modal = ({ selectedPokemon, setOpenModal }: ModalProps) => {
 
     const totalStats = statusArray.map(e => e.value).reduce((prev, cur) => prev + cur);
 
+    const rarity = totalStats >= 550 ? 6 : totalStats >= 500 ? 5 : totalStats >= 450 ? 4 : totalStats >= 400 ? 3 : totalStats >= 350 ? 3 : totalStats >= 300 ? 2 : 1
+
     return (
         <ModalPageContainer onClick={handleClick}>
             <ModalContentContainer onClick={(e) => e.stopPropagation()} $type={selectedPokemon.types[0]}>
@@ -38,8 +41,8 @@ const Modal = ({ selectedPokemon, setOpenModal }: ModalProps) => {
                                 <span>Name: {capitalize(selectedPokemon.name)}</span>
                             </DivColumn>
                         </ModalDataHeader>
-                        <ModalDataHeader style={{display: 'flex', flexDirection: 'column', height: '100%'}}>
-                            <DivColumn style={{ display: 'flex', width: '100%', height: '100%'}}>
+                        <ModalDataHeader style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                            <DivColumn style={{ display: 'flex', width: '100%', height: '100%' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                     {selectedPokemon.types.length > 1 ? 'Types' : 'Type'}:
                                     <div style={{ display: 'flex', gap: '10px' }}>
@@ -47,21 +50,28 @@ const Modal = ({ selectedPokemon, setOpenModal }: ModalProps) => {
                                     </div>
                                 </div>
                                 <br />
-                                <span>Total Stats: {totalStats}</span>
-                                <div style={{ display: 'flex', width: '100%', height: '100%'}}>
-                                <StatsGrid style={{ display: 'flex', flex: 1, height: '100%'}}>
-                                    <StatsBarContainer>
-                                        {statusArray.map(stat => (
-                                            <StatsBarRow key={stat.label}>
-                                                <StatsBarLabel>{stat.label}</StatsBarLabel>
-                                                <StatsBarTrack>
-                                                    <StatsBarFill $width={Math.min(stat.value, 100)} $color={stat.color} />
-                                                </StatsBarTrack>
-                                                <StatsBarValue $color={stat.color}>{stat.value}</StatsBarValue>
-                                            </StatsBarRow>
-                                        ))}
-                                    </StatsBarContainer>
-                                </StatsGrid>
+                                <div style={{ display: "flex", width: '100%', justifyContent: 'space-between' }}>
+                                    <span>Total Stats: {totalStats} </span>
+                                    <div style={{ display: 'flex', gap: '2px', flexDirection: 'row-reverse' }}>
+                                        {Array.from({ length: rarity }, (_, index) => index + 1).map((i) => {
+                                            return <Star key={i} fill={i > 5 ? '#d100b8' : 'goldenrod'} />
+                                        })}
+                                    </div>
+                                </div>
+                                <div style={{ display: 'flex', width: '100%', height: '100%' }}>
+                                    <StatsGrid style={{ display: 'flex', flex: 1, height: '100%' }}>
+                                        <StatsBarContainer>
+                                            {statusArray.map(stat => (
+                                                <StatsBarRow key={stat.label}>
+                                                    <StatsBarLabel>{stat.label}</StatsBarLabel>
+                                                    <StatsBarTrack>
+                                                        <StatsBarFill $width={Math.min(stat.value, 100)} $color={stat.color} />
+                                                    </StatsBarTrack>
+                                                    <StatsBarValue $color={stat.color}>{stat.value}</StatsBarValue>
+                                                </StatsBarRow>
+                                            ))}
+                                        </StatsBarContainer>
+                                    </StatsGrid>
                                 </div>
                             </DivColumn>
                         </ModalDataHeader>
