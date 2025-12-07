@@ -58,14 +58,14 @@ export const LibraryCardWrapper = styled.div<{ $type?: string }>`
   border-radius: 4px;
   width: 24%;
   box-sizing: border-box;
-  background: ${p => p.$type ? darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 60) : "#333"};;
+  background: ${p => p.$type ? darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 70) : "#333"};;
   transition: 0.2s ease-in-out;
   cursor: pointer;
   padding: 2px 10px;
   gap: 0 1rem;
   border: 1px solid #555;
   &:hover {
-    background: ${p => darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 80)}
+    background: ${p => darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 90)}
   }
 `
 
