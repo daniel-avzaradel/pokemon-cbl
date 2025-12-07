@@ -1,10 +1,8 @@
-import { useState } from "react"
-import { Container, Header } from "./Library.styles"
-import LibraryCard from "./LibraryCard"
-import Modal from "./Modal";
-import { useSelector } from "react-redux";
-import { RootState } from "../lib/store";
+import { useState } from "react";
 import { FetchedPokemon } from "src/hooks/usePokemon";
+import { Container, Header } from "./Library.styles";
+import LibraryCard from "./LibraryCard";
+import Modal from "./Modal";
 
 const Library = () => {
 

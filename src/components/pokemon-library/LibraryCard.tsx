@@ -2,7 +2,7 @@ import React from 'react'
 import { CardDataDiv, LibraryCardContainer, LibraryCardWrapper, TypeTag } from './Library.styles'
 import { useSelector } from 'react-redux'
 import { RootState } from '../lib/store'
-import { capitalize } from '../common/utils'
+import { capitalize, pokedexEntry } from '../common/utils'
 import { FetchedPokemon } from 'src/hooks/usePokemon'
 
 interface LibraryCardProps {
@@ -13,11 +13,6 @@ interface LibraryCardProps {
 const LibraryCard = ({ setOpenModal, setSelectedPokemon }: LibraryCardProps) => {
 
     const catalog = useSelector((state: RootState) => state.library.catalog)
-    const pokedexEntry = (id: number) => {
-        return id < 10 ? id.toString().padStart(3, "0")
-            : (id >= 10 && id < 100) ? id.toString().padStart(3, "0")
-                : id
-    }
 
     const handleClick = (pokemon: FetchedPokemon) => {
         setOpenModal(true)

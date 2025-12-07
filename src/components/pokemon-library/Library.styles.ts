@@ -145,7 +145,7 @@ export const ModalPageContainer = styled.div`
   height: 100%;
   box-sizing: border-box;
   padding: 2rem;
-  background: rgba(0,0,0, 0.6);
+  background: rgba(0,0,0, 0.8);
 `
 
 export const ModalContentContainer = styled.div<{$type: string}>`
@@ -164,7 +164,7 @@ export const ModalContentContainer = styled.div<{$type: string}>`
 
 export const ModalContentGrid = styled.div<{$img: string}>`
   display: grid;
-  grid-template-columns: 2fr 2fr;
+  grid-template-columns: 1.4fr 2fr;
   width: 100%;
   height: 100%;
   place-items: center;
@@ -183,8 +183,9 @@ export const ModalPokemonDataDiv = styled.div`
   padding: 1rem;
   border: 1px solid #1a1a1a;
   border-radius: 6px;
-  background: rgba(0,0,0, 0.2);
+  background: rgba(0,0,0, 0.8);
   border: 1px solid #1a1a1a;
+  gap: 10px;
 `
 
 export const ModalDataHeader = styled.div`
@@ -193,8 +194,19 @@ export const ModalDataHeader = styled.div`
   padding: 1rem;
   width: 100%;
   height: auto;
-  border: 1px solid #ccc;
+  border: 1px solid #2e2e2eff;
   border-radius: 4px;
+  gap: 1rem;
+  font-family: 'Courier New', Courier, monospace;
+`
+
+export const DivColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  gap: 4px;
 `
 
 export const ImageHolder = styled.div`
@@ -204,7 +216,6 @@ export const ImageHolder = styled.div`
 `
 
 export const ModalButton = styled.button`
-  position: absolute;
   background: linear-gradient(to right, #7f1d1d, #450a0a);
   color: white;
   padding: 0.75rem 2rem;
@@ -214,7 +225,7 @@ export const ModalButton = styled.button`
   transition: all 0.5s ease;
   animation: fadeIn 0.5s ease-in-out;
   animation-fill-mode: backwards;
-  margin-top: 2rem;
+  margin-top: 1rem;
   bottom: 5%;
   left: 10%;
   transition: 0.5s ease-in-out;
@@ -232,5 +243,80 @@ export const ModalButton = styled.button`
   }
   &:hover {
     background: linear-gradient(to right, #991b1b, #7f1d1d);
+  }
+`;
+
+export const StatsGrid = styled.div`
+  display: grid;
+  gap: 0.25rem;
+  text-align: center;
+  background-color: #1f1f1f;
+  border: 2px solid #404040;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-blend-mode: overlay;
+  width: 100%;
+`;
+
+export const StatsBarContainer = styled.div<{$modal?: boolean}>`
+  grid-column: auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: space-between;
+`;
+
+export const StatsBarRow = styled.div`
+  display: grid;
+  width: 100%;
+  grid-template-columns: .25fr 1fr 2rem;
+  gap: 0.5rem;
+  align-items: center;
+  & > *:first-child {
+    text-align: left;
+  }
+`;
+
+export const StatsBarLabel = styled.div`
+  color: #9ca3af;
+  font-size: .9rem;
+  font-weight: 600;
+`;
+
+export const StatsBarTrack = styled.div`
+  background: #404040;
+  border-radius: 0.25rem;
+  height: 1rem;
+  overflow: hidden;
+`;
+
+export const StatsBarFill = styled.div<{ $width: number; $color: string }>`
+  width: ${props => props.$width}%;
+  height: 100%;
+  background-color: ${props => props.$color};
+  transition: width 0.2s ease;
+`;
+
+export const StatsBarValue = styled.div<{ $color: string }>`
+  color: ${props => props.$color};
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: right;
+`;
+
+export const StatBox = styled.div<{ $bgColor: string; $textColor: string }>`
+  background: #262626;
+  border: 1px solid #404040;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  
+  .label {
+    color: #9ca3af;
+    font-size: 0.75rem;
+  }
+
+  .value {
+    color: ${props => props.$textColor};
   }
 `;
