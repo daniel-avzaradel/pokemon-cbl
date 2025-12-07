@@ -154,8 +154,8 @@ export const ModalContentContainer = styled.div<{$type: string}>`
   justify-content: center;
   align-items: center;
   padding: 10px;
-  width: 50%;
-  height: 50%;
+  width: 55%;
+  height: 40%;
   box-sizing: border-box;
   background: ${p => p.$type ? `linear-gradient(to bottom right, ${darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 60)}, ${darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 95)})` : '#444'};
   border-radius: 6px;
@@ -265,12 +265,13 @@ export const StatsBarContainer = styled.div<{$modal?: boolean}>`
   width: 100%;
   height: 100%;
   justify-content: space-between;
+  gap: 4px;
 `;
 
 export const StatsBarRow = styled.div`
   display: grid;
   width: 100%;
-  grid-template-columns: .25fr 1fr 2rem;
+  grid-template-columns: .2fr 1fr .1fr;
   gap: 0.5rem;
   align-items: center;
   & > *:first-child {
@@ -286,8 +287,8 @@ export const StatsBarLabel = styled.div`
 
 export const StatsBarTrack = styled.div`
   background: #404040;
-  border-radius: 0.25rem;
-  height: 1rem;
+  border-radius: 0.5rem;
+  height: 0.7rem;
   overflow: hidden;
 `;
 
@@ -300,7 +301,7 @@ export const StatsBarFill = styled.div<{ $width: number; $color: string }>`
 
 export const StatsBarValue = styled.div<{ $color: string }>`
   color: ${props => props.$color};
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   font-weight: 600;
   text-align: right;
 `;
@@ -313,7 +314,6 @@ export const StatBox = styled.div<{ $bgColor: string; $textColor: string }>`
   
   .label {
     color: #9ca3af;
-    font-size: 0.75rem;
   }
 
   .value {
