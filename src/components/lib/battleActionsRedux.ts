@@ -93,6 +93,8 @@ export function useBattleRedux(userTrainer: UserData, enemyTrainer: UserData) {
     // -----------------------------
     if (u.stats.speed === e.stats.speed) {
       // Speed tie → show coin toss
+      pushLog(`It's a speed tie! turn will be resolved on a coin toss`);
+
       setTimeout(() => {
         setShowCoinOverlay(true);
       }, 1500)

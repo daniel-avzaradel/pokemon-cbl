@@ -7,7 +7,7 @@ import { Card, UserData } from '../../App';
 import { Container, Header, IconWrapper, PackCard, PackContent, PackInfo, PacksGrid, PriceBox, PurchaseButton } from './Shop.styles';
 import { BoosterPack, boosterPacks, OpeninBoosterPack } from './packLogic';
 import { useSelector } from 'react-redux';
-import { RootState } from '../library/store';
+import { RootState } from '../lib/store';
 
 interface ShopProps {
   updateUser: (user: UserData) => void;

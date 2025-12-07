@@ -4,7 +4,7 @@ import Pokeball from '/assets/pokeball2.png';
 import { DivColumn, FaintedPokemonStatus, Header, PokemonBox, PokemonTray, TrainerHeaderName, TrainerPokemonStats, TrainerPokemonStatsWrapper, TrainerProfilePic, TrainerStatsContainer, TrainerStatsHeader } from './TrainerStats.styles';
 
 import { Gem } from 'lucide-react';
-import { selectedPokemonProps } from '../../library/battleSlice';
+import { selectedPokemonProps } from '../../lib/battleSlice';
 
 interface TrainerStatsProps {
     trainer: UserData;
@@ -12,6 +12,8 @@ interface TrainerStatsProps {
 }
 
 const TrainerStats = ({ trainer, selectedPokemon }: TrainerStatsProps) => {
+
+    const isNpc = trainer.isNPC
 
     return (
         <TrainerStatsContainer>
@@ -48,7 +50,7 @@ const TrainerStats = ({ trainer, selectedPokemon }: TrainerStatsProps) => {
 
                         <DivColumn>
 
-                            <PokemonTray>
+                            <PokemonTray $reverse={isNpc}>
                                 {trainer.battleDeck?.map((el, i) => {
                                     return (
                                         <div key={el.uid + i}>

@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 
 interface PokemonCardProps {
   card: Card;
-  user: UserData;
+  user?: UserData;
   onClick?: () => void;
   deck?: boolean;
   large?: boolean;
@@ -27,6 +27,7 @@ export function PokemonCard({ card, large, deck, onClick, user }: PokemonCardPro
   ]
 
   const isInDeck = (cardId: number) => {
+    if(!user) return;
     return user.battleDeck.some(card => card.uid === cardId);
   };
 

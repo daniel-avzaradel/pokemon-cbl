@@ -196,6 +196,7 @@ export const TurnEventsColumn = styled.div<{ $rotate?: boolean }>`
   gap: 2rem;
   height: 500px;
   box-sizing: border-box;
+  transition: 0.4s ease-in-out;
 
   & > h1 {
     font-size: 1.4rem;
@@ -217,6 +218,7 @@ export const TurnEventsColumn = styled.div<{ $rotate?: boolean }>`
     background: #111;
     border-radius: 50%;
     border: 1px solid #d1d1d1;
-    transform: rotate(${p => p.$rotate ? '-180deg' : '360deg'})
+    transform: rotate(${p => p.$rotate ? '-180deg' : '720deg'});
+    transition: 0.4s ease-in-out;
   }
 `

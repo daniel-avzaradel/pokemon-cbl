@@ -126,9 +126,9 @@ export const PokemonBox = styled.div<{
     `}
 `;
 
-export const PokemonTray = styled.div`
+export const PokemonTray = styled.div<{$reverse?: boolean}>`
     display: flex;
-    justify-content: flex-start;
+    justify-content: ${p => p.$reverse ? 'flex-end' : 'flex-start'};
     align-items: center;
     width: 100%;
     border-bottom: 1px solid #e1e1e1;

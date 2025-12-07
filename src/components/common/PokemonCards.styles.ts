@@ -30,17 +30,38 @@ export const singleTypeColors: Record<string, string> = {
   ice: '#a0e1e4ff',
   grass: '#77ffa9ff',
   bug: '#83f8dbff',
-  electric: '#bb9d42ff',
+  electric: '#f3c94dff',
   psychic: '#e97eceff',
   fighting: '#fd956bff',
   dragon: '#ebdb80ff',
-  poison: '#826df8ff',
-  normal: '#d1d1d1ff',
+  poison: '#b4a7f8ff',
+  normal: '#c7c7c7ff',
+  flying: '#ffffffff',
   ground: '#f8d39cff',
   rock: '#fad9a9ff',
   fairy: '#fda7f2ff',
   ghost: '#c782ffff',
   dark: '#8a8091ff',
+};
+
+export const singleTypeColorsLib: Record<string, string> = {
+  fire: '#751818ff',
+  water: '#173561ff',
+  ice: '#0d787eff',
+  grass: '#095324ff',
+  bug: '#385e45ff',
+  electric: '#b39801ff',
+  psychic: '#522446ff',
+  fighting: '#772c0eff',
+  dragon: '#494739ff',
+  poison: '#332e50ff',
+  normal: '#474747ff',
+  flying: '#727272ff',
+  ground: '#8a6b3dff',
+  rock: '#4d473fff',
+  fairy: '#8a7186ff',
+  ghost: '#483458ff',
+  dark: '#242424ff',
 };
 
 export const typeIcons = {
@@ -148,7 +169,7 @@ export const CardImage = styled.img`
   height: 100%;
   object-fit: cover;
   border-radius: 0.5rem;
-  bacground-blend-mode: overlay;
+  background-blend-mode: overlay;
 `;
 
 export const StatsGrid = styled.div`

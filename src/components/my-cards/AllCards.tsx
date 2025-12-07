@@ -5,6 +5,7 @@ import { PokemonCard } from '../common/PokemonCard';
 import { AllCardsHeader, CardContainer, CardsGrid, Section } from './MyCards.module';
 import Filter from './Filter';
 import SortBy from './SortBy';
+import { toast } from 'react-toastify';
 
 interface AllCardsProps {
     user: UserData;
@@ -51,6 +52,16 @@ const AllCards = ({ user, addToDeck, removeFromDeck, updateUser }: AllCardsProps
         setSort(value);
     }
 
+    const addCardToDeck = (card: Card) => {
+        if(user.battleDeck.some(p => p.id === card.id)) {
+            toast.warning("You cannot add the same card twice in the deck", {
+                theme: 'dark'
+            })
+        } else {
+            addToDeck(card)
+        }
+    }
+
     return (
         <Section>
             <AllCardsHeader>
@@ -65,7 +76,7 @@ const AllCards = ({ user, addToDeck, removeFromDeck, updateUser }: AllCardsProps
                     <CardContainer key={card.id + '-' + index}>
                         <PokemonCard {...{ user, updateUser, removeFromDeck, addToDeck }}
                             card={card}
-                            onClick={addToDeck ? () => addToDeck(card) : undefined }
+                            onClick={() => addCardToDeck(card) }
                         />
                     </CardContainer>
                 ))}

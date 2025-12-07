@@ -3,7 +3,7 @@ import { UserData, Card } from '../../App';
 import { PokemonCard } from '../common/PokemonCard';
 import { CardContainer, CardsGrid, Container, DeckEmpty, EmptyState, Header, Modal, ModalContent, Section } from './MyCards.module';
 import AllCards from './AllCards';
-import { RootState } from '../library/store';
+import { RootState } from '../lib/store';
 import { useSelector } from 'react-redux';
 
 interface MyCardsProps {

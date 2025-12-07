@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { Navigate, useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { UserData } from "../../App";
-import { useBattleRedux } from "../library/battleActionsRedux";
+import { useBattleRedux } from "../lib/battleActionsRedux";
 import { BattleContainer, IconWrapper, PlayersGrid } from "./Battle.styled";
-import CardActions from "./card-actions/CardActions";
+import CardActions, { actionButton } from "./card-actions/CardActions";
 import LoadingBattle from "./LoadingBattle";
 import {
   generateTeamFromNPCPokemons,
@@ -16,6 +16,7 @@ import { TrainerCardI, trainersData } from "./trainersData";
 import { CoinFlipOverlay } from "../common/CoinToss";
 import coinFront from '/assets/pokemon-coin.png';
 import coinBack from '/assets/pokemon-coin-back.png';
+import { store } from "../lib/store";
 
 
 export const BattleSystem = () => {
@@ -23,7 +24,7 @@ export const BattleSystem = () => {
   const location = useLocation();
 
   // Player's trainer (real player)
-  const userFromState = location.state?.user as UserData | undefined;
+  const userFromState = location.state?.user as UserData ?? store.getState().user;
 
   // Opponent trainer (maybe passed from route state)
   const trainerFromState = location.state?.trainer as TrainerCardI | undefined;
@@ -106,14 +107,13 @@ export const BattleSystem = () => {
   // ------------------------------
 
   // If trainer isn't loaded yet, avoid passing null
-  const safeEnemyTrainer = fullTrainer ?? undefined;
+  const safeEnemyTrainer = fullTrainer!;
 
   const {
     userPokemon,
     enemyPokemon,
     turnState,
     log,
-    handleTurn,
     showCoinOverlay,
     handleCoinResult
   } = useBattleRedux(userFromState, safeEnemyTrainer);
@@ -123,6 +123,7 @@ export const BattleSystem = () => {
   // ------------------------------
 
   if (loading) return <LoadingBattle />;
+  if (!userFromState) return <Navigate to="/login" replace />;
 
   if (error) {
     if (userFromState?.battleDeck.length === 0) {
@@ -135,6 +136,8 @@ export const BattleSystem = () => {
 
   // In case hook still preparing initial Pokémon
   if (!userPokemon || !enemyPokemon) return <LoadingBattle />;
+
+  const handleTurn = (action: actionButton) => {}
 
   return (
     <BattleContainer>
