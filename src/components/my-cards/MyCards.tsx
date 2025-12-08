@@ -32,6 +32,7 @@ export function MyCards({ updateUser }: MyCardsProps) {
     console.log(card, action);
 
     if (action === 'add') {
+      if(user.battleDeck.some(p => p.uid == card.uid)) return
       if (user.battleDeck.length < 6) {
         if(user.battleDeck.some(p => p.id === card.id)) {
           return toast.warning('You cannot add two equal cards to the deck', { theme: 'dark'})

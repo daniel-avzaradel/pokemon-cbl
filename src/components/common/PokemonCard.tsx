@@ -64,7 +64,7 @@ export function PokemonCard({ card, collection, deck, user, onClick }: PokemonCa
           </StatsGrid>
         </CardInner>
       </CardOuter>
-      {(collection && onClick) && (
+      {(collection && onClick && !isInDeck(card.uid)) && (
         <ButtonContainer>
           <CardButton className="card-button add" onClick={() => onClick(card, 'add')}>
             <Plus />
