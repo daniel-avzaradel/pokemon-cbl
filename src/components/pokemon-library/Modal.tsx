@@ -1,9 +1,10 @@
-import React from 'react'
-import { DivColumn, ImageHolder, ModalButton, ModalContentContainer, ModalContentGrid, ModalDataHeader, ModalPageContainer, ModalPokemonDataDiv, StatsBarContainer, StatsBarFill, StatsBarLabel, StatsBarRow, StatsBarTrack, StatsBarValue, StatsGrid, TypeTag } from './Library.styles'
-import { FetchedPokemon } from 'src/hooks/usePokemon';
-import { Navigate } from 'react-router-dom';
-import { capitalize, pokedexEntry } from '../common/utils';
 import { Star } from 'lucide-react';
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+import { FetchedPokemon } from 'src/hooks/usePokemon';
+import { typeIcons } from '../common/PokemonCards.styles';
+import { capitalize, pokedexEntry } from '../common/utils';
+import { DivColumn, ModalButton, ModalContentContainer, ModalContentGrid, ModalDataHeader, ModalPageContainer, ModalPokemonDataDiv, StatsBarContainer, StatsBarFill, StatsBarLabel, StatsBarRow, StatsBarTrack, StatsBarValue, StatsGrid, TypeTag } from './Library.styles';
 
 interface ModalProps {
     setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,6 +28,9 @@ const LibraryModal = ({ selectedPokemon, setOpenModal }: ModalProps) => {
     const totalStats = statusArray.map(e => e.value).reduce((prev, cur) => prev + cur);
 
     const rarity = totalStats >= 550 ? 6 : totalStats >= 500 ? 5 : totalStats >= 450 ? 4 : totalStats >= 400 ? 3 : totalStats >= 350 ? 3 : totalStats >= 300 ? 2 : 1
+
+    const TypeIcon = typeIcons[selectedPokemon.types[0] as keyof typeof typeIcons]
+    const primaryType = selectedPokemon.types[0] ?? 'normal';
 
     return (
         <ModalPageContainer onClick={handleClick}>

@@ -139,7 +139,7 @@ export const OpeninBoosterPack = async (pack: BoosterPack) => {
   let cards: Card[] = [];
 
   if (pack.id === 1) {
-    cards = await generatePack(1, /*rareChance*/ 1, /*rareMax*/ 270, /*minNormal*/ 200, /*foil*/ 2, /*legendary*/ 0);
+    cards = await generatePack(1, /*rareChance*/ 1, /*rareMax*/ 270, /*minNormal*/ 200, /*foil*/ 92, /*legendary*/ 0);
   }
 
   if (pack.id === 2) {
