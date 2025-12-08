@@ -82,6 +82,10 @@ export function PokemonCard({ card, collection, deck, user, onClick }: PokemonCa
             <Minus />
             Remove from Deck
           </CardButton>
+          <CardButton className="card-button details" onClick={() => onClick(card, 'details')}>
+            <BookMarked />
+            Details
+          </CardButton>
         </ButtonContainer>
       )}
     </CardWrapper>

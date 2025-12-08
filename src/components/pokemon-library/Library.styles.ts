@@ -192,6 +192,7 @@ export const ModalPokemonDataDiv = styled.div`
   border: 1px solid #1a1a1a;
   gap: 10px;
   box-sizing: border-box;
+  color: #e1e1e1;
 `
 
 export const ModalDataHeader = styled.div`

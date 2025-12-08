@@ -10,7 +10,7 @@ interface ModalProps {
     selectedPokemon: FetchedPokemon | null
 }
 
-const Modal = ({ selectedPokemon, setOpenModal }: ModalProps) => {
+const LibraryModal = ({ selectedPokemon, setOpenModal }: ModalProps) => {
 
     const handleClick = () => setOpenModal(false)
     if (!selectedPokemon) return <Navigate to="/library" replace />
@@ -83,4 +83,4 @@ const Modal = ({ selectedPokemon, setOpenModal }: ModalProps) => {
     )
 }
 
-export default Modal
+export default LibraryModal

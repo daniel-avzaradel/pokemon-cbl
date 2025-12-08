@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { UserData, Card } from '../../App';
 import { PokemonCard } from '../common/PokemonCard';
-import { CardContainer, CardsGrid, Container, DeckEmpty, EmptyState, Header, Modal, ModalContent, Section } from './MyCards.module';
+import { CardContainer, CardsGrid, Container, DeckEmpty, EmptyState, Header, Section } from './MyCards.module';
 import AllCards from './AllCards';
 import { RootState } from '../lib/store';
 import { useSelector } from 'react-redux';
+import LibraryModal from '../pokemon-library/Modal';
+import { toast } from 'react-toastify';
 
 interface MyCardsProps {
   updateUser: (user: UserData) => void;
@@ -13,6 +15,7 @@ interface MyCardsProps {
 export function MyCards({ updateUser }: MyCardsProps) {
 
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const user = useSelector((state: RootState) => state.user);
 
 
@@ -27,9 +30,12 @@ export function MyCards({ updateUser }: MyCardsProps) {
 
   const handleButtonAction = (card: Card, action: string) => {
     console.log(card, action);
-    
+
     if (action === 'add') {
       if (user.battleDeck.length < 6) {
+        if(user.battleDeck.some(p => p.id === card.id)) {
+          return toast.warning('You cannot add two equal cards to the deck', { theme: 'dark'})
+        }
         updateUser({
           ...user,
           battleDeck: [...user.battleDeck, card]
@@ -43,7 +49,8 @@ export function MyCards({ updateUser }: MyCardsProps) {
       });
     }
     if (action === 'details') {
-      
+      setSelectedCard(card)
+      setOpenModal(true)
     }
   }
 
@@ -78,9 +85,12 @@ export function MyCards({ updateUser }: MyCardsProps) {
               </CardsGrid>
             )}
           </Section>
-          <AllCards {...{ user, updateUser, addToDeck, setSelectedCard }} onClick={handleButtonAction} collection />
+          <AllCards {...{ user, updateUser, addToDeck }} onClick={handleButtonAction} collection />
 
         </>
+      )}
+      {openModal && (
+        <LibraryModal {...{setOpenModal}} selectedPokemon={selectedCard} />
       )}
     </Container>
   );
