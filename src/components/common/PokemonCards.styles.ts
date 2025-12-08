@@ -84,11 +84,19 @@ export const typeIcons = {
 };
 
 export const CardWrapper = styled.div<{ $inDeck?: boolean }>`
+  display: flex;
+  position: relative;
   max-height: 100%;
   width: 100%;
   cursor: pointer;
   transition: transform 0.2s ease;
   opacity: ${props => props.$inDeck ? 0.1 : 1};
+
+    &:hover > div .card-button {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
 `;
 
 export const CardOuter = styled.div<{ $type: string }>`
@@ -248,4 +256,92 @@ export const RarityLabel = styled.div`
   color: #9ca3af;
   font-size: 0.75rem;
   text-transform: capitalize;
+`;
+
+export const CardButton = styled.button`
+  display: flex;
+  flex: 1;                     /* Makes both buttons equal width */
+  padding: 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.25s ease;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: auto;
+  gap: 1rem;
+
+  background: #444;
+  color: white;
+
+  & > svg {
+      border-radius: 50%;
+      border: 1px solid white;
+      background-color: white;
+      width: 26;
+      cursor: pointer;
+    }
+
+  &:hover {
+    filter: brightness(1.15);
+  }
+  &.add {
+    width: 100%;
+    background: linear-gradient(to right, #287f1dff, #16450aff);
+    color: white;
+    & > svg {
+      color: green;
+    }
+  }
+
+  &.details {
+    width: 100%;
+    background: linear-gradient(to right, #1c568dff, #0d1b35ff);
+    color: white;
+    & > svg {
+      color: blue;
+    }
+  }
+
+  &.remove {
+    width: 100%;
+    background: linear-gradient(to right, #8d1c1cff, #350d0dff);
+    color: white;
+    & > svg {
+      color: #8d1c1cff;
+    }
+  }
+
+  &:hover {
+    filter: brightness(1.15);
+  }
+`;
+
+export const ButtonContainer = styled.div`
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  /* Hidden by default */
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: all 0.25s ease;
+  box-sizing: border-box;
+  padding: 0 10px;
+
+  /* Show when wrapper is hovered */
+  ${CardWrapper}:hover & {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
 `;

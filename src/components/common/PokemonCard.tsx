@@ -1,16 +1,17 @@
-import { Circle } from 'lucide-react';
+import { Circle, Info, Minus, Plus } from 'lucide-react';
 import { Card, UserData } from '../../App';
-import { CardHeader, CardImage, CardInner, CardName, CardOuter, CardWrapper, ImageContainer, singleTypeColors, StatsBarContainer, StatsBarFill, StatsBarLabel, StatsBarRow, StatsBarTrack, StatsBarValue, StatsGrid, typeColors, typeIcons } from './PokemonCards.styles';
+import { ButtonContainer, CardButton, CardHeader, CardImage, CardInner, CardName, CardOuter, CardWrapper, ImageContainer, singleTypeColors, StatsBarContainer, StatsBarFill, StatsBarLabel, StatsBarRow, StatsBarTrack, StatsBarValue, StatsGrid, typeColors, typeIcons } from './PokemonCards.styles';
 import { useLocation } from 'react-router-dom';
 
 interface PokemonCardProps {
   card: Card;
   user?: UserData;
   deck?: boolean;
-  large?: boolean;
+  collection?: boolean
+  onClick?: (card: Card, action: string) => void;
 }
 
-export function PokemonCard({ card, large, deck, user }: PokemonCardProps) {
+export function PokemonCard({ card, collection, deck, user, onClick }: PokemonCardProps) {
   const primaryType = Array.isArray(card.types) && card.types.length > 0 ? card.types[0] : 'normal';
   const TypeIcon = typeIcons[primaryType as keyof typeof typeIcons] || Circle;
 
@@ -26,7 +27,7 @@ export function PokemonCard({ card, large, deck, user }: PokemonCardProps) {
   ]
 
   const isInDeck = (cardId: number) => {
-    if(!user) return;
+    if (!user) return;
     return user.battleDeck.some(card => card.uid === cardId);
   };
 
@@ -36,7 +37,7 @@ export function PokemonCard({ card, large, deck, user }: PokemonCardProps) {
   }
 
   return (
-    <CardWrapper $inDeck={(deck || large || params.pathname.includes('/battle')) ? false : isInDeck(card.uid)}>
+    <CardWrapper $inDeck={(deck || params.pathname.includes('/battle')) ? false : isInDeck(card.uid)}>
       <CardOuter $type={typeColors[primaryType]}  >
         <CardInner $type={primaryType} $rarity={rarity(card)} $shine={card.isFoil}>
           <CardHeader $type={primaryType}>
@@ -63,6 +64,26 @@ export function PokemonCard({ card, large, deck, user }: PokemonCardProps) {
           </StatsGrid>
         </CardInner>
       </CardOuter>
+      {(collection && onClick) && (
+        <ButtonContainer>
+          <CardButton className="card-button add" onClick={() => onClick(card, 'add')}>
+            <Plus />
+            Add to deck
+          </CardButton>
+          <CardButton className="card-button details" onClick={() => onClick(card, 'details')}>
+            <Info />
+            Details
+          </CardButton>
+        </ButtonContainer>
+      )}
+      {(deck && onClick) && (
+        <ButtonContainer>
+          <CardButton className="card-button remove" onClick={() => onClick(card, 'remove')}>
+            <Minus />
+            Remove from Deck
+          </CardButton>
+        </ButtonContainer>
+      )}
     </CardWrapper>
   );
 }

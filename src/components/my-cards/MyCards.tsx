@@ -25,11 +25,26 @@ export function MyCards({ updateUser }: MyCardsProps) {
     }
   };
 
-  const removeFromDeck = (cardId: number) => {
-    updateUser({
-      ...user,
-      battleDeck: user.battleDeck.filter(card => card.uid !== cardId)
-    });
+  const handleButtonAction = (card: Card, action: string) => {
+    console.log(card, action);
+    
+    if (action === 'add') {
+      if (user.battleDeck.length < 6) {
+        updateUser({
+          ...user,
+          battleDeck: [...user.battleDeck, card]
+        });
+      }
+    }
+    if (action === 'remove') {
+      updateUser({
+        ...user,
+        battleDeck: user.battleDeck.filter(c => c.uid !== card.uid)
+      });
+    }
+    if (action === 'details') {
+      
+    }
   }
 
 
@@ -57,14 +72,14 @@ export function MyCards({ updateUser }: MyCardsProps) {
               <CardsGrid $columns={6}>
                 {user.battleDeck.map((card) => (
                   <CardContainer key={card.id + '-' + card.uid}>
-                    <PokemonCard {... { user, addToDeck, removeFromDeck }} card={card} deck />
+                    <PokemonCard {... { user }} card={card} deck onClick={handleButtonAction} />
                   </CardContainer>
                 ))}
               </CardsGrid>
             )}
           </Section>
-          <AllCards {...{ user, updateUser, addToDeck, removeFromDeck, setSelectedCard }} />
-          
+          <AllCards {...{ user, updateUser, addToDeck, setSelectedCard }} onClick={handleButtonAction} collection />
+
         </>
       )}
     </Container>
