@@ -1,7 +1,7 @@
-import { Circle, Info, Minus, Plus } from 'lucide-react';
+import { BookMarked, Circle, Minus, Plus } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import { Card, UserData } from '../../App';
 import { ButtonContainer, CardButton, CardHeader, CardImage, CardInner, CardName, CardOuter, CardWrapper, ImageContainer, singleTypeColors, StatsBarContainer, StatsBarFill, StatsBarLabel, StatsBarRow, StatsBarTrack, StatsBarValue, StatsGrid, typeColors, typeIcons } from './PokemonCards.styles';
-import { useLocation } from 'react-router-dom';
 
 interface PokemonCardProps {
   card: Card;
@@ -71,7 +71,7 @@ export function PokemonCard({ card, collection, deck, user, onClick }: PokemonCa
             Add to deck
           </CardButton>
           <CardButton className="card-button details" onClick={() => onClick(card, 'details')}>
-            <Info />
+            <BookMarked />
             Details
           </CardButton>
         </ButtonContainer>
