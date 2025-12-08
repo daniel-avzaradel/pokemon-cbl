@@ -10,11 +10,11 @@ import { toast } from 'react-toastify';
 interface AllCardsProps {
     user: UserData;
     updateUser: (user: UserData) => void;
-    addToDeck: (card: Card) => void;
-    removeFromDeck: (cardId: number) => void;
+    collection?: boolean;
+    onClick?: (card: Card, action: string) => void;
 }
 
-const AllCards = ({ user, addToDeck, removeFromDeck, updateUser }: AllCardsProps) => {
+const AllCards = ({ collection, user, onClick, updateUser }: AllCardsProps) => {
 
     const [filter, setFilter] = useState<string>('');
     const [sort, setSort] = useState<string>('id');
@@ -52,16 +52,6 @@ const AllCards = ({ user, addToDeck, removeFromDeck, updateUser }: AllCardsProps
         setSort(value);
     }
 
-    const addCardToDeck = (card: Card) => {
-        if(user.battleDeck.some(p => p.id === card.id)) {
-            toast.warning("You cannot add the same card twice in the deck", {
-                theme: 'dark'
-            })
-        } else {
-            addToDeck(card)
-        }
-    }
-
     return (
         <Section>
             <AllCardsHeader>
@@ -74,10 +64,7 @@ const AllCards = ({ user, addToDeck, removeFromDeck, updateUser }: AllCardsProps
             <CardsGrid>
                 {filteredCollection.map((card, index) => (
                     <CardContainer key={card.id + '-' + index}>
-                        <PokemonCard {...{ user, updateUser, removeFromDeck, addToDeck }}
-                            card={card}
-                            onClick={() => addCardToDeck(card) }
-                        />
+                        <PokemonCard {...{ user, card, collection, updateUser, onClick }} />
                     </CardContainer>
                 ))}
             </CardsGrid>

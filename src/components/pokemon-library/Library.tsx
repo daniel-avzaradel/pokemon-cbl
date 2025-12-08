@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FetchedPokemon } from "src/hooks/usePokemon";
 import { Container, Header } from "./Library.styles";
 import LibraryCard from "./LibraryCard";
-import Modal from "./Modal";
+import LibraryModal from "./Modal";
 
 const Library = () => {
 
@@ -17,7 +17,7 @@ const Library = () => {
             <br />
             <LibraryCard {...{ setOpenModal, setSelectedPokemon }} />
             {openModal && (
-                <Modal {...{selectedPokemon, setOpenModal}} />
+                <LibraryModal {...{selectedPokemon, setOpenModal}} />
             )}
         </Container>
     )

@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { UserData, Card } from '../../App';
 import { PokemonCard } from '../common/PokemonCard';
-import { CardContainer, CardsGrid, Container, DeckEmpty, EmptyState, Header, Modal, ModalContent, Section } from './MyCards.module';
+import { CardContainer, CardsGrid, Container, DeckEmpty, EmptyState, Header, Section } from './MyCards.module';
 import AllCards from './AllCards';
 import { RootState } from '../lib/store';
 import { useSelector } from 'react-redux';
+import LibraryModal from '../pokemon-library/Modal';
+import { toast } from 'react-toastify';
 
 interface MyCardsProps {
   updateUser: (user: UserData) => void;
@@ -13,6 +15,7 @@ interface MyCardsProps {
 export function MyCards({ updateUser }: MyCardsProps) {
 
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const user = useSelector((state: RootState) => state.user);
 
 
@@ -25,11 +28,31 @@ export function MyCards({ updateUser }: MyCardsProps) {
     }
   };
 
-  const removeFromDeck = (cardId: number) => {
-    updateUser({
-      ...user,
-      battleDeck: user.battleDeck.filter(card => card.uid !== cardId)
-    });
+  const handleButtonAction = (card: Card, action: string) => {
+    console.log(card, action);
+
+    if (action === 'add') {
+      if(user.battleDeck.some(p => p.uid == card.uid)) return
+      if (user.battleDeck.length < 6) {
+        if(user.battleDeck.some(p => p.id === card.id)) {
+          return toast.warning('You cannot add two equal cards to the deck', { theme: 'dark'})
+        }
+        updateUser({
+          ...user,
+          battleDeck: [...user.battleDeck, card]
+        });
+      }
+    }
+    if (action === 'remove') {
+      updateUser({
+        ...user,
+        battleDeck: user.battleDeck.filter(c => c.uid !== card.uid)
+      });
+    }
+    if (action === 'details') {
+      setSelectedCard(card)
+      setOpenModal(true)
+    }
   }
 
 
@@ -57,15 +80,18 @@ export function MyCards({ updateUser }: MyCardsProps) {
               <CardsGrid $columns={6}>
                 {user.battleDeck.map((card) => (
                   <CardContainer key={card.id + '-' + card.uid}>
-                    <PokemonCard {... { user, addToDeck, removeFromDeck }} card={card} onClick={() => removeFromDeck(card.uid)} deck />
+                    <PokemonCard {... { user }} card={card} deck onClick={handleButtonAction} />
                   </CardContainer>
                 ))}
               </CardsGrid>
             )}
           </Section>
-          <AllCards {...{ user, updateUser, addToDeck, removeFromDeck, setSelectedCard }} />
-          
+          <AllCards {...{ user, updateUser, addToDeck }} onClick={handleButtonAction} collection />
+
         </>
+      )}
+      {openModal && (
+        <LibraryModal {...{setOpenModal}} selectedPokemon={selectedCard} />
       )}
     </Container>
   );

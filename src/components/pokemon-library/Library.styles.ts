@@ -58,14 +58,14 @@ export const LibraryCardWrapper = styled.div<{ $type?: string }>`
   border-radius: 4px;
   width: 24%;
   box-sizing: border-box;
-  background: ${p => p.$type ? darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 60) : "#333"};;
+  background: ${p => p.$type ? darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 70) : "#333"};;
   transition: 0.2s ease-in-out;
   cursor: pointer;
   padding: 2px 10px;
   gap: 0 1rem;
   border: 1px solid #555;
   &:hover {
-    background: ${p => darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 80)}
+    background: ${p => darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 90)}
   }
 `
 
@@ -162,6 +162,7 @@ export const ModalContentContainer = styled.div<{$type: string}>`
   transition: 0.2s ease-in-out;
   border: 5px solid #000;
   box-sizing: border-box;
+  max-width: 800px;
 `
 
 export const ModalContentGrid = styled.div<{$img: string}>`
@@ -191,6 +192,7 @@ export const ModalPokemonDataDiv = styled.div`
   border: 1px solid #1a1a1a;
   gap: 10px;
   box-sizing: border-box;
+  color: #e1e1e1;
 `
 
 export const ModalDataHeader = styled.div`
