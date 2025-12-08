@@ -162,6 +162,7 @@ export const ModalContentContainer = styled.div<{$type: string}>`
   transition: 0.2s ease-in-out;
   border: 5px solid #000;
   box-sizing: border-box;
+  max-width: 800px;
 `
 
 export const ModalContentGrid = styled.div<{$img: string}>`

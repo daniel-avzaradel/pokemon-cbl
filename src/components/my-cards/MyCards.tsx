@@ -57,7 +57,7 @@ export function MyCards({ updateUser }: MyCardsProps) {
               <CardsGrid $columns={6}>
                 {user.battleDeck.map((card) => (
                   <CardContainer key={card.id + '-' + card.uid}>
-                    <PokemonCard {... { user, addToDeck, removeFromDeck }} card={card} onClick={() => removeFromDeck(card.uid)} deck />
+                    <PokemonCard {... { user, addToDeck, removeFromDeck }} card={card} deck />
                   </CardContainer>
                 ))}
               </CardsGrid>

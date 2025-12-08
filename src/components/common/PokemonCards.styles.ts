@@ -83,10 +83,10 @@ export const typeIcons = {
   steel: Anvil
 };
 
-export const CardWrapper = styled.div<{ $clickable?: boolean, $inDeck?: boolean }>`
+export const CardWrapper = styled.div<{ $inDeck?: boolean }>`
   max-height: 100%;
   width: 100%;
-  cursor: ${props => props.$clickable ? 'pointer' : 'default'};
+  cursor: pointer;
   transition: transform 0.2s ease;
   opacity: ${props => props.$inDeck ? 0.1 : 1};
 `;

@@ -6,12 +6,11 @@ import { useLocation } from 'react-router-dom';
 interface PokemonCardProps {
   card: Card;
   user?: UserData;
-  onClick?: () => void;
   deck?: boolean;
   large?: boolean;
 }
 
-export function PokemonCard({ card, large, deck, onClick, user }: PokemonCardProps) {
+export function PokemonCard({ card, large, deck, user }: PokemonCardProps) {
   const primaryType = Array.isArray(card.types) && card.types.length > 0 ? card.types[0] : 'normal';
   const TypeIcon = typeIcons[primaryType as keyof typeof typeIcons] || Circle;
 
@@ -37,7 +36,7 @@ export function PokemonCard({ card, large, deck, onClick, user }: PokemonCardPro
   }
 
   return (
-    <CardWrapper $inDeck={(deck || large || params.pathname.includes('/battle')) ? false : isInDeck(card.uid)} $clickable={!!onClick} onClick={onClick}>
+    <CardWrapper $inDeck={(deck || large || params.pathname.includes('/battle')) ? false : isInDeck(card.uid)}>
       <CardOuter $type={typeColors[primaryType]}  >
         <CardInner $type={primaryType} $rarity={rarity(card)} $shine={card.isFoil}>
           <CardHeader $type={primaryType}>
