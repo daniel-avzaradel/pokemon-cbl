@@ -122,9 +122,6 @@ export const BattleSystem = () => {
   // RENDERING LOGIC
   // ------------------------------
 
-  console.log(userFromState);
-  
-
   if (!userFromState) return <Navigate to="/login" replace />;
   
   if (error) {
