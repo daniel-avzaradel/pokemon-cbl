@@ -122,22 +122,25 @@ export const BattleSystem = () => {
   // RENDERING LOGIC
   // ------------------------------
 
-  if (loading) return <LoadingBattle />;
-  if (!userFromState) return <Navigate to="/login" replace />;
+  console.log(userFromState);
+  
 
+  if (!userFromState) return <Navigate to="/login" replace />;
+  
   if (error) {
-    if (userFromState?.battleDeck.length === 0) {
-      toast.error("You dont have any cards in your deck");
-      return <Navigate to="/battle" replace />;
-    }
     toast.error("Failed to load battle data");
     return <Navigate to="/battle" replace />;
   }
-
+  if (userFromState?.battleDeck.length === 0) {
+      toast.error("You dont have any cards in your deck", { theme: "dark" });
+      return <Navigate to="/battle" replace />;
+    }
   // In case hook still preparing initial Pokémon
   if (!userPokemon || !enemyPokemon) return <LoadingBattle />;
-
+  
   const handleTurn = (action: actionButton) => {}
+  
+  if (loading) return <LoadingBattle />;
 
   return (
     <BattleContainer>

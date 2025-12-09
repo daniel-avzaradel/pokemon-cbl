@@ -14,8 +14,6 @@ interface TrainerCardProps {
 
 export function TrainerCard({ trainer, user, updateUser }: TrainerCardProps) {
   
-  // Calculate total battles won (using coins as proxy)
-  const battlesWon = 3
   const userArenaTrainer = user.arena?.find(t => t.name === trainer.name)
 
   const isUnlocked = () => {
