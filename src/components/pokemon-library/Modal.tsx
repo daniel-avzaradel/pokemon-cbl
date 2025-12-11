@@ -37,7 +37,7 @@ const LibraryModal = ({ selectedPokemon, setOpenModal }: ModalProps) => {
             <ModalContentContainer onClick={(e) => e.stopPropagation()} $type={selectedPokemon.types[0]}>
                 <ModalContentGrid $img={selectedPokemon.imageUrl ?? ""}>
                     <div></div>
-                    <ModalPokemonDataDiv>
+                    <ModalPokemonDataDiv $type={selectedPokemon.types[0]}>
                         <ModalDataHeader>
                             <img src={selectedPokemon.sprite ?? ""} />
                             <DivColumn>

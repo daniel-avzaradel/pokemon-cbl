@@ -181,7 +181,7 @@ export const ModalContentGrid = styled.div<{$img: string}>`
   padding: 10px;
 `;
 
-export const ModalPokemonDataDiv = styled.div`
+export const ModalPokemonDataDiv = styled.div<{$type: string}>`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -189,7 +189,13 @@ export const ModalPokemonDataDiv = styled.div`
   padding: 1rem;
   border: 1px solid #1a1a1a;
   border-radius: 6px;
-  background: rgba(0,0,0, 0.8);
+  background-color: rgba(0, 0, 0, 0.7);
+  filter: drop-shadow(0 0 10px ${p => p.$type ? darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 20) : "#000"});
+  filter: brightness(.8);
+  background-size: 50%;
+  background-repeat: repeat;
+  background-position: center;
+  background-blend-mode: overlay;
   border: 1px solid #1a1a1a;
   gap: 10px;
   box-sizing: border-box;
@@ -208,36 +214,6 @@ export const ModalDataHeader = styled.div`
   gap: 1rem;
   font-family: 'Courier New', Courier, monospace;
 `
-
-export const FoilSeal = styled.div`
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  width: 30px;
-  height: 30px;
-  display: inline-block;
-
-  svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-
-    /* Mask to let the shine appear only inside the shape */
-    mask-image: url(#dynamic-svg);
-    mask-size: cover;
-    mask-repeat: no-repeat;
-    mask-position: center;
-
-    -webkit-mask-image: url(#dynamic-svg);
-    -webkit-mask-size: cover;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-
-    background-image: url(${ShineTexture});
-    background-size: cover;
-    background-position: center;
-  }
-`;
 
 export const DivColumn = styled.div`
   display: flex;
@@ -264,7 +240,6 @@ export const ModalButton = styled.button`
   transition: all 0.5s ease;
   animation: fadeIn 0.5s ease-in-out;
   animation-fill-mode: backwards;
-  margin-top: 1rem;
   bottom: 5%;
   left: 10%;
   transition: 0.5s ease-in-out;
