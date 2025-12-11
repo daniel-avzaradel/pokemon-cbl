@@ -155,7 +155,7 @@ export const ModalContentContainer = styled.div<{$type: string, }>`
   position: relative;
   justify-content: center;
   align-items: center;
-  width: 55%;
+  width: 60%;
   height: auto;
   box-sizing: border-box;
   background: ${p => p.$type ? `linear-gradient(to bottom right, ${darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 60)}, ${darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 95)})` : '#444'};
