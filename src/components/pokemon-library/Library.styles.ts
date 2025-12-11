@@ -145,7 +145,7 @@ export const ModalPageContainer = styled.div`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  padding: 2rem;
+  padding: 1rem;
   background: rgba(0,0,0, 0.8);
   transition: 0.2s ease-in-out;
 `
