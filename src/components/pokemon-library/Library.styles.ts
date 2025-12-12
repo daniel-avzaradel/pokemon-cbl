@@ -190,8 +190,7 @@ export const ModalPokemonDataDiv = styled.div<{$type: string}>`
   border: 1px solid #1a1a1a;
   border-radius: 6px;
   background-color: rgba(0, 0, 0, 0.7);
-  filter: drop-shadow(0 0 10px ${p => p.$type ? darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 20) : "#000"});
-  filter: brightness(.8);
+  filter: drop-shadow(0 0 6px ${p => p.$type ? darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 50) : "#000"});
   background-size: 50%;
   background-repeat: repeat;
   background-position: center;

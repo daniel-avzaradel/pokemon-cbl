@@ -127,12 +127,157 @@ export function useBattleRedux(userTrainer: UserData, enemyTrainer: UserData) {
     setShowCoinOverlay(false);
   };
 
+  const handleTurn = useCallback(
+  async (userAction: any) => {
+    if (!userPokemon || !enemyPokemon) return;
+    if (turnState !== "user-turn") return; // prevent spam
+
+    // -------------------------------------------------
+    // USER → ENEMY
+    // -------------------------------------------------
+    setTurnState("resolving");
+
+    const attacker = userPokemon;
+    const defender = enemyPokemon;
+
+    pushLog(`${capitalize(attacker.name)} attacks!`);
+
+    await delay(500);
+
+    // Simple damage formula (replace later)
+    const damage = Math.max(3, Math.floor((attacker.currentStats.atk - defender.currentStats.def) / 2)
+    );
+
+    const newDefenderHp = Math.max(0, defender.currentStats.hp - damage);
+
+    pushLog(
+      `${capitalize(attacker.name)} deals ${damage} damage to ${capitalize(
+        defender.name
+      )}!`
+    );
+
+    // Update enemy Pokémon HP
+    setEnemyPokemon(prev =>
+      prev
+        ? {
+            ...prev,
+            currentStats: {
+              ...prev.currentStats,
+              hp: newDefenderHp
+            }
+          }
+        : prev
+    );
+
+    await delay(600);
+
+    // KO check
+    if (newDefenderHp <= 0) {
+      pushLog(`${capitalize(defender.name)} fainted!`);
+      setTurnState("finished");
+      return;
+    }
+
+    // -------------------------------------------------
+    // ENEMY COUNTERATTACK
+    // -------------------------------------------------
+    pushLog(`${capitalize(defender.name)} attacks back!`);
+    await delay(700);
+
+    const counterDamage = Math.max(1, Math.floor(defender.currentStats.atk - attacker.currentStats.def / 2));
+
+    const newUserHp = Math.max(0, attacker.currentStats.hp - counterDamage);
+
+    pushLog(
+      `${capitalize(defender.name)} deals ${counterDamage} damage to ${capitalize(
+        attacker.name
+      )}!`
+    );
+
+    setUserPokemon(prev =>
+      prev
+        ? {
+            ...prev,
+            currentStats: {
+              ...prev.currentStats,
+              hp: newUserHp
+            }
+          }
+        : prev
+    );
+
+    await delay(600);
+
+    // KO check
+    if (newUserHp <= 0) {
+      pushLog(`${capitalize(attacker.name)} fainted!`);
+      setTurnState("finished");
+      return;
+    }
+
+    // -------------------------------------------------
+    // END → NEXT USER TURN
+    // -------------------------------------------------
+    setTurnState("user-turn");
+  },
+  [userPokemon, enemyPokemon, turnState, pushLog]
+);
+
+const enemyAutoTurn = useCallback(async () => {
+  if (!enemyPokemon || !userPokemon) return;
+
+  setTurnState("resolving");
+
+  const attacker = enemyPokemon;
+  const defender = userPokemon;
+
+  pushLog(`${capitalize(attacker.name)} attacks!`);
+  await delay(600);
+
+  const damage = Math.max(
+    1,
+    Math.floor(attacker.currentStats.atk - defender.currentStats.def / 2)
+  );
+
+  const newUserHp = Math.max(0, defender.currentStats.hp - damage);
+
+  pushLog(
+    `${capitalize(attacker.name)} deals ${damage} damage to ${capitalize(
+      defender.name
+    )}!`
+  );
+
+  setUserPokemon(prev =>
+    prev
+      ? {
+          ...prev,
+          currentStats: {
+            ...prev.currentStats,
+            hp: newUserHp
+          }
+        }
+      : prev
+  );
+
+  await delay(600);
+
+  if (newUserHp <= 0) {
+    pushLog(`${capitalize(defender.name)} fainted!`);
+    setTurnState("finished");
+    return;
+  }
+
+  // Switch to user’s turn
+  setTurnState("user-turn");
+}, [enemyPokemon, userPokemon, pushLog]);
+
   return {
     userPokemon,
     enemyPokemon,
     turnState,
     log,
     pushLog,
+    handleTurn,
     showCoinOverlay,
     handleCoinResult
   };

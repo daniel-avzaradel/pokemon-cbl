@@ -115,6 +115,7 @@ export const BattleSystem = () => {
     turnState,
     log,
     showCoinOverlay,
+    handleTurn,
     handleCoinResult
   } = useBattleRedux(userFromState, safeEnemyTrainer);
 
@@ -134,8 +135,6 @@ export const BattleSystem = () => {
     }
   // In case hook still preparing initial Pokémon
   if (!userPokemon || !enemyPokemon) return <LoadingBattle />;
-  
-  const handleTurn = (action: actionButton) => {}
   
   if (loading) return <LoadingBattle />;
 
