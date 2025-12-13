@@ -29,7 +29,6 @@ export function MyCards({ updateUser }: MyCardsProps) {
   };
 
   const handleButtonAction = (card: Card, action: string) => {
-    console.log(card, action);
 
     if (action === 'add') {
       if(user.battleDeck.some(p => p.uid == card.uid)) return

@@ -29,14 +29,14 @@ interface PokemonActionsProps {
   activeTurn: TurnState | null; // tracked locally
 }
 
-const PokemonActions = ({ user, card, turnState, handleTurn, isUserCard, activeTurn }: PokemonActionsProps) => {
+const PokemonActions = ({ user, card, handleTurn, isUserCard, activeTurn }: PokemonActionsProps) => {
   const [disableBtn, setDisableBtn] = useState(false);
 
-  const handleClick = async (action: actionButton) => {
+  const handleClick = (action: actionButton) => {
     if (disableBtn) return;
     setDisableBtn(true);
     try {
-      await handleTurn(action);
+      handleTurn(action);
     } finally {
       setDisableBtn(false);
     }

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { singleTypeColors, singleTypeColorsLib } from "../common/PokemonCards.styles";
+import ShineTexture from '/assets/foil4.gif';
 
 export const Container = styled.div`
     display: flex;
@@ -144,12 +145,12 @@ export const ModalPageContainer = styled.div`
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  padding: 2rem;
+  padding: 1rem;
   background: rgba(0,0,0, 0.8);
   transition: 0.2s ease-in-out;
 `
 
-export const ModalContentContainer = styled.div<{$type: string}>`
+export const ModalContentContainer = styled.div<{$type: string, }>`
   display: flex;
   position: relative;
   justify-content: center;
@@ -175,12 +176,12 @@ export const ModalContentGrid = styled.div<{$img: string}>`
   background-size: 70%;
   background-repeat: no-repeat;
 
-  background-position: -30% 50%;
+  background-position: -20% 50%;
   box-sizing: border-box;
   padding: 10px;
 `;
 
-export const ModalPokemonDataDiv = styled.div`
+export const ModalPokemonDataDiv = styled.div<{$type: string}>`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -188,7 +189,12 @@ export const ModalPokemonDataDiv = styled.div`
   padding: 1rem;
   border: 1px solid #1a1a1a;
   border-radius: 6px;
-  background: rgba(0,0,0, 0.8);
+  background-color: rgba(0, 0, 0, 0.7);
+  filter: drop-shadow(0 0 6px ${p => p.$type ? darkenHex(singleTypeColorsLib[p.$type as keyof typeof singleTypeColorsLib], 50) : "#000"});
+  background-size: 50%;
+  background-repeat: repeat;
+  background-position: center;
+  background-blend-mode: overlay;
   border: 1px solid #1a1a1a;
   gap: 10px;
   box-sizing: border-box;
@@ -197,6 +203,7 @@ export const ModalPokemonDataDiv = styled.div`
 
 export const ModalDataHeader = styled.div`
   display: flex;
+  position: relative;
   justify-content: flex-start;
   padding: 1rem;
   width: 100%;
@@ -232,7 +239,6 @@ export const ModalButton = styled.button`
   transition: all 0.5s ease;
   animation: fadeIn 0.5s ease-in-out;
   animation-fill-mode: backwards;
-  margin-top: 1rem;
   bottom: 5%;
   left: 10%;
   transition: 0.5s ease-in-out;
