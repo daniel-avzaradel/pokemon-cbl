@@ -169,7 +169,7 @@ export function useBattleRedux(userTrainer: UserData, enemyTrainer: UserData) {
       const defender = userPokemon;
 
       pushLog(`${capitalize(attacker.name)} attacks!`);
-      await delay(400);
+      await delay(500);
 
       const dmg = Math.max(2, Math.floor((attacker.currentStats.atk - defender.currentStats.def) / 2));
       const newHp = Math.max(0, defender.currentStats.hp - dmg);
