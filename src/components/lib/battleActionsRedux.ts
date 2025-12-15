@@ -181,7 +181,7 @@ export function useBattleRedux(userTrainer: UserData, enemyTrainer: UserData) {
         currentStats: { ...prev.currentStats, hp: newHp }
       } : prev);
 
-      await delay(600);
+      await delay(500);
 
       if (newHp <= 0) {
         pushLog(`${capitalize(defender.name)} fainted!`);
